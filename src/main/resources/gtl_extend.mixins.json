@@ -7,6 +7,7 @@
   "client": [
   ],
   "mixins": [
+    "forge.dataGenMixin",
     "gtl.GTLGTAddonMixin",
     "gtmt.WirelessEnergyMonitorMixin"
   ],

@@ -55,7 +55,6 @@ public class GTL_Extend_Blocks {
                                                       ResourceLocation texture,
                                                       Supplier<Supplier<RenderType>> renderType,
                                                       NonNullSupplier<? extends Block> baseProperties) {                              // 新增参数：层级标识)
-        // {
         BlockEntry<Block> blockEntry = REGISTRATE.block(name, Block::new)
                 .initialProperties(baseProperties)
                 .properties(p -> p

@@ -21,7 +21,7 @@ public class CircuitsRecipe {
     public static void init(Consumer<FinishedRecipe> provider) {
         if (GTLExtendConfigHolder.INSTANCE.enableInfinityDreamAndDreamHostCrafting) {
 
-            // 生成 LV 配方（基础）
+            // 生成 ULV 配方（基础）
             SUPRACHRONAL_ASSEMBLY_LINE_RECIPES.recipeBuilder("eternalbluedream_ulv_processor_mainframe")
                     .inputItems(Registries.getItem("minecraft:sand"), 64)
                     .inputFluids(ETERNALBLUEDREAM.getFluid(9216))
@@ -30,7 +30,7 @@ public class CircuitsRecipe {
                     .duration(1)
                     .save(provider);
 
-            // 从 MV 开始，逐级生成高阶配方
+            // 从 LV 开始，逐级生成高阶配方
             String[] tiers = { "ulv", "lv", "mv", "hv", "ev", "iv", "luv", "zpm", "uv", "uhv", "uev", "uiv", "uxv", "opv", "max" };
             for (int i = 1; i < tiers.length; i++) {
                 String currentTier = tiers[i];

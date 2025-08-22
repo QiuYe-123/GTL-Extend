@@ -15,10 +15,10 @@ public class GTLExtendConfigHolder {
     @Configurable.Comment("开启永恒蓝梦和蓝梦主机合成表的注册，注意这可能会影响游戏平衡（修改后请退出重进）")
     public boolean enableInfinityDreamAndDreamHostCrafting = false;
     @Configurable
-    @Configurable.Comment("开启黑洞物质解压器实体渲染,当延迟过大时关闭此项(未实装)")
+    @Configurable.Comment("开启黑洞物质解压器实体渲染,当延迟过大时关闭此项")
     public boolean enableBlackHoleMatterDecompressor = true;
     @Configurable
-    @Configurable.Comment("开启超维度发电机实体渲染,当延迟过大时关闭此项(未实装)")
+    @Configurable.Comment("开启超维度发电机实体渲染,当延迟过大时关闭此项")
     public boolean enableHyperDimensionalPower = true;
     @Configurable
     @Configurable.Comment("开启通用蒸汽机（修改后请退出重进）")

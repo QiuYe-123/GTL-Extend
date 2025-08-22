@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "gtl_extend:block/dimension_core"
+    }
+  }
+}

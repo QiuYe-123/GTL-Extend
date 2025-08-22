@@ -107,7 +107,7 @@ public class GTLEXMachineRecipe {
                 .duration(4096)
                 .EUt(V[UHV])
                 .save(provider);
-        ASSEMBLY_LINE_RECIPES.recipeBuilder("platinum_based_rocessing_hub")
+        ASSEMBLY_LINE_RECIPES.recipeBuilder("platinum_based_processing_hub")
                 .inputItems(Registries.getItem("gtceu:chemical_plant"), 16)
                 .inputItems(Registries.getItem("gtceu:large_distillery"), 4)
                 .inputItems(Registries.getItem("gtceu:large_sifting_funnel"), 4)

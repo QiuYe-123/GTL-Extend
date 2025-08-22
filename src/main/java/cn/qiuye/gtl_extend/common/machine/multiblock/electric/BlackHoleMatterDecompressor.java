@@ -112,10 +112,14 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine {
     // 计算实际并行（考虑蓝梦流体加成）
     private int calculateParallel() {
         int base = getBaseParallel();
-        if (!isInfinityDreamEnabled()) return base;
+        if (!isInfinityDreamEnabled())
+            return base;
 
         // 每1000B流体翻倍一次，但不超过int最大值
-        long multiplier = eternalbluedream / 1_000_000_000L;
+        // 所以到底是1kB还是1MB呢
+        long multiplier = eternalbluedream / 1_000_000L;
+        if (multiplier > 24)
+            return Integer.MAX_VALUE;
         return (int) Math.min(base * (1L << multiplier), Integer.MAX_VALUE);
     }
 
@@ -135,8 +139,8 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine {
             oc = 0;
             // 处理额外流体输入（永恒蓝梦）
             if (isInfinityDreamEnabled()) {
-                if (MachineIO.inputFluid(this, ETERNALBLUEDREAM.getFluid(100000000))) {
-                    eternalbluedream += 100000000;
+                if (MachineIO.inputFluid(this, ETERNALBLUEDREAM.getFluid(1_000_000L))) {
+                    eternalbluedream += 1_000_000L;
                 }
             }
             int[] priorityOrder = { 8, 7, 6, 5, 4, 3, 2, 1 };
@@ -170,7 +174,7 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine {
             if (isInfinityDreamEnabled()) {
                 textList.add(Component.literal("永恒蓝梦: " +
                         FormattingUtil.formatNumbers(eternalbluedream) + " mB"));
-                textList.add(Component.literal("基础并行: " + BASE_PARALLEL));
+                textList.add(Component.literal("基础并行: " + getBaseParallel()));
             } else {
                 double actualMultiplier = getPowerMultiplier(circuitConfig) * Math.pow(2, calculateOverclockTimes());
                 String powerMultiplierDisplay = (actualMultiplier >= Double.MAX_VALUE / 1e3) ? "∞" : FormattingUtil.formatNumbers(actualMultiplier);

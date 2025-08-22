@@ -2,6 +2,7 @@ package cn.qiuye.gtl_extend.client.renderer.machine;
 
 import cn.qiuye.gtl_extend.GTL_Extend;
 import cn.qiuye.gtl_extend.common.machine.multiblock.electric.BlackHoleMatterDecompressor;
+import cn.qiuye.gtl_extend.config.GTLExtendConfigHolder;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlackHoleMatterDecompressorRender extends WorkableCasingMachineRenderer implements IControllerRenderer {
 
+    private static final boolean enabled = GTLExtendConfigHolder.INSTANCE.enableBlackHoleMatterDecompressor;
     private static final ResourceLocation SPACE_MODEL = GTL_Extend.id("obj/space");
     private static final ResourceLocation BLACKHOLE_MODEL = GTL_Extend.id("obj/black_hole");
 
@@ -59,6 +61,8 @@ public class BlackHoleMatterDecompressorRender extends WorkableCasingMachineRend
                        MultiBufferSource buffer,
                        int combinedLight,
                        int combinedOverlay) {
+        if (!enabled)
+            return;
         if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
                 machineBlockEntity.getMetaMachine() instanceof BlackHoleMatterDecompressor machine &&
                 machine.isActive()) {

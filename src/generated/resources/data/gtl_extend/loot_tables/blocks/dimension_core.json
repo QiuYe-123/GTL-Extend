@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "gtl_extend:dimension_core"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "gtl_extend:blocks/dimension_core"
+}
