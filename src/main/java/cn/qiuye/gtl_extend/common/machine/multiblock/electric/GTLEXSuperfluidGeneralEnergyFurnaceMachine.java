@@ -20,7 +20,7 @@ public class GTLEXSuperfluidGeneralEnergyFurnaceMachine extends WorkableElectric
     }
 
     public int getAdditionalThread() {
-        return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
+        return Integer.MAX_VALUE;
     }
 
     public GTLEXSuperfluidGeneralEnergyFurnaceMachine(IMachineBlockEntity holder, Object... args) {

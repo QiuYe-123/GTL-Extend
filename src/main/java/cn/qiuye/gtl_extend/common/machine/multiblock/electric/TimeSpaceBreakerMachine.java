@@ -26,7 +26,7 @@ public class TimeSpaceBreakerMachine extends WorkableElectricMultiblockMachine i
     }
 
     public int getAdditionalThread() {
-        return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
+        return Integer.MAX_VALUE;
     }
 
     public TimeSpaceBreakerMachine(IMachineBlockEntity holder, Object... args) {

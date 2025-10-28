@@ -1,5 +1,7 @@
 package cn.qiuye.gtl_extend.common.machine.multiblock.electric;
 
+import cn.qiuye.gtl_extend.config.GTLExtendConfigHolder;
+
 import org.gtlcore.gtlcore.common.machine.trait.MultipleRecipesLogic;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -20,7 +22,9 @@ public class PlatinumBasedRocessingHub extends WorkableElectricMultiblockMachine
     }
 
     public int getAdditionalThread() {
-        return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
+        if (GTLExtendConfigHolder.INSTANCE.enableThreads) {
+            return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
+        } else return Integer.MAX_VALUE;
     }
 
     public PlatinumBasedRocessingHub(IMachineBlockEntity holder, Object... args) {

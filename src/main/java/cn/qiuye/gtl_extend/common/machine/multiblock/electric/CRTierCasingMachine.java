@@ -1,5 +1,7 @@
 package cn.qiuye.gtl_extend.common.machine.multiblock.electric;
 
+import cn.qiuye.gtl_extend.config.GTLExtendConfigHolder;
+
 import org.gtlcore.gtlcore.common.data.GTLRecipeModifiers;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -33,7 +35,9 @@ public class CRTierCasingMachine extends WorkableElectricMultiblockMachine imple
     }
 
     public int getAdditionalThread() {
-        return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
+        if (GTLExtendConfigHolder.INSTANCE.getThreads() == 2) {
+            return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
+        } else return Integer.MAX_VALUE;
     }
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
