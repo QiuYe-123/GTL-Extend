@@ -1,5 +1,7 @@
 package cn.qiuye.gtl_extend.mixin.gtl;
 
+import cn.qiuye.gtl_extend.config.GTLExtendConfigHolder;
+
 import org.gtlcore.gtlcore.api.machine.multiblock.ParallelMachine;
 import org.gtlcore.gtlcore.api.machine.trait.ILockRecipe;
 import org.gtlcore.gtlcore.api.machine.trait.IRecipeCapabilityMachine;
@@ -31,7 +33,7 @@ import java.util.function.BiPredicate;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.spongepowered.asm.mixin.*;
 
-@Mixin(MultipleRecipesLogic.class)
+@Mixin(value = MultipleRecipesLogic.class, priority = 9999)
 public class MultipleRecipesLogicMixin extends RecipeLogic implements ILockRecipe {
 
     @Mutable
@@ -46,7 +48,19 @@ public class MultipleRecipesLogicMixin extends RecipeLogic implements ILockRecip
     @Shadow(remap = false)
     private double reductionRatio;
     @Unique
-    private static final long MAX_THREADS = 1024;
+    private static final long MAX_THREADS = Integer.MAX_VALUE - 1;
+
+    @Unique
+    private Integer gtl_extend$MaxThreads() {
+        long var;
+        if (GTLExtendConfigHolder.INSTANCE.max_threads_bool) {
+            var = GTLExtendConfigHolder.INSTANCE.max_threads;
+        } else {
+            var = Integer.MAX_VALUE - 1;
+        }
+        int var2 = (int) var;
+        return var2;
+    }
 
     public MultipleRecipesLogicMixin(ParallelMachine machine) {
         this(machine, null);
@@ -97,7 +111,7 @@ public class MultipleRecipesLogicMixin extends RecipeLogic implements ILockRecip
                 output.outputs.put(ItemRecipeCapability.CAP, new ObjectArrayList<>());
                 output.outputs.put(FluidRecipeCapability.CAP, new ObjectArrayList<>());
                 long totalEu = 0L;
-                long remain = (long) this.parallel.getMaxParallel() * MAX_THREADS;
+                long remain = (long) this.parallel.getMaxParallel() * gtl_extend$MaxThreads();
                 double euMultiplier = this.getEuMultiplier();
 
                 while (remain > 0L && iterator.hasNext()) {

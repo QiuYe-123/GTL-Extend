@@ -119,7 +119,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
 
     private int allocatedCWUt(int cwut, boolean simulate) {
         if (totalCWU < getMaxCWUt()) {
-            if (this.userId != null)
+            if (this.userId != null && this.oc >= 1)
                 totalCWU += getMaxCWUt();
             maxCWUt = 0;
         }
@@ -192,7 +192,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
     }
 
     protected void updateTickSubscription() {
-        if (isFormed) {
+        if (isFormed && oc >= 1) {
             tickSubs = subscribeServerTick(tickSubs, this::tick);
         } else if (tickSubs != null) {
             tickSubs.unsubscribe();

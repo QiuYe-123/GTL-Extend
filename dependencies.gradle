@@ -10,7 +10,7 @@ dependencies {
     modImplementation("com.gregtechceu.gtceu:gtceu-$project.minecraft_version:$project.gtceu_version") { transitive = false }
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-$project.minecraft_version:$project.ldlib_version") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:$project.registrate_version")
-    modImplementation("dev:gtlcore-1.2.2.4-fix7")
+    modImplementation("dev:gtlcore-1.2.2.5")
     modRuntimeOnly("dev.latvian.mods:rhino-forge:$project.rhino_version")
     modRuntimeOnly("dev.latvian.mods:kubejs-forge:$project.kubejs_version")
 

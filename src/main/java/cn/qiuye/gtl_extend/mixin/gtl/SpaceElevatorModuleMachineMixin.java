@@ -1,6 +1,6 @@
 package cn.qiuye.gtl_extend.mixin.gtl;
 
-import org.gtlcore.gtlcore.api.machine.multiblock.ISpaceElevatorModule;
+import org.gtlcore.gtlcore.api.machine.multiblock.IModularMachineModule;
 import org.gtlcore.gtlcore.common.data.GTLBlocks;
 import org.gtlcore.gtlcore.common.data.GTLRecipeModifiers;
 import org.gtlcore.gtlcore.common.data.machines.AdvancedMultiBlockMachine;
@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 
 @Mixin(SpaceElevatorModuleMachine.class)
-public abstract class SpaceElevatorModuleMachineMixin extends WorkableElectricMultiblockMachine implements ISpaceElevatorModule, IMachineLife {
+public abstract class SpaceElevatorModuleMachineMixin extends WorkableElectricMultiblockMachine implements IModularMachineModule<SpaceElevatorMachine, SpaceElevatorModuleMachine>, IMachineLife {
 
     @Shadow(remap = false)
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(SpaceElevatorModuleMachineMixin.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);

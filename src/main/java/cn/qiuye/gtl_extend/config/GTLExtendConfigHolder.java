@@ -35,6 +35,13 @@ public class GTLExtendConfigHolder {
     @Configurable.Comment("开启通用AE制造机（修改后请退出重进）")
     public boolean enableGeneralAEManufacturingMachine = false;
     @Configurable
+    @Configurable.Comment("是否启用手动修改最大配方线程数（修改后请退出重进）")
+    public boolean max_threads_bool = false;
+    @Configurable
+    @Configurable.Comment("配方线程数（修改后请退出重进）")
+    @Configurable.Range(min = 1, max = Integer.MAX_VALUE)
+    public Integer max_threads = 2048;
+    @Configurable
     @Configurable.Comment("实体加速")
     public boolean ticktime = true;
 }

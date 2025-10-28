@@ -476,8 +476,6 @@ public class MultiBlockMachineA {
                 .tooltips(Component.literal("特殊功能:"))
                 .tooltips(Component.literal("  - 需要绑定玩家无线电网供电"))
                 .tooltips(Component.literal("  - 自动从多方块结构中的流体容器消耗冷却液"))
-                .tooltips(Component.literal("特性？:"))
-                .tooltips(Component.literal("  - 退出重进后需要手动打开主机的GUI，否则无法提供算力，推荐使用服务器"))
                 .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                         GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
                 .appearanceBlock(HIGH_POWER_CASING)
