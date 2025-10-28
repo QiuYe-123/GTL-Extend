@@ -1,6 +1,5 @@
 package cn.qiuye.gtl_extend.common.machine.multiblock.electric;
 
-import org.gtlcore.gtlcore.api.machine.multiblock.ParallelMachine;
 import org.gtlcore.gtlcore.common.data.GTLRecipeModifiers;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -18,12 +17,24 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
+import com.gtladd.gtladditions.api.machine.feature.IThreadModifierPart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CRTierCasingMachine extends WorkableElectricMultiblockMachine implements ParallelMachine {
+public class CRTierCasingMachine extends WorkableElectricMultiblockMachine implements IWirelessThreadModifierParallelMachine {
+
+    protected @Nullable IThreadModifierPart threadPartMachine = null;
+
+    public void setThreadPartMachine(@Nullable IThreadModifierPart threadPartMachine) {
+        this.threadPartMachine = threadPartMachine;
+    }
+
+    public int getAdditionalThread() {
+        return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
+    }
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             CRTierCasingMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
@@ -47,7 +58,14 @@ public class CRTierCasingMachine extends WorkableElectricMultiblockMachine imple
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
+        this.threadPartMachine = null;
         tier = 0;
+    }
+
+    @Override
+    public void onPartUnload() {
+        super.onPartUnload();
+        this.threadPartMachine = null;
     }
 
     @Override

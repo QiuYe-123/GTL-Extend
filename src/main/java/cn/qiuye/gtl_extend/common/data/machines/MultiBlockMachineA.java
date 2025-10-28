@@ -51,6 +51,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 import appeng.core.AppEng;
 import appeng.core.definitions.AEBlocks;
+import com.gtladd.gtladditions.api.machine.GTLAddPartAbility;
 
 public class MultiBlockMachineA {
 
@@ -175,7 +176,8 @@ public class MultiBlockMachineA {
                                 .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setPreviewCount(1))
                                 .or(Predicates.abilities(PartAbility.PARALLEL_HATCH).setMaxGlobalLimited(1))
                                 .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(1))
-                                .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2)))
+                                .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
+                                .or(Predicates.abilities(GTLAddPartAbility.THREAD_MODIFIER).setMaxGlobalLimited(1)))
                         .where('B', Predicates.blocks(GetRegistries.getBlock("gtceu:stainless_steel_frame")))
                         .where('F', Predicates.blocks(GetRegistries.getBlock("gtceu:ev_machine_casing")))
                         .where('D', Predicates.blocks(GetRegistries.getBlock("gtceu:stable_machine_casing")))
@@ -207,7 +209,8 @@ public class MultiBlockMachineA {
                         .where('E', Predicates.blocks(HIGH_POWER_CASING.get())
                                 .or(Predicates.abilities(PartAbility.PARALLEL_HATCH).setMaxGlobalLimited(1))
                                 .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
-                                .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(1)))
+                                .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(1))
+                                .or(Predicates.abilities(GTLAddPartAbility.THREAD_MODIFIER).setMaxGlobalLimited(1)))
                         .where('A', GTLPredicates.tierCasings(GTL_Extend_Blocks.crmap, "CRTier"))
                         .where('F', Predicates.blocks(GetRegistries.getBlock("minecraft:white_concrete")))
                         .where('B', Predicates.blocks(GetRegistries.getBlock("minecraft:pink_concrete")))
@@ -260,7 +263,8 @@ public class MultiBlockMachineA {
                                 .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1))
                                 .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1))
                                 .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(2))
-                                .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2)))
+                                .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
+                                .or(Predicates.abilities(GTLAddPartAbility.THREAD_MODIFIER).setMaxGlobalLimited(1)))
                         .where('^', Predicates.blocks(GTLBlocks.ADVANCED_COMPRESSED_FUSION_COIL.get()))
                         .build())
                 .workableCasingRenderer(GTCEu.id("block/casings/gcym/high_temperature_smelting_casing"),
@@ -405,6 +409,7 @@ public class MultiBlockMachineA {
                                 .or(Predicates.abilities(PartAbility.IMPORT_ITEMS))
                                 .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
                                 .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
+                                .or(Predicates.abilities(GTLAddPartAbility.THREAD_MODIFIER).setMaxGlobalLimited(1))
                                 .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(1))
                                 .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2)))
                         .where('B', Predicates.blocks(GetRegistries.getBlock("gtceu:tritanium_frame")))
@@ -445,6 +450,7 @@ public class MultiBlockMachineA {
                                 .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1))
                                 .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
                                 .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(2))
+                                .or(Predicates.abilities(GTLAddPartAbility.THREAD_MODIFIER).setMaxGlobalLimited(1))
                                 .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                         .where('b', Predicates.blocks(GTBlocks.CASING_INVAR_HEATPROOF.get()))
                         .where('C', Predicates.blocks(GetRegistries.getBlock("kubejs:abyssalalloy_coil_block")))
@@ -549,7 +555,8 @@ public class MultiBlockMachineA {
                                 .or(Predicates.abilities(PartAbility.IMPORT_ITEMS))
                                 .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
                                 .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
-                                .or(Predicates.abilities(PartAbility.INPUT_LASER)))
+                                .or(Predicates.abilities(PartAbility.INPUT_LASER))
+                                .or(Predicates.abilities(GTLAddPartAbility.THREAD_MODIFIER).setMaxGlobalLimited(1)))
                         .where('B', Predicates.blocks(GTLBlocks.FUSION_CASING_MK5.get()))
                         .where('C', Predicates.blocks(GTL_Extend_Blocks.DIMENSION_CORE.get()))
                         .where('D', Predicates.blocks(Blocks.CHAIN))

@@ -15,3 +15,9 @@ mandatory = true
 versionRange = "[${gtceu_version},)"
 ordering = "AFTER"
 side = "BOTH"
+[[dependencies.${mod_id}]]
+modId = "gtladditions"
+mandatory = true
+versionRange = "[2.4Custom,)"
+ordering = "AFTER"
+side = "BOTH"

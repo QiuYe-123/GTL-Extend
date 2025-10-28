@@ -1,15 +1,27 @@
 package cn.qiuye.gtl_extend.common.machine.multiblock.electric;
 
-import org.gtlcore.gtlcore.api.machine.multiblock.ParallelMachine;
 import org.gtlcore.gtlcore.common.machine.trait.MultipleRecipesLogic;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 
+import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
+import com.gtladd.gtladditions.api.machine.feature.IThreadModifierPart;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class GTLEXDimensionallyTranscendentDissolvingTank extends WorkableElectricMultiblockMachine implements ParallelMachine {
+public class GTLEXDimensionallyTranscendentDissolvingTank extends WorkableElectricMultiblockMachine implements IWirelessThreadModifierParallelMachine {
+
+    protected @Nullable IThreadModifierPart threadPartMachine = null;
+
+    public void setThreadPartMachine(@Nullable IThreadModifierPart threadPartMachine) {
+        this.threadPartMachine = threadPartMachine;
+    }
+
+    public int getAdditionalThread() {
+        return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
+    }
 
     public GTLEXDimensionallyTranscendentDissolvingTank(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -29,5 +41,17 @@ public class GTLEXDimensionallyTranscendentDissolvingTank extends WorkableElectr
     @Override
     public int getMaxParallel() {
         return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        this.threadPartMachine = null;
+    }
+
+    @Override
+    public void onPartUnload() {
+        super.onPartUnload();
+        this.threadPartMachine = null;
     }
 }

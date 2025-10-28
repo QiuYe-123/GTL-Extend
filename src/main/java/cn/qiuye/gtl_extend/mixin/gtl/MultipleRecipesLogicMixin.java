@@ -3,10 +3,10 @@ package cn.qiuye.gtl_extend.mixin.gtl;
 import cn.qiuye.gtl_extend.config.GTLExtendConfigHolder;
 
 import org.gtlcore.gtlcore.api.machine.multiblock.ParallelMachine;
-import org.gtlcore.gtlcore.api.machine.trait.ILockRecipe;
-import org.gtlcore.gtlcore.api.machine.trait.IRecipeCapabilityMachine;
+import org.gtlcore.gtlcore.api.machine.trait.IRecipeStatus;
 import org.gtlcore.gtlcore.api.recipe.IGTRecipe;
 import org.gtlcore.gtlcore.api.recipe.IParallelLogic;
+import org.gtlcore.gtlcore.api.recipe.RecipeResult;
 import org.gtlcore.gtlcore.api.recipe.RecipeRunnerHelper;
 import org.gtlcore.gtlcore.common.machine.trait.MultipleRecipesLogic;
 
@@ -14,7 +14,6 @@ import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -25,72 +24,82 @@ import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
 import net.minecraft.nbt.CompoundTag;
 
-import java.util.Collections;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiPredicate;
 
+import static org.gtlcore.gtlcore.api.recipe.IParallelLogic.getMaxParallel;
+import static org.gtlcore.gtlcore.api.recipe.IParallelLogic.getRecipeOutputChance;
+import static org.gtlcore.gtlcore.api.recipe.RecipeRunnerHelper.handleRecipeInput;
+
+import com.gtladd.gtladditions.api.machine.IWirelessElectricMultiblockMachine;
+import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
+import com.gtladd.gtladditions.api.machine.logic.IWirelessRecipeLogic;
+import com.gtladd.gtladditions.api.machine.trait.IWirelessNetworkEnergyHandler;
+import com.gtladd.gtladditions.api.recipe.IWirelessGTRecipe;
+import com.gtladd.gtladditions.api.recipe.WirelessGTRecipe;
+import com.gtladd.gtladditions.api.recipe.WirelessGTRecipeBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = MultipleRecipesLogic.class, priority = 9999)
-public class MultipleRecipesLogicMixin extends RecipeLogic implements ILockRecipe {
+public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements IWirelessRecipeLogic, IRecipeStatus {
 
-    @Mutable
+    @Shadow(remap = false)
     @Final
-    @Shadow(remap = false)
-    private final ParallelMachine parallel;
-    @Mutable
-    @Final
-    @Shadow(remap = false)
-    private final BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck;
-    @Mutable
-    @Shadow(remap = false)
-    private double reductionRatio;
-    @Unique
-    private static final long MAX_THREADS = Integer.MAX_VALUE - 1;
+    private static int MAX_THREADS;
 
     @Unique
-    private Integer gtl_extend$MaxThreads() {
-        long var;
-        if (GTLExtendConfigHolder.INSTANCE.max_threads_bool) {
+    private IWirelessThreadModifierParallelMachine gTLExtend$machine;
+
+    @Unique
+    public int gtl_extend$MaxThreads() {
+        long var = 0;
+        if (GTLExtendConfigHolder.INSTANCE.getThreads() == 1) {
             var = GTLExtendConfigHolder.INSTANCE.max_threads;
-        } else {
+        } else if (GTLExtendConfigHolder.INSTANCE.getThreads() == 2) {
+            var = MAX_THREADS + gTLExtend$machine.getAdditionalThread();
+        } else if (GTLExtendConfigHolder.INSTANCE.getThreads() == 3) {
             var = Integer.MAX_VALUE - 1;
         }
         int var2 = (int) var;
         return var2;
     }
 
-    public MultipleRecipesLogicMixin(ParallelMachine machine) {
-        this(machine, null);
+    public MultipleRecipesLogicMixin(IRecipeLogicMachine machine) {
+        super(machine);
     }
 
-    public MultipleRecipesLogicMixin(ParallelMachine machine, BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck) {
-        this(machine, dataCheck, 1.0F, 1.0F);
-    }
-
-    public MultipleRecipesLogicMixin(ParallelMachine machine, BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck, double reductionEUt, double reductionDuration) {
-        super((IRecipeLogicMachine) machine);
-        this.parallel = machine;
-        this.dataCheck = dataCheck;
-        this.reductionRatio = reductionEUt * reductionDuration;
-    }
-
-    @Shadow(remap = false)
-    public WorkableElectricMultiblockMachine getMachine() {
-        return (WorkableElectricMultiblockMachine) super.getMachine();
-    }
-
-    @Shadow(remap = false)
-    protected double getEuMultiplier() {
-        IMaintenanceMachine maintenanceMachine = ((IRecipeCapabilityMachine) this.parallel).getMaintenanceMachine();
-        return maintenanceMachine != null ? (double) maintenanceMachine.getDurationMultiplier() * this.reductionRatio : this.reductionRatio;
+    @Inject(method = "<init>(Lorg/gtlcore/gtlcore/api/machine/multiblock/ParallelMachine;Ljava/util/function/BiPredicate;DD)V", at = @At("TAIL"), remap = false)
+    private void onInit(ParallelMachine ignore1, BiPredicate<CompoundTag, IRecipeLogicMachine> ignore2, double ignore3, double ignore4, CallbackInfo ci) {
+        gTLExtend$machine = ((IWirelessThreadModifierParallelMachine) getMachine());
     }
 
     @Shadow(remap = false)
     protected double getTotalEuOfRecipe(GTRecipe recipe) {
-        return (double) (RecipeHelper.getInputEUt(recipe) * (long) recipe.duration);
+        throw new AssertionError();
+    }
+
+    @Shadow(remap = false)
+    protected double getEuMultiplier() {
+        throw new AssertionError();
+    }
+
+    @Shadow(remap = false)
+    private Iterator<GTRecipe> lookupRecipeIterator() {
+        throw new AssertionError();
+    }
+
+    @Shadow(remap = false)
+    public WorkableElectricMultiblockMachine getMachine() {
+        throw new AssertionError();
     }
 
     /**
@@ -99,84 +108,139 @@ public class MultipleRecipesLogicMixin extends RecipeLogic implements ILockRecip
      */
     @Overwrite(remap = false)
     private GTRecipe getRecipe() {
-        if (!this.machine.hasProxies()) {
+        if (!machine.hasProxies()) return null;
+
+        final var wirelessTrait = gTLExtend$machine.getWirelessNetworkEnergyHandler();
+        if (wirelessTrait != null) return gTLAdditions$getWirelessRecipe(wirelessTrait);
+
+        long maxEUt = getMachine().getOverclockVoltage();
+        if (maxEUt <= 0) return null;
+        var iterator = lookupRecipeIterator();
+        GTRecipe output = GTRecipeBuilder.ofRaw().buildRawRecipe();
+        output.outputs.put(ItemRecipeCapability.CAP, new ObjectArrayList<>());
+        output.outputs.put(FluidRecipeCapability.CAP, new ObjectArrayList<>());
+        double totalEu = 0;
+        long remain = (long) this.gTLExtend$machine.getMaxParallel() * gtl_extend$MaxThreads();
+        double euMultiplier = getEuMultiplier();
+
+        while (remain > 0 && iterator.hasNext()) {
+            var match = iterator.next();
+            if (match == null) continue;
+            var p = getMaxParallel(machine, match, remain);
+            if (p <= 0) continue;
+            else if (p > 1) match = match.copy(ContentModifier.multiplier(p), false);
+            ((IGTRecipe) match).setRealParallels(p);
+            match = getRecipeOutputChance(machine, match);
+            if (handleRecipeInput(machine, match)) {
+                remain -= p;
+                totalEu += getTotalEuOfRecipe(match) * euMultiplier;
+                var item = match.outputs.get(ItemRecipeCapability.CAP);
+                if (item != null) output.outputs.get(ItemRecipeCapability.CAP).addAll(item);
+                var fluid = match.outputs.get(FluidRecipeCapability.CAP);
+                if (fluid != null) output.outputs.get(FluidRecipeCapability.CAP).addAll(fluid);
+            }
+            if (totalEu / maxEUt > 20 * 500) break;
+        }
+        if (output.outputs.get(ItemRecipeCapability.CAP).isEmpty() &&
+                output.outputs.get(FluidRecipeCapability.CAP).isEmpty()) {
+            if (getRecipeStatus() == null || getRecipeStatus().isSuccess()) RecipeResult.of(this.machine, RecipeResult.FAIL_FIND);
             return null;
-        } else {
-            long maxEUt = this.getMachine().getOverclockVoltage();
-            if (maxEUt <= 0L) {
-                return null;
-            } else {
-                Iterator<GTRecipe> iterator = this.lookupRecipeIterator();
-                GTRecipe output = GTRecipeBuilder.ofRaw().buildRawRecipe();
-                output.outputs.put(ItemRecipeCapability.CAP, new ObjectArrayList<>());
-                output.outputs.put(FluidRecipeCapability.CAP, new ObjectArrayList<>());
-                long totalEu = 0L;
-                long remain = (long) this.parallel.getMaxParallel() * gtl_extend$MaxThreads();
-                double euMultiplier = this.getEuMultiplier();
-
-                while (remain > 0L && iterator.hasNext()) {
-                    GTRecipe match = iterator.next();
-                    if (match != null) {
-                        long p = IParallelLogic.getMaxParallel(this.machine, match, remain);
-                        if (p > 0L) {
-                            if (p > 1L) {
-                                match = match.copy(ContentModifier.multiplier((double) p), false);
-                            }
-
-                            ((IGTRecipe) match).setRealParallels(p);
-                            match = IParallelLogic.getRecipeOutputChance(this.machine, match);
-                            remain -= p;
-                            if (RecipeRunnerHelper.handleRecipeInput(this.machine, match)) {
-                                totalEu += (long) (this.getTotalEuOfRecipe(match) * euMultiplier);
-                                List<Content> item = match.outputs.get(ItemRecipeCapability.CAP);
-                                if (item != null) {
-                                    output.outputs.get(ItemRecipeCapability.CAP).addAll(item);
-                                }
-
-                                List<Content> fluid = match.outputs.get(FluidRecipeCapability.CAP);
-                                if (fluid != null) {
-                                    output.outputs.get(FluidRecipeCapability.CAP).addAll(fluid);
-                                }
-                            }
-
-                            if (totalEu / maxEUt > 10000L) {
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (output.outputs.get(ItemRecipeCapability.CAP).isEmpty() && output.outputs.get(FluidRecipeCapability.CAP).isEmpty()) {
-                    return null;
-                } else {
-                    double d = (double) totalEu / (double) maxEUt;
-                    long eut = d > (double) 20.0F ? maxEUt : (long) ((double) maxEUt * d / (double) 20.0F);
-                    output.tickInputs.put(EURecipeCapability.CAP, List.of(new Content(eut, 10000, 10000, 0, null, null)));
-                    output.duration = Math.min((int) Math.max(d, 1.0F), 20);
-                    IGTRecipe.of(output).setHasTick(true);
-                    return output;
-                }
-            }
         }
+        var d = totalEu / maxEUt;
+        long eut = d > 20 ? maxEUt : (long) (maxEUt * d / 20);
+        output.tickInputs.put(EURecipeCapability.CAP,
+                List.of(new Content(eut, 10000, 10000, 0, null, null)));
+        output.duration = Math.min((int) Math.max(d, 1), 20);
+        IGTRecipe.of(output).setHasTick(true);
+        return output;
     }
 
-    @Shadow(remap = false)
-    private Iterator<GTRecipe> lookupRecipeIterator() {
-        if (this.isLock()) {
-            if (this.getLockRecipe() == null) {
-                this.setLockRecipe(this.machine.getRecipeType().getLookup().find(this.machine, this::checkRecipe));
-            } else if (!this.checkRecipe(this.getLockRecipe())) {
-                return Collections.emptyIterator();
+    @Unique
+    @Nullable
+    private WirelessGTRecipe gTLAdditions$getWirelessRecipe(@NotNull IWirelessNetworkEnergyHandler wirelessTrait) {
+        if (!wirelessTrait.isOnline()) return null;
+
+        final var iterator = lookupRecipeIterator();
+        final var maxTotalEu = wirelessTrait.getMaxAvailableEnergy();
+        final var euMultiplier = getEuMultiplier();
+        final var itemOutputs = new ObjectArrayList<Content>();
+        final var fluidOutputs = new ObjectArrayList<Content>();
+
+        long remain = (long) this.gTLExtend$machine.getMaxParallel() * gtl_extend$MaxThreads();
+        BigInteger totalEu = BigInteger.ZERO;
+
+        while (remain > 0 && iterator.hasNext()) {
+            GTRecipe match = iterator.next();
+            if (match == null) continue;
+            long p = IParallelLogic.getMaxParallel(machine, match, remain);
+            if (p <= 0) continue;
+
+            var parallelEUt = BigInteger.valueOf(RecipeHelper.getInputEUt(match));
+            if (p > 1) {
+                match = match.copy(ContentModifier.multiplier(p), false);
+                parallelEUt = parallelEUt.multiply(BigInteger.valueOf(p));
+            }
+            IGTRecipe.of(match).setRealParallels(p);
+
+            var tempTotalEu = totalEu.add(BigDecimal.valueOf(match.duration * euMultiplier).multiply(new BigDecimal(parallelEUt)).toBigInteger());
+            if (tempTotalEu.compareTo(maxTotalEu) > 0) {
+                if (totalEu.signum() == 0) RecipeResult.of(machine, RecipeResult.FAIL_NO_ENOUGH_EU_IN);
+                break;
             }
 
-            return Collections.singleton(this.getLockRecipe()).iterator();
-        } else {
-            return this.machine.getRecipeType().getLookup().getRecipeIterator(this.machine, this::checkRecipe);
+            match = IParallelLogic.getRecipeOutputChance(machine, match);
+            if (RecipeRunnerHelper.handleRecipeInput(machine, match)) {
+                remain -= p;
+                totalEu = tempTotalEu;
+                var item = match.outputs.get(ItemRecipeCapability.CAP);
+                if (item != null) itemOutputs.addAll(item);
+                var fluid = match.outputs.get(FluidRecipeCapability.CAP);
+                if (fluid != null) fluidOutputs.addAll(fluid);
+            }
         }
+
+        if (itemOutputs.isEmpty() && fluidOutputs.isEmpty()) {
+            if (getRecipeStatus() == null || getRecipeStatus().isSuccess()) RecipeResult.of(this.machine, RecipeResult.FAIL_FIND);
+            return null;
+        }
+
+        var eut = totalEu.divide(BigInteger.valueOf(20)).negate();
+        return WirelessGTRecipeBuilder
+                .ofRaw()
+                .output(ItemRecipeCapability.CAP, itemOutputs)
+                .output(FluidRecipeCapability.CAP, fluidOutputs)
+                .duration(20)
+                .setWirelessEut(eut)
+                .buildRawRecipe();
     }
 
-    @Shadow(remap = false)
-    private boolean checkRecipe(GTRecipe recipe) {
-        return RecipeRunnerHelper.matchRecipe(this.machine, recipe) && recipe.data.getInt("euTier") <= this.getMachine().getTier() && recipe.checkConditions(this).isSuccess() && (this.dataCheck == null || this.dataCheck.test(recipe.data, this.machine));
+    @SuppressWarnings("all")
+    @Override
+    @NotNull
+    public IWirelessElectricMultiblockMachine getWirelessMachine() {
+        return gTLExtend$machine;
+    }
+
+    @Override
+    public void handleRecipeWorking() {
+        assert this.lastRecipe != null;
+
+        boolean success = this.lastRecipe instanceof IWirelessGTRecipe wirelessGTRecipe ? handleWirelessTickInput(wirelessGTRecipe) : this.handleTickRecipe(this.lastRecipe).isSuccess();
+
+        if (success) {
+            this.setStatus(RecipeLogic.Status.WORKING);
+            if (!this.machine.onWorking()) {
+                this.interruptRecipe();
+                return;
+            }
+            ++this.progress;
+            ++this.totalContinuousRunningTime;
+        } else {
+            this.setWaiting(RecipeResult.FAIL_NO_ENOUGH_EU_IN.reason());
+        }
+
+        if (this.getStatus() == RecipeLogic.Status.WAITING) {
+            this.doDamping();
+        }
     }
 }

@@ -8,7 +8,6 @@ import org.gtlcore.gtlcore.utils.MachineIO;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -36,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 public class DimensionalPower extends NoEnergyMultiblockMachine implements IMachineLife {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            DimensionalPower.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+            DimensionalPower.class, NoEnergyMultiblockMachine.MANAGED_FIELD_HOLDER);
     // 常量定义
     private static final int BASE_PARALLEL = 64;
     private final BigInteger longmax = BigInteger.valueOf(Long.MAX_VALUE);

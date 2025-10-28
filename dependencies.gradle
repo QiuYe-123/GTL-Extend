@@ -10,7 +10,8 @@ dependencies {
     modImplementation("com.gregtechceu.gtceu:gtceu-$project.minecraft_version:$project.gtceu_version") { transitive = false }
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-$project.minecraft_version:$project.ldlib_version") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:$project.registrate_version")
-    modImplementation("dev:gtlcore-1.2.2.5")
+    modImplementation("dev:gtlcore-1.2.2.5-fix1")
+    modImplementation(jarJar("dev:gtladditions:$project.gtladditions_version"))
     modRuntimeOnly("dev.latvian.mods:rhino-forge:$project.rhino_version")
     modRuntimeOnly("dev.latvian.mods:kubejs-forge:$project.kubejs_version")
 
@@ -52,7 +53,7 @@ dependencies {
 
     modRuntimeOnly("dev:rubidium-extra:0.5.4.3+mc1.20.1-build.121")
 
-    modRuntimeOnly("maven.modrinth:jade-1.20.1-forge-$project.jade_version")
+    modImplementation("maven.modrinth:jade-1.20.1-forge-$project.jade_version")
 
 //    modRuntimeOnly("icyllis.modernui:ModernUI-Forge:1.20.1-3.10.1.4") { transitive = false }
 

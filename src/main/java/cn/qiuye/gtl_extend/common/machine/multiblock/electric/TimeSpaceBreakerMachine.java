@@ -1,6 +1,5 @@
 package cn.qiuye.gtl_extend.common.machine.multiblock.electric;
 
-import org.gtlcore.gtlcore.api.machine.multiblock.ParallelMachine;
 import org.gtlcore.gtlcore.common.machine.trait.MultipleRecipesLogic;
 
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
@@ -11,12 +10,24 @@ import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
+import com.gtladd.gtladditions.api.machine.feature.IThreadModifierPart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TimeSpaceBreakerMachine extends WorkableElectricMultiblockMachine implements ParallelMachine {
+public class TimeSpaceBreakerMachine extends WorkableElectricMultiblockMachine implements IWirelessThreadModifierParallelMachine {
 
     protected ConditionalSubscriptionHandler StartupSubs;
+
+    protected @Nullable IThreadModifierPart threadPartMachine = null;
+
+    public void setThreadPartMachine(@Nullable IThreadModifierPart threadPartMachine) {
+        this.threadPartMachine = threadPartMachine;
+    }
+
+    public int getAdditionalThread() {
+        return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
+    }
 
     public TimeSpaceBreakerMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -61,5 +72,17 @@ public class TimeSpaceBreakerMachine extends WorkableElectricMultiblockMachine i
     @Override
     public int getMaxParallel() {
         return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        this.threadPartMachine = null;
+    }
+
+    @Override
+    public void onPartUnload() {
+        super.onPartUnload();
+        this.threadPartMachine = null;
     }
 }

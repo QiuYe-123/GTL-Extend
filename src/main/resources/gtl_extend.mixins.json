@@ -7,10 +7,10 @@
   "client": [
   ],
   "mixins": [
-    "gtl.GTLGTAddonMixin",
     "gtl.MetaMachineMixinExMixin",
     "gtl.MultipleRecipesLogicMixin",
     "gtl.SpaceElevatorModuleMachineMixin",
+    "gtladd.WirelessEnergyNetworkTerminalProviderMixin",
     "gtmt.WirelessEnergyMonitorMixin"
   ],
   "injectors": {
