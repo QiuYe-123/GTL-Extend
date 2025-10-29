@@ -42,9 +42,6 @@ public class GTLExtendConfigHolder {
     @Configurable.Range(min = 1, max = Integer.MAX_VALUE)
     public int max_threads = 2048;
     @Configurable
-    @Configurable.Comment("false为直接返回AUTO为Integer.MAX，true为gtladd的线程返回逻辑(修改后请退出重进)")
-    public boolean enableThreads = false;
-    @Configurable
     @Configurable.Comment("实体加速")
     public boolean ticktime = true;
 

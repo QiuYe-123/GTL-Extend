@@ -22,7 +22,7 @@ public class PlatinumBasedRocessingHub extends WorkableElectricMultiblockMachine
     }
 
     public int getAdditionalThread() {
-        if (GTLExtendConfigHolder.INSTANCE.enableThreads) {
+        if (GTLExtendConfigHolder.INSTANCE.getThreads() == 2) {
             return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
         } else return Integer.MAX_VALUE;
     }
