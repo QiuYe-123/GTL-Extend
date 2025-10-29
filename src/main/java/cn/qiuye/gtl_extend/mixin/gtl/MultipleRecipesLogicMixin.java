@@ -214,7 +214,6 @@ public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements I
                 .buildRawRecipe();
     }
 
-    @SuppressWarnings("all")
     @Override
     @NotNull
     public IWirelessElectricMultiblockMachine getWirelessMachine() {
