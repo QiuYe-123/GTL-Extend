@@ -204,7 +204,7 @@ public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements I
             return null;
         }
 
-        var eut = totalEu.divide(BigInteger.valueOf(20)).negate();
+        var eut = totalEu.divide(BigInteger.valueOf(2)).negate();
         return WirelessGTRecipeBuilder
                 .ofRaw()
                 .output(ItemRecipeCapability.CAP, itemOutputs)
