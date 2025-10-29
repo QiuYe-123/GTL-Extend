@@ -209,7 +209,7 @@ public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements I
                 .ofRaw()
                 .output(ItemRecipeCapability.CAP, itemOutputs)
                 .output(FluidRecipeCapability.CAP, fluidOutputs)
-                .duration(20)
+                .duration(2)
                 .setWirelessEut(eut)
                 .buildRawRecipe();
     }
