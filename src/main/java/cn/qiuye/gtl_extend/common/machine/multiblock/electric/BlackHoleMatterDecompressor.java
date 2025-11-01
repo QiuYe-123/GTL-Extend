@@ -44,7 +44,7 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
             BlackHoleMatterDecompressor.class, NoEnergyMultiblockMachine.MANAGED_FIELD_HOLDER);
     // 常量定义
     private static final int BASE_PARALLEL = 64;
-    private static final long BASE_EU_COST = 5277655810867200L;
+    private static final BigInteger BASE_EU_COST = BigInteger.valueOf(5277655810867200L);
     @Persisted
     private long eternalbluedream; // 永恒蓝梦流体存储量
     @Persisted
@@ -72,23 +72,23 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
 
     @Override
     public boolean beforeWorking(@Nullable GTRecipe recipe) {
-		if (this.userId != null) {
-			if (WirelessEnergyManager.getUserEU(userId).compareTo(BigInteger.valueOf(getRecipeEUt())) > 0) {
-				this.eut = true;
-				return true;
-			} else {
-				this.eut = false;
-				return false;
-			}
-		}
-		return false;
+        boolean value = false;
+        if (this.userId != null) {
+            if (WirelessEnergyManager.getUserEU(userId).compareTo(getRecipeEUt()) > 0) {
+                this.eut = true;
+                value = true;
+            } else {
+                this.eut = false;
+            }
+        }
+        return value;
     }
 
     @Override
     public boolean onWorking() {
         boolean value = super.onWorking();
         if (this.eut && this.userId != null) {
-            WirelessEnergyManager.addEUToGlobalEnergyMap(userId, -getRecipeEUt(), this);
+            WirelessEnergyManager.addEUToGlobalEnergyMap(userId, getRecipeEUt().negate(), this);
         }
         return value;
     }
@@ -115,9 +115,14 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
     }
 
     // 计算启动能耗
-    private long getRecipeEUt() {
+    private BigInteger getRecipeEUt() {
         int ocTimes = calculateOverclockTimes();
-        return (long) (BASE_EU_COST * Math.pow(32, ocTimes));
+        // 将32转换为BigInteger类型
+        BigInteger base = BigInteger.valueOf(32);
+        // 使用BigInteger的pow方法计算32的ocTimes次方
+        BigInteger powerResult = base.pow(ocTimes);
+        // 返回BASE_EU_COST与powerResult的乘积
+        return BASE_EU_COST.multiply(powerResult).multiply(BigInteger.valueOf(Integer.MAX_VALUE - 1));
     }
 
     // 计算实际并行（考虑蓝梦流体加成）
@@ -190,13 +195,13 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
                     BigInteger totalEU = WirelessEnergyManager.getUserEU(userId);
                     if (totalEU.compareTo(BigInteger.ZERO) > 0) {
                         BigInteger maxAllowedEU = totalEU.divide(BigInteger.valueOf(100));
-                        long maxAllowedEULong;
+                        BigInteger AllowedEU;
                         try {
-                            maxAllowedEULong = maxAllowedEU.longValueExact();
+                            AllowedEU = maxAllowedEU;
                         } catch (ArithmeticException e) {
-                            maxAllowedEULong = Long.MAX_VALUE;
+                            AllowedEU = BigInteger.valueOf(Long.MAX_VALUE);
                         }
-                        textList.add(Component.literal("最大允许功率: " + FormattingUtil.formatNumbers(maxAllowedEULong) + " EU/t"));
+                        textList.add(Component.literal("最大允许功率: " + NumberUtils.formatBigIntegerNumberOrSic(AllowedEU) + " EU/t"));
                     }
                 }
             }
@@ -208,7 +213,7 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
                         NumberUtils.formatBigIntegerNumberOrSic(WirelessEnergyManager.getUserEU(userId))));
             }
             // 公共信息
-            textList.add(Component.literal("耗能：" + NumberUtils.formatBigIntegerNumberOrSic(BigInteger.valueOf(getRecipeEUt())) + " EU/t"));
+            textList.add(Component.literal("耗能：" + NumberUtils.formatBigIntegerNumberOrSic(getRecipeEUt()) + " EU/t"));
             textList.add(Component.literal("最终并行: " + calculateParallel()));
             textList.add(Component.translatable("gtl_extend.machine.circuit",
                     oc,  // 直接显示原始电路编号
@@ -241,7 +246,7 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
      */
     @Override
     public int getExtendlThread() {
-        return Integer.MAX_VALUE;
+        return Integer.MAX_VALUE - 1;
     }
 
     /**
