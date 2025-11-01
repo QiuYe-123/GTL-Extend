@@ -55,8 +55,7 @@ public class DimensionalPower extends NoEnergyMultiblockMachine implements IMach
     // 电路配置更新逻辑
     public void StartupUpdate() {
         if (getOffsetTimer() % 20 == 0) {
-            oc = 0;
-            int[] priorityOrder = { 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+            int[] priorityOrder = { 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
             for (int config : priorityOrder) {
                 if (MachineIO.notConsumableCircuit(this, config)) {
                     this.oc = config;

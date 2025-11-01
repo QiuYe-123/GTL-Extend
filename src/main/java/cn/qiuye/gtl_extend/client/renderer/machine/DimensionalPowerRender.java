@@ -1,7 +1,7 @@
 package cn.qiuye.gtl_extend.client.renderer.machine;
 
 import cn.qiuye.gtl_extend.GTL_Extend;
-import cn.qiuye.gtl_extend.common.machine.multiblock.electric.BlackHoleMatterDecompressor;
+import cn.qiuye.gtl_extend.common.machine.multiblock.electric.DimensionalPower;
 
 import org.gtlcore.gtlcore.GTLCore;
 
@@ -58,7 +58,7 @@ public class DimensionalPowerRender extends WorkableCasingMachineRenderer implem
                        int combinedLight,
                        int combinedOverlay) {
         if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
-                machineBlockEntity.getMetaMachine() instanceof BlackHoleMatterDecompressor machine &&
+                machineBlockEntity.getMetaMachine() instanceof DimensionalPower machine &&
                 machine.isActive()) {
             float tick = machine.getOffsetTimer() + partialTicks;
             adjustPositionByFacing(machine.getFrontFacing(), poseStack);

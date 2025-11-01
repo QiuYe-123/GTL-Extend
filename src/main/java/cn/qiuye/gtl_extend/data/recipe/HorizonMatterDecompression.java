@@ -53,7 +53,7 @@ public class HorizonMatterDecompression {
                         RawStarMatter.getFluid(FluidStorageKeys.PLASMA, 131072000),
                         CosmicMesh.getFluid(FluidStorageKeys.PLASMA, 131072000),
                         ActiniumSuperhydride.getFluid(FluidStorageKeys.PLASMA, 131072000),
-                        DimensionallyTranscendentCrudeCatalyst.getFluid(131072000),
+                        CosmicNeutronium.getFluid(131072000),
                         Eternity.getFluid(131072000))
                 .duration(1200)
                 .save(provider);

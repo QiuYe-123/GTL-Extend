@@ -275,7 +275,6 @@ public class MultiBlockMachineA {
                 .appearanceBlock(GTLBlocks.DIMENSION_CONNECTION_CASING)
                 .recipeType(GTLRecipeTypes.COSMOS_SIMULATION_RECIPES)
                 .recipeType(GTL_Extend_RecipeTypes.HORIZON_MATTER_DECOMPRESSION_RECIPES)
-                .recipeModifier((machine, recipe, params, result) -> ((BlackHoleMatterDecompressor) machine).recipeModifier(machine, recipe))
                 .tooltips(Component.literal(TextUtil.full_color("创造一个黑洞，并从里面获取无限的资源")))
                 .tooltips(Component.literal(TextUtil.purplish_red("宇宙中的万千黑洞不断地蒸发质量，真是浪费。我们从中拿取一颗，使之完全变为我们需要的材料。")))
                 .tooltips(Component.literal("工作模式:"))

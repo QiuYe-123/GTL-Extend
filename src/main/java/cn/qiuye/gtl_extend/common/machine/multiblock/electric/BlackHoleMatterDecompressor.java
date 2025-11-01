@@ -1,5 +1,7 @@
 package cn.qiuye.gtl_extend.common.machine.multiblock.electric;
 
+import cn.qiuye.gtl_extend.api.machine.IThreadModifierParallelMachine;
+import cn.qiuye.gtl_extend.common.machine.trait.MultipleRecipesLogic;
 import cn.qiuye.gtl_extend.config.GTLExtendConfigHolder;
 import cn.qiuye.gtl_extend.utils.NumberUtils;
 
@@ -8,9 +10,8 @@ import org.gtlcore.gtlcore.utils.MachineIO;
 
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
@@ -32,11 +33,12 @@ import static cn.qiuye.gtl_extend.common.data.GTL_Extend_Materials.ETERNALBLUEDR
 
 import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
 import com.hepdd.gtmthings.utils.TeamUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine {
+public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine implements IThreadModifierParallelMachine {
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             BlackHoleMatterDecompressor.class, NoEnergyMultiblockMachine.MANAGED_FIELD_HOLDER);
@@ -44,11 +46,12 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine {
     private static final int BASE_PARALLEL = 64;
     private static final long BASE_EU_COST = 5277655810867200L;
     @Persisted
-    private long eternalbluedream = 0; // 永恒蓝梦流体存储量
+    private long eternalbluedream; // 永恒蓝梦流体存储量
     @Persisted
     private int oc = 0;     // 当前电路配置编号
     @Persisted
     private UUID userId;// 绑定用户ID
+    private boolean eut = false;
 
     protected ConditionalSubscriptionHandler StartupSubs;
 
@@ -57,34 +60,42 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine {
         this.StartupSubs = new ConditionalSubscriptionHandler(this, this::StartupUpdate, this::isFormed);
     }
 
+    @Override
+    protected RecipeLogic createRecipeLogic(Object @NotNull... args) {
+        return new MultipleRecipesLogic(this);
+    }
+
     // 判断是否启用无限蓝梦模式
     private static boolean isInfinityDreamEnabled() {
         return GTLExtendConfigHolder.INSTANCE != null && GTLExtendConfigHolder.INSTANCE.enableInfinityDreamAndDreamHostCrafting;
     }
 
-    @Nullable
-    public GTRecipe recipeModifier(MetaMachine machine, GTRecipe recipe) {
-        int parallel = calculateParallel(); // 直接调用实例方法
-        long euCost = getRecipeEUt(); // 直接调用实例方法
-        if (machine instanceof BlackHoleMatterDecompressor BlackHoleMatterDecompressor && BlackHoleMatterDecompressor.userId != null && BlackHoleMatterDecompressor.oc > 0) {
-            if (this.userId != null &&
-                    WirelessEnergyManager.addEUToGlobalEnergyMap(
-                            this.userId,
-                            -euCost,
-                            this)) {
+    @Override
+    public boolean beforeWorking(@Nullable GTRecipe recipe) {
+		if (this.userId != null) {
+			if (WirelessEnergyManager.getUserEU(userId).compareTo(BigInteger.valueOf(getRecipeEUt())) > 0) {
+				this.eut = true;
+				return true;
+			} else {
+				this.eut = false;
+				return false;
+			}
+		}
+		return false;
+    }
 
-                GTRecipe modifiedRecipe = recipe.copy();
-                modifiedRecipe.duration = (int) (4800 / Math.pow(2, this.oc));
-
-                // 应用精确并行处理并返回结果
-                return GTRecipeModifiers.accurateParallel(
-                        this, // 传入当前实例
-                        modifiedRecipe,
-                        parallel,
-                        false).getFirst();
-            }
+    @Override
+    public boolean onWorking() {
+        boolean value = super.onWorking();
+        if (this.eut && this.userId != null) {
+            WirelessEnergyManager.addEUToGlobalEnergyMap(userId, -getRecipeEUt(), this);
         }
-        return null;
+        return value;
+    }
+
+    @Override
+    public void afterWorking() {
+        super.afterWorking();
     }
 
     @Override
@@ -169,7 +180,7 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine {
             if (isInfinityDreamEnabled()) {
                 textList.add(Component.literal("永恒蓝梦: " +
                         FormattingUtil.formatNumbers(eternalbluedream) + " mB"));
-                textList.add(Component.literal("基础并行: " + BASE_PARALLEL));
+                textList.add(Component.literal("基础并行: " + getBaseParallel()));
             } else {
                 double actualMultiplier = getPowerMultiplier() * Math.pow(2, calculateOverclockTimes());
                 String powerMultiplierDisplay = (actualMultiplier >= Double.MAX_VALUE / 1e3) ? "∞" : FormattingUtil.formatNumbers(actualMultiplier);
@@ -197,7 +208,7 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine {
                         NumberUtils.formatBigIntegerNumberOrSic(WirelessEnergyManager.getUserEU(userId))));
             }
             // 公共信息
-            textList.add(Component.literal("耗能：" + FormattingUtil.formatNumbers(getRecipeEUt()) + " EU/t"));
+            textList.add(Component.literal("耗能：" + NumberUtils.formatBigIntegerNumberOrSic(BigInteger.valueOf(getRecipeEUt())) + " EU/t"));
             textList.add(Component.literal("最终并行: " + calculateParallel()));
             textList.add(Component.translatable("gtl_extend.machine.circuit",
                     oc,  // 直接显示原始电路编号
@@ -215,5 +226,29 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine {
             case 4 -> 32768.0;
             default -> 1.0;
         };
+    }
+
+    /**
+     * @return .
+     */
+    @Override
+    public int getMaxParallel() {
+        return calculateParallel();
+    }
+
+    /**
+     * @return .
+     */
+    @Override
+    public int getExtendlThread() {
+        return Integer.MAX_VALUE;
+    }
+
+    /**
+     * @return .
+     */
+    @Override
+    public int getExtendlDuration() {
+        return (int) (4800 / Math.pow(2, this.oc));
     }
 }
