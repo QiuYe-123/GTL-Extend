@@ -52,10 +52,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = MultipleRecipesLogic.class, priority = 9999)
 public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements IWirelessRecipeLogic, IRecipeStatus {
 
-    @Shadow(remap = false)
-    @Final
-    private static int MAX_THREADS;
-
     @Unique
     private IWirelessThreadModifierParallelMachine gTLExtend$machine;
 
@@ -65,7 +61,7 @@ public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements I
         if (GTLExtendConfigHolder.INSTANCE.getThreads() == 1) {
             var = GTLExtendConfigHolder.INSTANCE.max_threads;
         } else if (GTLExtendConfigHolder.INSTANCE.getThreads() == 2) {
-            var = MAX_THREADS + gTLExtend$machine.getAdditionalThread();
+            var = GTLExtendConfigHolder.INSTANCE.max_threads + gTLExtend$machine.getAdditionalThread();
         } else if (GTLExtendConfigHolder.INSTANCE.getThreads() == 3) {
             var = Integer.MAX_VALUE - 1;
         }
