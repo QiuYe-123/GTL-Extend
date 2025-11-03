@@ -36,7 +36,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(WirelessEnergyMonitor.class)
+@Mixin(value = WirelessEnergyMonitor.class, priority = 9999)
 public class WirelessEnergyMonitorMixin extends MetaMachine implements IFancyUIMachine {
 
     @Shadow(remap = false)
