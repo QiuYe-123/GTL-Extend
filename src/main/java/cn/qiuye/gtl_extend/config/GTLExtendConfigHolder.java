@@ -50,16 +50,16 @@ public class GTLExtendConfigHolder {
         ADD,
         SET
     }
-
-    public int getThreads() {
-        int val = 0;
-        if (max_threads_type == ThreadsType.SET) {
-            val = 1;
-        } else if (max_threads_type == ThreadsType.ADD) {
-            val = 2;
-        } else if (max_threads_type == ThreadsType.AUTO) {
-            val = 3;
-        }
-        return val;
-    }
+	
+	public boolean ThreadsSET() {
+		return max_threads_type == ThreadsType.SET;
+	}
+	
+	public boolean ThreadsADD() {
+		return max_threads_type == ThreadsType.ADD;
+	}
+	
+	public boolean ThreadsSetAUTO() {
+		return max_threads_type == ThreadsType.AUTO;
+	}
 }

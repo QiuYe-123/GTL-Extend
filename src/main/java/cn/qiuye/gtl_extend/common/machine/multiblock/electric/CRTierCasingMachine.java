@@ -35,7 +35,7 @@ public class CRTierCasingMachine extends WorkableElectricMultiblockMachine imple
     }
 
     public int getAdditionalThread() {
-        if (GTLExtendConfigHolder.INSTANCE.getThreads() == 2) {
+        if (GTLExtendConfigHolder.INSTANCE.ThreadsADD()) {
             return threadPartMachine != null ? threadPartMachine.getThreadCount() : 0;
         } else return Integer.MAX_VALUE;
     }

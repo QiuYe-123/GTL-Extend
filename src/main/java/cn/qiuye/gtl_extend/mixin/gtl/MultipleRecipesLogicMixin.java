@@ -58,15 +58,14 @@ public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements I
     @Unique
     public int gtl_extend$MaxThreads() {
         long var = 0;
-        if (GTLExtendConfigHolder.INSTANCE.getThreads() == 1) {
+        if (GTLExtendConfigHolder.INSTANCE.ThreadsSET()) {
             var = GTLExtendConfigHolder.INSTANCE.max_threads;
-        } else if (GTLExtendConfigHolder.INSTANCE.getThreads() == 2) {
+        } else if (GTLExtendConfigHolder.INSTANCE.ThreadsADD()) {
             var = GTLExtendConfigHolder.INSTANCE.max_threads + gTLExtend$machine.getAdditionalThread();
-        } else if (GTLExtendConfigHolder.INSTANCE.getThreads() == 3) {
+        } else if (GTLExtendConfigHolder.INSTANCE.ThreadsSetAUTO()) {
             var = Integer.MAX_VALUE - 1;
         }
-        int var2 = (int) var;
-        return var2;
+	    return (int) var;
     }
 
     public MultipleRecipesLogicMixin(IRecipeLogicMachine machine) {
