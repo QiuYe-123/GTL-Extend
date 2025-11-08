@@ -65,7 +65,7 @@ public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements I
         } else if (GTLExtendConfigHolder.INSTANCE.ThreadsSetAUTO()) {
             var = Integer.MAX_VALUE - 1;
         }
-	    return (int) var;
+        return (int) var;
     }
 
     public MultipleRecipesLogicMixin(IRecipeLogicMachine machine) {

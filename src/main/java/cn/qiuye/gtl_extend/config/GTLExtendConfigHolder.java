@@ -45,21 +45,15 @@ public class GTLExtendConfigHolder {
     @Configurable.Comment("实体加速")
     public boolean ticktime = true;
 
-    public enum ThreadsType {
-        AUTO,
-        ADD,
-        SET
+    public boolean ThreadsSET() {
+        return max_threads_type == ThreadsType.SET;
     }
-	
-	public boolean ThreadsSET() {
-		return max_threads_type == ThreadsType.SET;
-	}
-	
-	public boolean ThreadsADD() {
-		return max_threads_type == ThreadsType.ADD;
-	}
-	
-	public boolean ThreadsSetAUTO() {
-		return max_threads_type == ThreadsType.AUTO;
-	}
+
+    public boolean ThreadsADD() {
+        return max_threads_type == ThreadsType.ADD;
+    }
+
+    public boolean ThreadsSetAUTO() {
+        return max_threads_type == ThreadsType.AUTO;
+    }
 }
