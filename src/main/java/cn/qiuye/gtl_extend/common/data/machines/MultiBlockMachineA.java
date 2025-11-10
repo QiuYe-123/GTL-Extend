@@ -124,11 +124,11 @@ public class MultiBlockMachineA {
                 .recipeModifier((machine, recipe, params, result) -> {
                     GTRecipe recipe1 = recipe.copy();
                     recipe1.duration = 1;
-                    recipe1 = GTRecipeModifiers.fastParallel(machine, recipe1, 4096, false).getFirst();
+                    recipe1 = GTRecipeModifiers.fastParallel(machine, recipe1, 16384, false).getFirst();
                     return recipe1;
                 })
                 .tooltips(Component.literal(TextUtil.full_color("暴力.....")))
-                .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为1t,自带4096并行")))
+                .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为1t,自带16384并行")))
                 .tooltips(Component.translatable("gtceu.machine.available_recipe_map_13.tooltip",
                         Component.translatable("gtceu.lava_furnace"),
                         Component.translatable("gtceu.forge_hammer"),

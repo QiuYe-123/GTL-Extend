@@ -45,7 +45,7 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             GeneralPurposeSteamEngine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    private static final double CONVERSION_RATE = 10.0D;
+    private static final double CONVERSION_RATE = 100.0D;
     @Getter
     private final int max_parallels;
     @Persisted
