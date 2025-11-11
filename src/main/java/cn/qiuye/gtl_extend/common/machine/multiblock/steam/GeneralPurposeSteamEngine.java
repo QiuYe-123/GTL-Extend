@@ -1,7 +1,9 @@
 package cn.qiuye.gtl_extend.common.machine.multiblock.steam;
 
-import cn.qiuye.gtl_extend.api.machine.IThreadModifierParallelMachine;
+import cn.qiuye.gtl_extend.api.machine.IThreadModifierParallelSteamMachine;
 import cn.qiuye.gtl_extend.common.machine.trait.SteamMultipleRecipesLogic;
+
+import org.gtlcore.gtlcore.api.machine.trait.ICheckPatternMachine;
 
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
@@ -9,12 +11,10 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyUIProvider;
-import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SteamEnergyRecipeHandler;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
@@ -44,16 +44,16 @@ import org.jetbrains.annotations.NotNull;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine implements IFancyUIMachine, IDisplayUIMachine, IThreadModifierParallelMachine {
+public class GeneralPurposeSteamEngine extends WorkableElectricMultiblockMachine implements IFancyUIMachine, IDisplayUIMachine, ICheckPatternMachine, IThreadModifierParallelSteamMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            GeneralPurposeSteamEngine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
+            GeneralPurposeSteamEngine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private static final double CONVERSION_RATE = 100.0D;
     @Persisted
     private int amountOC;
-    private int MaxParallel;
-    private int ExtendlThread;
+    private final int MaxParallel;
+    private final int ExtendlThread;
 
     public GeneralPurposeSteamEngine(IMachineBlockEntity holder, int MaxParallel, int ExtendlThread, Object... args) {
         super(holder, args);
@@ -91,7 +91,6 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
 
     @Override
     public void addDisplayText(List<Component> textList) {
-        IDisplayUIMachine.super.addDisplayText(textList);
         if (isFormed()) {
             textList.add(Component.translatable(getRecipeType().registryName.toLanguageKey())
                     .setStyle(Style.EMPTY.withColor(ChatFormatting.AQUA)
@@ -141,17 +140,7 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
 
     @Override
     public List<IFancyUIProvider> getSubTabs() {
-        return getParts().stream()
-                .filter(Objects::nonNull)
-                .map(IFancyUIProvider.class::cast)
-                .toList();
-    }
-
-    @Override
-    public void attachTooltips(TooltipsPanel tooltipsPanel) {
-        for (IMultiPart part : getParts()) {
-            part.attachFancyTooltipsToController(this, tooltipsPanel);
-        }
+        return super.getSubTabs();
     }
 
     @Override

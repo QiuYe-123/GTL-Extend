@@ -1,12 +1,13 @@
 package cn.qiuye.gtl_extend.common.machine.trait;
 
-import cn.qiuye.gtl_extend.api.machine.IThreadModifierParallelMachine;
+import cn.qiuye.gtl_extend.api.machine.IThreadModifierParallelSteamMachine;
 
 import org.gtlcore.gtlcore.api.machine.trait.ILockRecipe;
 import org.gtlcore.gtlcore.api.machine.trait.IRecipeCapabilityMachine;
 import org.gtlcore.gtlcore.api.machine.trait.IRecipeStatus;
 import org.gtlcore.gtlcore.api.recipe.IGTRecipe;
 import org.gtlcore.gtlcore.api.recipe.RecipeResult;
+import org.gtlcore.gtlcore.api.recipe.RecipeRunnerHelper;
 
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
@@ -37,21 +38,21 @@ import lombok.Getter;
 @Getter
 public class SteamMultipleRecipesLogic extends RecipeLogic implements ILockRecipe, IRecipeStatus {
 
-    private final IThreadModifierParallelMachine parallel;
+    private final IThreadModifierParallelSteamMachine parallel;
 
     private final BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck;
 
     private final double reductionRatio;
 
-    public SteamMultipleRecipesLogic(IThreadModifierParallelMachine machine) {
+    public SteamMultipleRecipesLogic(IThreadModifierParallelSteamMachine machine) {
         this(machine, null);
     }
 
-    public SteamMultipleRecipesLogic(IThreadModifierParallelMachine machine, BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck) {
+    public SteamMultipleRecipesLogic(IThreadModifierParallelSteamMachine machine, BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck) {
         this(machine, dataCheck, 1.0, 1.0);
     }
 
-    public SteamMultipleRecipesLogic(IThreadModifierParallelMachine machine, BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck, double reductionEUt, double reductionDuration) {
+    public SteamMultipleRecipesLogic(IThreadModifierParallelSteamMachine machine, BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck, double reductionEUt, double reductionDuration) {
         super((IRecipeLogicMachine) machine);
         this.parallel = machine;
         this.dataCheck = dataCheck;
@@ -61,19 +62,6 @@ public class SteamMultipleRecipesLogic extends RecipeLogic implements ILockRecip
     @Override
     public WorkableElectricMultiblockMachine getMachine() {
         return (WorkableElectricMultiblockMachine) super.getMachine();
-    }
-
-    @Override
-    public void findAndHandleRecipe() {
-        lastRecipe = null;
-        setRecipeStatus(null);
-        var match = getRecipe();
-        if (match != null) {
-            RecipeResult.of(machine, RecipeResult.SUCCESS);
-            if (matchRecipeOutput(machine, match)) {
-                setupRecipe(match);
-            }
-        }
     }
 
     protected double getTotalEuOfRecipe(GTRecipe recipe) {
@@ -96,7 +84,7 @@ public class SteamMultipleRecipesLogic extends RecipeLogic implements ILockRecip
         output.outputs.put(ItemRecipeCapability.CAP, new ObjectArrayList<>());
         output.outputs.put(FluidRecipeCapability.CAP, new ObjectArrayList<>());
         double totalEu = 0;
-        long remain = this.parallel.getExtendlThread();
+        long remain = (long) this.parallel.getMaxParallel() * this.parallel.getExtendlThread();
         double euMultiplier = getEuMultiplier();
 
         while (remain > 0 && iterator.hasNext()) {
@@ -126,26 +114,9 @@ public class SteamMultipleRecipesLogic extends RecipeLogic implements ILockRecip
         long eut = d > 20 ? maxEUt : (long) (maxEUt * d / 20);
         output.tickInputs.put(EURecipeCapability.CAP,
                 List.of(new Content(eut, 10000, 10000, 0, null, null)));
-        output.duration = (int) Math.max(d, 20);
+        output.duration = this.parallel.getExtendlDuration();
         IGTRecipe.of(output).setHasTick(true);
         return output;
-    }
-
-    private Iterator<GTRecipe> lookupRecipeIterator() {
-        if (this.isLock()) {
-            if (this.getLockRecipe() == null) {
-                this.setLockRecipe(machine.getRecipeType().getLookup()
-                        .find(machine, this::checkRecipe));
-            } else if (!checkRecipe(this.getLockRecipe())) return Collections.emptyIterator();
-            return Collections.singleton(this.getLockRecipe()).iterator();
-        } else return machine.getRecipeType().getLookup().getRecipeIterator(machine, this::checkRecipe);
-    }
-
-    private boolean checkRecipe(GTRecipe recipe) {
-        return matchRecipe(machine, recipe) &&
-                IGTRecipe.of(recipe).getEuTier() <= getMachine().getTier() &&
-                recipe.checkConditions(this).isSuccess() &&
-                (dataCheck == null || dataCheck.test(recipe.data, machine));
     }
 
     @Override
@@ -164,5 +135,35 @@ public class SteamMultipleRecipesLogic extends RecipeLogic implements ILockRecip
         setStatus(Status.IDLE);
         progress = 0;
         duration = 0;
+    }
+
+    @Override
+    public void findAndHandleRecipe() {
+        this.lastRecipe = null;
+        this.setRecipeStatus(null);
+        GTRecipe match = this.getRecipe();
+        if (match != null) {
+            RecipeResult.of(this.machine, RecipeResult.SUCCESS);
+            if (RecipeRunnerHelper.matchRecipeOutput(this.machine, match)) {
+                this.setupRecipe(match);
+            }
+        }
+    }
+
+    private Iterator<GTRecipe> lookupRecipeIterator() {
+        if (this.isLock()) {
+            if (this.getLockRecipe() == null) {
+                this.setLockRecipe(this.machine.getRecipeType().getLookup().find(this.machine, this::checkRecipe));
+            } else if (!this.checkRecipe(this.getLockRecipe())) {
+                return Collections.emptyIterator();
+            }
+            return Collections.singleton(this.getLockRecipe()).iterator();
+        } else {
+            return this.machine.getRecipeType().getLookup().getRecipeIterator(this.machine, this::checkRecipe);
+        }
+    }
+
+    private boolean checkRecipe(GTRecipe recipe) {
+        return true;
     }
 }
