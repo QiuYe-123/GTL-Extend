@@ -56,7 +56,7 @@ public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements I
     private IWirelessThreadModifierParallelMachine gTLExtend$machine;
 
     @Unique
-    public int gtl_extend$MaxThreads() {
+    public long gtl_extend$MaxThreads() {
         long var = 0;
         if (GTLExtendConfigHolder.INSTANCE.ThreadsSET()) {
             var = GTLExtendConfigHolder.INSTANCE.max_threads;
@@ -65,7 +65,7 @@ public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements I
         } else if (GTLExtendConfigHolder.INSTANCE.ThreadsSetAUTO()) {
             var = Integer.MAX_VALUE - 1;
         }
-        return (int) var;
+        return var;
     }
 
     public MultipleRecipesLogicMixin(IRecipeLogicMachine machine) {

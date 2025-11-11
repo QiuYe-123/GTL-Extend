@@ -1,5 +1,8 @@
 package cn.qiuye.gtl_extend.common.machine.multiblock.steam;
 
+import cn.qiuye.gtl_extend.api.machine.IThreadModifierParallelMachine;
+import cn.qiuye.gtl_extend.common.machine.trait.SteamMultipleRecipesLogic;
+
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -14,6 +17,7 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SteamEnergyRecipeHandler;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
@@ -36,24 +40,30 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static org.gtlcore.gtlcore.common.data.GTLMachines.LARGE_STEAM_HATCH;
 
-import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine implements IFancyUIMachine, IDisplayUIMachine {
+public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine implements IFancyUIMachine, IDisplayUIMachine, IThreadModifierParallelMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             GeneralPurposeSteamEngine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private static final double CONVERSION_RATE = 100.0D;
-    @Getter
-    private final int max_parallels;
     @Persisted
     private int amountOC;
+    private int MaxParallel;
+    private int ExtendlThread;
 
-    public GeneralPurposeSteamEngine(IMachineBlockEntity holder, int maxParallels, Object... args) {
+    public GeneralPurposeSteamEngine(IMachineBlockEntity holder, int MaxParallel, int ExtendlThread, Object... args) {
         super(holder, args);
-        max_parallels = maxParallels;
+        this.MaxParallel = MaxParallel;
+        this.ExtendlThread = ExtendlThread;
+    }
+
+    @Override
+    protected RecipeLogic createRecipeLogic(Object @NotNull... args) {
+        return new SteamMultipleRecipesLogic(this);
     }
 
     @Override
@@ -147,5 +157,29 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
     @Override
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
+    }
+
+    /**
+     * @return .
+     */
+    @Override
+    public int getExtendlDuration() {
+        return 1;
+    }
+
+    /**
+     * @return .
+     */
+    @Override
+    public int getMaxParallel() {
+        return MaxParallel;
+    }
+
+    /**
+     * @return .
+     */
+    @Override
+    public int getExtendlThread() {
+        return ExtendlThread;
     }
 }

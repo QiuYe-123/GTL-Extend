@@ -2,6 +2,8 @@ package cn.qiuye.gtl_extend.mixin.gtmt;
 
 import cn.qiuye.gtl_extend.utils.NumberUtils;
 
+import org.gtlcore.gtlcore.integration.gtmt.NewGTValues;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -72,11 +74,20 @@ public class WirelessEnergyMonitorMixin extends MetaMachine implements IFancyUIM
         textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", TeamUtil.GetName(this.holder.level(), this.userid)).withStyle(ChatFormatting.AQUA));
         textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.1", NumberUtils.formatBigIntegerNumberOrSic(energyTotal)).withStyle(ChatFormatting.GRAY));
         BigDecimal avgEnergy = this.getAvgUsage(energyTotal);
+        BigDecimal absAvgEnergy = avgEnergy.abs();
+
+        long absAvgLongEut = org.gtlcore.gtlcore.utils.NumberUtils.getLongValue(absAvgEnergy.toBigInteger());
+        int avgEnergyTier = absAvgLongEut == Long.MAX_VALUE ? GTValues.MAX_TRUE : org.gtlcore.gtlcore.utils.NumberUtils.getFakeVoltageTier(absAvgLongEut);
+        Component voltageName = Component.literal(NewGTValues.VNF[avgEnergyTier]);
+        BigDecimal voltageAmperage = absAvgEnergy.divide(BigDecimal.valueOf(GTValues.VEX[avgEnergyTier]), 2, RoundingMode.FLOOR);
+
         if (avgEnergy.compareTo(BigDecimal.valueOf(0L)) >= 0) {
-            textList.add(Component.translatable("gtl_extend.machine.wireless_energy_monitor.tooltip.input", NumberUtils.formatBigDecimalNumberOrSic(avgEnergy.abs())).withStyle(ChatFormatting.GRAY));
+            textList.add(Component.translatable("gtl_extend.machine.wireless_energy_monitor.tooltip.input",
+                    Component.literal(NumberUtils.formatBigDecimalNumberOrSic(absAvgEnergy)).withStyle(ChatFormatting.BLUE), NumberUtils.formatBigDecimalNumberOrSic(voltageAmperage), voltageName).withStyle(ChatFormatting.GRAY));
             textList.add(Component.translatable("gtceu.multiblock.power_substation.time_to_fill", Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.time_to_fill")).withStyle(ChatFormatting.GRAY));
         } else {
-            textList.add(Component.translatable("gtl_extend.machine.wireless_energy_monitor.tooltip.output", NumberUtils.formatBigDecimalNumberOrSic(avgEnergy.abs())).withStyle(ChatFormatting.GRAY));
+            textList.add(Component.translatable("gtl_extend.machine.wireless_energy_monitor.tooltip.output",
+                    Component.literal(NumberUtils.formatBigDecimalNumberOrSic(absAvgEnergy)).withStyle(ChatFormatting.BLUE), NumberUtils.formatBigDecimalNumberOrSic(voltageAmperage), voltageName).withStyle(ChatFormatting.GRAY));
             textList.add(Component.translatable("gtceu.multiblock.power_substation.time_to_drain", getTimeToFillDrainText(energyTotal.divide(avgEnergy.abs().toBigInteger().multiply(BigInteger.valueOf(20L))))).withStyle(ChatFormatting.GRAY));
         }
 

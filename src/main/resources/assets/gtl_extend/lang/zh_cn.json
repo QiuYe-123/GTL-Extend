@@ -57,7 +57,5 @@
   "item.gtl_extend.advanced_data_module": "高级数据模块",
   "item.gtl_extend.forever": "永恒",
   "block.gtl_extend.void_world_block": "世界核心",
-  "block.gtl_extend.dimension_core": "维度核心",
-  "gtl_extend.machine.wireless_energy_monitor.tooltip.input": "平均输入：§a%s EU/t",
-  "gtl_extend.machine.wireless_energy_monitor.tooltip.output": "平均输出：§a%s EU/t"
+  "block.gtl_extend.dimension_core": "维度核心"
 }

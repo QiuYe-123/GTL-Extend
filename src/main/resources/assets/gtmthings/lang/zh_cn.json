@@ -1,0 +1,4 @@
+{
+  "gtl_extend.machine.wireless_energy_monitor.tooltip.input": "平均输入：§a%s EU/t (%s A %s§r)",
+  "gtl_extend.machine.wireless_energy_monitor.tooltip.output": "平均输出：§a%s EU/t (%s A %s§r)"
+}

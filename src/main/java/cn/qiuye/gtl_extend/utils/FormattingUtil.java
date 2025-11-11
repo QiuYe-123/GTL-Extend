@@ -46,7 +46,7 @@ public class FormattingUtil {
             exp = calculateExponent(number);
 
             // 当指数超过单位数组范围时使用科学计数法
-            if (exp > UNITS.length) {
+            if (exp > UNITS.length - 1) {
                 return DECIMAL_FORMAT_SIC_2F.format(number);
             }
 
@@ -58,7 +58,7 @@ public class FormattingUtil {
         }
 
         sb.append(fmt.format(number1));
-        if (exp > 0 && exp < UNITS.length) {
+        if (exp > 0) {
             sb.append(UNITS[exp]);
         } else if (milli && number1.compareTo(zero) != 0) {
             sb.append('m');

@@ -70,6 +70,7 @@ public class MultiBlockMachineA {
     public static final MultiblockMachineDefinition GENERAL_PURPOSE_AE_PRODUCTION;
     public static final MultiblockMachineDefinition QUANTUM_COMPUTER;
     public static final MultiblockMachineDefinition TIME_SPACE_BREAKER;
+    // public static final MultiblockMachineDefinition STEAM_INTEGRATED_ORE_PROCESSING_CENTER;
 
     static {
         GTLEXRegistration.REGISTRATE.creativeModeTab(() -> GTL_Extend_CreativeModeTabs.MACHINES_ITEM);
@@ -103,7 +104,7 @@ public class MultiBlockMachineA {
                         GTCEu.id("block/multiblock/fusion_reactor"))
                 .register() : null;
 
-        GENERAL_PURPOSE_STEAM_ENGINE = GTLExtendConfigHolder.INSTANCE.enableGeneralPurposeSteamEngine ? GTLEXRegistration.REGISTRATE.multiblock("general_purpose_steam_engine", (holder) -> new GeneralPurposeSteamEngine(holder, 4096))
+        GENERAL_PURPOSE_STEAM_ENGINE = GTLExtendConfigHolder.INSTANCE.enableGeneralPurposeSteamEngine ? GTLEXRegistration.REGISTRATE.multiblock("general_purpose_steam_engine", (holder) -> new GeneralPurposeSteamEngine(holder, 16384, 1))
                 .rotationState(RotationState.NON_Y_AXIS)
                 .recipeType(GTLRecipeTypes.LAVA_FURNACE_RECIPES)
                 .recipeType(GTRecipeTypes.FORGE_HAMMER_RECIPES)
@@ -158,6 +159,29 @@ public class MultiBlockMachineA {
                 .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                         GTCEu.id("block/multiblock/steam_oven"))
                 .register() : null;
+
+        // STEAM_INTEGRATED_ORE_PROCESSING_CENTER =
+        // GTLEXRegistration.REGISTRATE.multiblock("steam_integrated_ore_processing_center", (holder) -> new
+        // GeneralPurposeSteamEngine(holder, 10000,8))
+        // .rotationState(RotationState.NON_Y_AXIS)
+        // .recipeType(GTLRecipeTypes.INTEGRATED_ORE_PROCESSOR)
+        // .appearanceBlock(() -> GetRegistries.getBlock("gtceu:steam_machine_casing"))
+        // .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+        // GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
+        // .recipeModifier((machine, recipe, params, result) -> {
+        // GTRecipe recipe1 = recipe.copy();
+        // recipe1.duration = 1;
+        // recipe1 = GTRecipeModifiers.fastParallel(machine, recipe1, 10000, false).getFirst();
+        // return recipe1;
+        // })
+        // .tooltips(Component.literal(TextUtil.full_color("暴力.....")))
+        // .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为1t,自带10000并行")))
+        // .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
+        // Component.translatable("gtceu.integrated_ore_processor")))
+        // .tooltipBuilder(GTL_EX_ADD)
+        // .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+        // GTCEu.id("block/multiblock/steam_oven"))
+        // .register();
 
         LARGE_VOID_PUMP = GTLEXRegistration.REGISTRATE.multiblock("large_void_pump", (holder) -> new CRTierCasingMachine(holder, "CRTier"))
                 .rotationState(RotationState.NON_Y_AXIS)
