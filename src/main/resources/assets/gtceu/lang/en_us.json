@@ -12,5 +12,6 @@
   "gtceu.cattle_cattle_machine": "牛牛机",
   "gtceu.recipe.tier_combination": "核心: %s,",
   "gtceu.tier.void_world_block": "世界核心",
-  "gtceu.tier.dimension_core": "维度核心"
+  "gtceu.tier.dimension_core": "维度核心",
+  "gtceu.tope.electricity": "%s A %s"
 }

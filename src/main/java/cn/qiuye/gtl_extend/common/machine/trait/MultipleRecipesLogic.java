@@ -26,8 +26,7 @@ import lombok.Getter;
 import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 import java.util.function.BiPredicate;
 
 @Getter

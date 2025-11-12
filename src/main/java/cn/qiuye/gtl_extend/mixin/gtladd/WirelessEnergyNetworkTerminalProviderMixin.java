@@ -56,12 +56,11 @@ public class WirelessEnergyNetworkTerminalProviderMixin {
                             .append(Component.literal(" EU").withStyle(RESET)
                                     .append(Component.literal(" (").withStyle(GREEN)
                                             .append(Component
-                                                    .translatable("gtceu.top.electricity",
-                                                            String.format("%.2e", new BigDecimal(abs).divide(BigDecimal.valueOf(GTValues.VEX[energyTier]), 3, RoundingMode.DOWN).doubleValue()),
+                                                    .translatable("gtceu.tope.electricity",
+                                                            cn.qiuye.gtl_extend.utils.NumberUtils.formatBigDecimalNumberOrSic(new BigDecimal(abs).divide(BigDecimal.valueOf(GTValues.VEX[energyTier]), RoundingMode.DOWN)),
                                                             NewGTValues.VNF[energyTier])
                                                     .withStyle(style -> style.withColor(GTL_CORE$VC[Math.min(energyTier, 14)])))
                                             .append(Component.literal(")").withStyle(GREEN))));
-
                     tooltip.add(Component.translatable("gtladditions.machine.wireless_energy_network_terminal.tooltips.1", text));
                 }
             }

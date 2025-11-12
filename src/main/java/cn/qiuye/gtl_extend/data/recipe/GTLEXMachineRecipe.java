@@ -96,7 +96,7 @@ public class GTLEXMachineRecipe {
                 .inputItems(LARGE_STEAM_THERMAL_CENTRIFUGE, 64)
                 .inputItems(GetRegistries.getItem("kubejs:precision_steam_mechanism"), 64)
                 .inputItems(GetRegistries.getItem("kubejs:precision_steam_mechanism"), 64)
-                .inputItems(GTItems.ELECTRONIC_CIRCUIT_LV, 64)
+                .inputItems(CustomTags.LV_CIRCUITS, 64)
                 .inputFluids(GTMaterials.SolderingAlloy.getFluid(64000))
                 .outputItems(MultiBlockMachineA.STEAM_INTEGRATED_ORE_PROCESSING_CENTER)
                 .duration(20000)

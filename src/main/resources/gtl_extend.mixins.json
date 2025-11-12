@@ -10,6 +10,7 @@
     "gtl.MetaMachineMixinExMixin",
     "gtl.MultipleRecipesLogicMixin",
     "gtl.SpaceElevatorModuleMachineMixin",
+    "gtl.WorkableElectricMultiblockMachineMixin",
     "gtladd.WirelessEnergyNetworkTerminalProviderMixin",
     "gtmt.WirelessEnergyMonitorMixin"
   ],

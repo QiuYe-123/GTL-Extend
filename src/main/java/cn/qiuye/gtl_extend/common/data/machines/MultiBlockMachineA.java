@@ -432,12 +432,6 @@ public class MultiBlockMachineA {
             .tooltips(Component.literal("可使用等离子：氩等离子，铁等离子，镍等离子，简并态等离子"))
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
-            .recipeModifier((machine, recipe, params, result) -> {
-                GTRecipe recipe_s = recipe.copy();
-                recipe_s.duration = 1;
-                recipe_s = GTRecipeModifiers.fastParallel(machine, recipe_s, Integer.MAX_VALUE, false).getFirst();
-                return recipe_s;
-            })
             .tooltipBuilder(GTL_EX_ADD)
             .pattern(definition -> Platinum_basedProcessingHub_MultiBlockStructure.PLATINUM_BASE_DPROCESSING_HUB
                     .where("~", Predicates.controller(blocks(definition.getBlock())))
@@ -471,12 +465,6 @@ public class MultiBlockMachineA {
             .tooltips(Component.translatable("gtceu.machine.multiple_recipes.tooltip"))
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
-            .recipeModifier((machine, recipe, params, result) -> {
-                GTRecipe recipe_s = recipe.copy();
-                recipe_s.duration = 1;
-                recipe_s = GTRecipeModifiers.fastParallel(machine, recipe_s, Integer.MAX_VALUE, false).getFirst();
-                return recipe_s;
-            })
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
             .tooltipBuilder(GTL_EX_ADD)
             .pattern(definition -> GTLMachines.DTPF
@@ -564,7 +552,6 @@ public class MultiBlockMachineA {
             .appearanceBlock(HIGH_POWER_CASING)
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
-            .recipeModifier((machine, recipe, maxParallel, modifyDuration) -> ((TimeSpaceBreakerMachine) machine).recipeModifier(machine, recipe))
             .tooltips(Component.literal(TextUtil.full_color("把不可能变为可能，我们无所不能")))
             .tooltips(Component.literal("此机器无需耗电，只需放置MAX激光靶仓就可以跑满并行"))
             .tooltips(Component.literal("严禁使用增广系列输出，否则造成严重吞物品概不负责，普通me输出则会对超int上线的物品进行截断"))
