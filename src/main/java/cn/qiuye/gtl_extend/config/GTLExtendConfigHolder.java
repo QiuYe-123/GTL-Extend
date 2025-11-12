@@ -39,7 +39,7 @@ public class GTLExtendConfigHolder {
     public ThreadsType max_threads_type = ThreadsType.AUTO;
     @Configurable
     @Configurable.Comment("配方线程数(修改后请退出重进)")
-    @Configurable.Range(min = 1, max = Integer.MAX_VALUE * 2L)
+    @Configurable.Range(min = 1, max = Integer.MAX_VALUE)
     public long max_threads = 2048;
     @Configurable
     @Configurable.Comment("实体加速")
