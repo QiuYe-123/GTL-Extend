@@ -42,6 +42,11 @@ public class CommonProxy {
     public static void init() {
         GTL_Extend_CreativeModeTabs.init();
         GTLExtendConfigHolder.init();
+        if (GTL_Extend.isDataGen() || GTL_Extend.isDev()) {
+            GTLExtendConfigHolder.INSTANCE.enableInfinityDreamAndDreamHostCrafting = true;
+            GTLExtendConfigHolder.INSTANCE.enableGeneralPurposeSteamEngine = true;
+            GTLExtendConfigHolder.INSTANCE.enableGeneralAEManufacturingMachine = true;
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {}

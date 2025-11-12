@@ -36,6 +36,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
 
@@ -43,6 +44,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -91,7 +93,7 @@ public class MultiBlockMachineA {
                     GTCEu.id("block/multiblock/fusion_reactor"))
             .register() : null;
 
-    public static final MultiblockMachineDefinition GENERAL_PURPOSE_STEAM_ENGINE = GTLExtendConfigHolder.INSTANCE.enableGeneralPurposeSteamEngine ? GTLEXRegistration.REGISTRATE.multiblock("general_purpose_steam_engine", (holder) -> new GeneralPurposeSteamEngine(holder, 16384, 1))
+    public static final MultiblockMachineDefinition GENERAL_PURPOSE_STEAM_ENGINE = GTLExtendConfigHolder.INSTANCE.enableGeneralPurposeSteamEngine ? GTLEXRegistration.REGISTRATE.multiblock("general_purpose_steam_engine", (holder) -> new GeneralPurposeSteamEngine(holder, 16384, 1, 100.0D))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(GTLRecipeTypes.LAVA_FURNACE_RECIPES,
                     GTRecipeTypes.FORGE_HAMMER_RECIPES,
@@ -148,10 +150,10 @@ public class MultiBlockMachineA {
                     GTCEu.id("block/multiblock/steam_oven"))
             .register() : null;
 
-    public static final MultiblockMachineDefinition STEAM_INTEGRATED_ORE_PROCESSING_CENTER = GTLEXRegistration.REGISTRATE.multiblock("steam_integrated_ore_processing_center", (holder) -> new GeneralPurposeSteamEngine(holder, 10000, 8))
+    public static final MultiblockMachineDefinition STEAM_INTEGRATED_ORE_PROCESSING_CENTER = GTLEXRegistration.REGISTRATE.multiblock("steam_integrated_ore_processing_center", (holder) -> new GeneralPurposeSteamEngine(holder, 10000, 8, 1000.0D))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTLRecipeTypes.INTEGRATED_ORE_PROCESSOR)
-            .appearanceBlock(() -> GetRegistries.getBlock("gtceu:steam_machine_casing"))
+            .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .recipeModifier((machine, recipe, params, result) -> {
@@ -168,30 +170,30 @@ public class MultiBlockMachineA {
             .pattern(definition -> SteamOP.PATTERN
                     .where("~", Predicates.controller(blocks(definition.getBlock())))
                     .where(" ", Predicates.any())
-                    .where("A", Predicates.blocks(GetRegistries.getBlock("minecraft:cyan_wool"))
-                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(0))
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(0)))
-                    .where("B", Predicates.blocks(GetRegistries.getBlock("gtceu:invar_frame")))
-                    .where("C", Predicates.blocks(GetRegistries.getBlock("gtceu:solid_machine_casing")))
-                    .where("D", Predicates.blocks(GetRegistries.getBlock("gtceu:bronze_frame")))
-                    .where("E", Predicates.blocks(GetRegistries.getBlock("gtceu:steel_frame")))
-                    .where("F", Predicates.blocks(GetRegistries.getBlock("gtceu:bronze_machine_casing")))
-                    .where("G", Predicates.blocks(GetRegistries.getBlock("gtceu:steel_gearbox")))
-                    .where("H", Predicates.blocks(GetRegistries.getBlock("gtceu:bronze_gearbox")))
-                    .where("I", Predicates.blocks(GetRegistries.getBlock("gtceu:lv_machine_casing")))
-                    .where("J", Predicates.blocks(GetRegistries.getBlock("gtceu:steel_firebox_casing")))
-                    .where("K", Predicates.blocks(GetRegistries.getBlock("gtceu:steam_machine_casing")))
-                    .where("L", Predicates.blocks(GetRegistries.getBlock("minecraft:water")))
-                    .where("M", Predicates.blocks(GetRegistries.getBlock("gtceu:bronze_pipe_casing")))
-                    .where("N", Predicates.blocks(GetRegistries.getBlock("gtceu:steel_pipe_casing")))
-                    .where("O", Predicates.blocks(GetRegistries.getBlock("minecraft:yellow_wool")))
-                    .where("P", Predicates.blocks(GetRegistries.getBlock("minecraft:orange_wool")))
-                    .where("Q", Predicates.blocks(GetRegistries.getBlock("gtceu:wrought_iron_block")))
-                    .where("R", Predicates.blocks(GetRegistries.getBlock("gtceu:lv_muffler_hatch")))
+                    .where("A", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get())
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS)))
+                    .where("B", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Invar)))
+                    .where("C", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where("D", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Bronze)))
+                    .where("E", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel)))
+                    .where("F", Predicates.blocks(GTBlocks.BRONZE_HULL.get()))
+                    .where("G", Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .where("H", Predicates.blocks(GTBlocks.CASING_BRONZE_GEARBOX.get()))
+                    .where("I", Predicates.blocks(GTBlocks.MACHINE_CASING_LV.get()))
+                    .where("J", Predicates.blocks(ALL_FIREBOXES.get(BoilerFireboxType.BRONZE_FIREBOX).get()))
+                    .where("K", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get()))
+                    .where("L", Predicates.fluids(Fluids.WATER))
+                    .where("M", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get()))
+                    .where("N", Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .where("O", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get())
+                            .or(Predicates.abilities(PartAbility.STEAM).setMinGlobalLimited(1).setMaxGlobalLimited(9)))
+                    .where("P", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get())
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(20))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setMaxGlobalLimited(20)))
+                    .where("Q", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.block, GTMaterials.WroughtIron)))
+                    .where("R", Predicates.abilities(PartAbility.MUFFLER))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     GTCEu.id("block/multiblock/steam_oven"))

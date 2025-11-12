@@ -10,11 +10,11 @@ import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
-import com.gregtechceu.gtceu.api.gui.fancy.IFancyUIProvider;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SteamEnergyRecipeHandler;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
@@ -44,21 +44,22 @@ import org.jetbrains.annotations.NotNull;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class GeneralPurposeSteamEngine extends WorkableElectricMultiblockMachine implements IFancyUIMachine, IDisplayUIMachine, ICheckPatternMachine, IThreadModifierParallelSteamMachine {
+public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine implements IFancyUIMachine, IDisplayUIMachine, ICheckPatternMachine, IThreadModifierParallelSteamMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             GeneralPurposeSteamEngine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    private static final double CONVERSION_RATE = 100.0D;
+    private final double CONVERSION_RATE;
     @Persisted
     private int amountOC;
     private final int MaxParallel;
     private final int ExtendlThread;
 
-    public GeneralPurposeSteamEngine(IMachineBlockEntity holder, int MaxParallel, int ExtendlThread, Object... args) {
+    public GeneralPurposeSteamEngine(IMachineBlockEntity holder, int MaxParallel, int ExtendlThread, double conversion_rate, Object... args) {
         super(holder, args);
         this.MaxParallel = MaxParallel;
         this.ExtendlThread = ExtendlThread;
+        this.CONVERSION_RATE = conversion_rate;
     }
 
     @Override
@@ -136,11 +137,6 @@ public class GeneralPurposeSteamEngine extends WorkableElectricMultiblockMachine
     public ModularUI createUI(Player entityPlayer) {
         return new ModularUI(198, 208, this, entityPlayer)
                 .widget(new FancyMachineUIWidget(this, 198, 208));
-    }
-
-    @Override
-    public List<IFancyUIProvider> getSubTabs() {
-        return super.getSubTabs();
     }
 
     @Override

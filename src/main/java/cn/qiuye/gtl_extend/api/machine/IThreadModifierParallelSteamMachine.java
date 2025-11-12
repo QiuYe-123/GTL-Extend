@@ -1,10 +1,7 @@
 package cn.qiuye.gtl_extend.api.machine;
 
-public interface IThreadModifierParallelSteamMachine {
-	
-	int getExtendlThread();
-	
-	int getMaxParallel();
-	
-	int getExtendlDuration();
-}
+import cn.qiuye.gtl_extend.api.machine.multiblock.IDurationMachine;
+import cn.qiuye.gtl_extend.api.machine.multiblock.IExParallelMachine;
+import cn.qiuye.gtl_extend.api.machine.multiblock.IThreadModifierMachine;
+
+public interface IThreadModifierParallelSteamMachine extends IThreadModifierMachine, IExParallelMachine, IDurationMachine {}

@@ -13,7 +13,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
@@ -60,8 +60,8 @@ public class SteamMultipleRecipesLogic extends RecipeLogic implements ILockRecip
     }
 
     @Override
-    public WorkableElectricMultiblockMachine getMachine() {
-        return (WorkableElectricMultiblockMachine) super.getMachine();
+    public WorkableMultiblockMachine getMachine() {
+        return (WorkableMultiblockMachine) super.getMachine();
     }
 
     protected double getTotalEuOfRecipe(GTRecipe recipe) {
@@ -77,8 +77,7 @@ public class SteamMultipleRecipesLogic extends RecipeLogic implements ILockRecip
 
     private GTRecipe getRecipe() {
         if (!machine.hasProxies()) return null;
-        long maxEUt = getMachine().getOverclockVoltage();
-        if (maxEUt <= 0) return null;
+        long maxEUt = Long.MAX_VALUE;
         var iterator = lookupRecipeIterator();
         GTRecipe output = GTRecipeBuilder.ofRaw().buildRawRecipe();
         output.outputs.put(ItemRecipeCapability.CAP, new ObjectArrayList<>());

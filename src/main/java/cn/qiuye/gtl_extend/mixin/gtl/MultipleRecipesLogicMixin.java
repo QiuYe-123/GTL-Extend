@@ -63,7 +63,7 @@ public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements I
         } else if (GTLExtendConfigHolder.INSTANCE.ThreadsADD()) {
             var = GTLExtendConfigHolder.INSTANCE.max_threads + gTLExtend$machine.getAdditionalThread();
         } else if (GTLExtendConfigHolder.INSTANCE.ThreadsSetAUTO()) {
-            var = Integer.MAX_VALUE - 1;
+            var = Integer.MAX_VALUE * 3L;
         }
         return var;
     }

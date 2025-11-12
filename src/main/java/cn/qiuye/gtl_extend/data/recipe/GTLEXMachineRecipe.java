@@ -36,6 +36,7 @@ import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static org.gtlcore.gtlcore.common.data.GTLMaterials.*;
 import static org.gtlcore.gtlcore.common.data.GTLRecipeTypes.SUPRACHRONAL_ASSEMBLY_LINE_RECIPES;
+import static org.gtlcore.gtlcore.common.data.machines.MultiBlockMachineA.*;
 
 import appeng.core.definitions.AEBlocks;
 
@@ -89,6 +90,19 @@ public class GTLEXMachineRecipe {
                     'A', GetRegistries.getItem("ae2:sky_stone_block"),
                     'B', CustomTags.EV_CIRCUITS);
         }
+
+        ASSEMBLER_RECIPES.recipeBuilder("the_steam_integrated_ore_processing_center")
+                .inputItems(LARGE_STEAM_MACERATOR, 64)
+                .inputItems(LARGE_STEAM_BATH, 64)
+                .inputItems(LARGE_STEAM_THERMAL_CENTRIFUGE, 64)
+                .inputItems(GetRegistries.getItem("kubejs:precision_steam_mechanism"), 64)
+                .inputItems(GetRegistries.getItem("kubejs:precision_steam_mechanism"), 64)
+                .inputItems(GTItems.ELECTRONIC_CIRCUIT_LV, 64)
+                .inputFluids(GTMaterials.SolderingAlloy.getFluid(64000))
+                .outputItems(MultiBlockMachineA.STEAM_INTEGRATED_ORE_PROCESSING_CENTER)
+                .duration(20000)
+                .EUt(VA[LV])
+                .save(provider);
 
         ASSEMBLY_LINE_RECIPES.recipeBuilder("cattle_cattle_machine")
                 .inputFluids(GTMaterials.Milk.getFluid(10000000000L))
