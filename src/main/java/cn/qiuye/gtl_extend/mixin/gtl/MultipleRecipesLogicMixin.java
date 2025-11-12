@@ -10,6 +10,14 @@ import org.gtlcore.gtlcore.api.recipe.RecipeResult;
 import org.gtlcore.gtlcore.api.recipe.RecipeRunnerHelper;
 import org.gtlcore.gtlcore.common.machine.trait.MultipleRecipesLogic;
 
+import com.gtladd.gtladditions.api.machine.IWirelessElectricMultiblockMachine;
+import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
+import com.gtladd.gtladditions.api.machine.logic.IWirelessRecipeLogic;
+import com.gtladd.gtladditions.api.machine.trait.IWirelessNetworkEnergyHandler;
+import com.gtladd.gtladditions.api.recipe.IWirelessGTRecipe;
+import com.gtladd.gtladditions.api.recipe.WirelessGTRecipe;
+import com.gtladd.gtladditions.api.recipe.WirelessGTRecipeBuilder;
+
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
@@ -22,7 +30,14 @@ import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.nbt.CompoundTag;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -33,21 +48,6 @@ import java.util.function.BiPredicate;
 import static org.gtlcore.gtlcore.api.recipe.IParallelLogic.getMaxParallel;
 import static org.gtlcore.gtlcore.api.recipe.IParallelLogic.getRecipeOutputChance;
 import static org.gtlcore.gtlcore.api.recipe.RecipeRunnerHelper.handleRecipeInput;
-
-import com.gtladd.gtladditions.api.machine.IWirelessElectricMultiblockMachine;
-import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
-import com.gtladd.gtladditions.api.machine.logic.IWirelessRecipeLogic;
-import com.gtladd.gtladditions.api.machine.trait.IWirelessNetworkEnergyHandler;
-import com.gtladd.gtladditions.api.recipe.IWirelessGTRecipe;
-import com.gtladd.gtladditions.api.recipe.WirelessGTRecipe;
-import com.gtladd.gtladditions.api.recipe.WirelessGTRecipeBuilder;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = MultipleRecipesLogic.class, priority = 9999)
 public abstract class MultipleRecipesLogicMixin extends RecipeLogic implements IWirelessRecipeLogic, IRecipeStatus {

@@ -1,6 +1,9 @@
 dependencies {
     compileOnly(libs.jetbrains.annotations)
 
+    modImplementation("thedarkcolour:kotlinforforge:4.11.0")
+    modImplementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+
     api(annotationProcessor("io.github.llamalad7:mixinextras-common:$project.mixinextras_version"))
     annotationProcessor 'org.spongepowered:mixin:0.8.7:processor'
 

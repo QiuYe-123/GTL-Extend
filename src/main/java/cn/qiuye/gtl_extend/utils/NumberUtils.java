@@ -2,12 +2,11 @@ package cn.qiuye.gtl_extend.utils;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
-
-import org.jetbrains.annotations.NotNull;
 
 public class NumberUtils {
 

@@ -4,6 +4,9 @@ import cn.qiuye.gtl_extend.config.GTLExtendConfigHolder;
 
 import org.gtlcore.gtlcore.common.data.GTLRecipeModifiers;
 
+import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
+import com.gtladd.gtladditions.api.machine.feature.IThreadModifierPart;
+
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
@@ -14,15 +17,12 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
-import com.gtladd.gtladditions.api.machine.feature.IThreadModifierPart;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

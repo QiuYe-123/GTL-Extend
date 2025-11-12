@@ -3,11 +3,20 @@ package cn.qiuye.gtl_extend.mixin.gtladd;
 import org.gtlcore.gtlcore.integration.gtmt.NewGTValues;
 import org.gtlcore.gtlcore.utils.NumberUtils;
 
+import com.gtladd.gtladditions.common.machine.muiltblock.part.WirelessEnergyNetworkTerminalPartMachineBase;
+import com.gtladd.gtladditions.integration.jade.provider.WirelessEnergyNetworkTerminalProvider;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 
+import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,15 +25,6 @@ import java.util.UUID;
 import static com.hepdd.gtmthings.utils.TeamUtil.*;
 import static net.minecraft.ChatFormatting.*;
 import static org.gtlcore.gtlcore.utils.TextUtil.GTL_CORE$VC;
-
-import com.gtladd.gtladditions.common.machine.muiltblock.part.WirelessEnergyNetworkTerminalPartMachineBase;
-import com.gtladd.gtladditions.integration.jade.provider.WirelessEnergyNetworkTerminalProvider;
-import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.ITooltip;
-import snownee.jade.api.config.IPluginConfig;
 
 @Mixin(WirelessEnergyNetworkTerminalProvider.class)
 public class WirelessEnergyNetworkTerminalProviderMixin {

@@ -5,6 +5,7 @@ import cn.qiuye.gtl_extend.config.GTLExtendConfigHolder;
 
 import org.gtlcore.gtlcore.utils.Registries;
 
+import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Item;
 
@@ -13,8 +14,6 @@ import java.util.function.Consumer;
 import static cn.qiuye.gtl_extend.common.data.GTL_Extend_Materials.ETERNALBLUEDREAM;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static org.gtlcore.gtlcore.common.data.GTLRecipeTypes.SUPRACHRONAL_ASSEMBLY_LINE_RECIPES;
-
-import com.tterrag.registrate.util.entry.ItemEntry;
 
 public class CircuitsRecipe {
 

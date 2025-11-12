@@ -26,6 +26,8 @@ import org.gtlcore.gtlcore.common.data.GTLMachines;
 import org.gtlcore.gtlcore.common.data.GTLRecipeTypes;
 import org.gtlcore.gtlcore.utils.TextUtil;
 
+import com.gtladd.gtladditions.api.machine.GTLAddPartAbility;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -40,6 +42,8 @@ import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
 
+import appeng.core.AppEng;
+import appeng.core.definitions.AEBlocks;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -51,10 +55,6 @@ import java.util.function.BiConsumer;
 
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
-
-import appeng.core.AppEng;
-import appeng.core.definitions.AEBlocks;
-import com.gtladd.gtladditions.api.machine.GTLAddPartAbility;
 
 public class MultiBlockMachineA {
 

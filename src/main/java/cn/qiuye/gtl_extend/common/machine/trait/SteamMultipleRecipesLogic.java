@@ -21,6 +21,8 @@ import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import lombok.Getter;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.Collections;
@@ -31,9 +33,6 @@ import java.util.function.BiPredicate;
 import static org.gtlcore.gtlcore.api.recipe.IParallelLogic.getMaxParallel;
 import static org.gtlcore.gtlcore.api.recipe.IParallelLogic.getRecipeOutputChance;
 import static org.gtlcore.gtlcore.api.recipe.RecipeRunnerHelper.*;
-
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import lombok.Getter;
 
 @Getter
 public class SteamMultipleRecipesLogic extends RecipeLogic implements ILockRecipe, IRecipeStatus {

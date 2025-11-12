@@ -29,12 +29,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
-
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
+
+import java.util.List;
 
 @Mixin(SpaceElevatorModuleMachine.class)
 public abstract class SpaceElevatorModuleMachineMixin extends WorkableElectricMultiblockMachine implements IModularMachineModule<SpaceElevatorMachine, SpaceElevatorModuleMachine>, IMachineLife {

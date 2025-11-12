@@ -2,12 +2,13 @@ package cn.qiuye.gtl_extend.common.machine.multiblock.electric;
 
 import org.gtlcore.gtlcore.common.machine.trait.MultipleRecipesLogic;
 
+import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
+import com.gtladd.gtladditions.api.machine.feature.IThreadModifierPart;
+
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 
-import com.gtladd.gtladditions.api.machine.IWirelessThreadModifierParallelMachine;
-import com.gtladd.gtladditions.api.machine.feature.IThreadModifierPart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

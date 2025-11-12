@@ -31,6 +31,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,6 @@ import java.util.Objects;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static org.gtlcore.gtlcore.common.data.GTLMachines.LARGE_STEAM_HATCH;
-
-import org.jetbrains.annotations.NotNull;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

@@ -6,9 +6,8 @@ import cn.qiuye.gtl_extend.common.data.machines.MultiBlockMachineA;
 
 import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;
 
-import net.minecraft.world.item.CreativeModeTab;
-
 import com.tterrag.registrate.util.entry.RegistryEntry;
+import net.minecraft.world.item.CreativeModeTab;
 
 public class GTL_Extend_CreativeModeTabs {
 

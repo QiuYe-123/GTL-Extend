@@ -4,6 +4,11 @@ repositories {
         dir "gradle/libs"
     }
     mavenCentral()
+
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+    }
     maven {
         url "https://maven.gtceu.com"
         content {

@@ -4,6 +4,10 @@ import cn.qiuye.gtl_extend.GTL_Extend;
 
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 
+import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -15,11 +19,6 @@ import net.minecraft.world.level.block.SoundType;
 import java.util.function.Supplier;
 
 import static cn.qiuye.gtl_extend.api.registries.GTLEXRegistration.REGISTRATE;
-
-import com.tterrag.registrate.util.entry.BlockEntry;
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public class GTL_Extend_Blocks {
 

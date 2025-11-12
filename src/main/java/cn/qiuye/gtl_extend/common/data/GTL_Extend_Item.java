@@ -4,14 +4,13 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.common.data.GTCompassSections;
 import com.gregtechceu.gtceu.common.item.DataItemBehavior;
 
+import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 import static cn.qiuye.gtl_extend.api.registries.GTLEXRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static com.gregtechceu.gtceu.common.data.GTItems.compassNode;
-
-import com.tterrag.registrate.util.entry.ItemEntry;
 
 public class GTL_Extend_Item {
 

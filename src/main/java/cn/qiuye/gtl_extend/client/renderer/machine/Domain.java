@@ -2,6 +2,7 @@ package cn.qiuye.gtl_extend.client.renderer.machine;
 
 import org.gtlcore.gtlcore.client.ClientUtil;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -9,8 +10,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.ModelData;
-
-import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Quaternionf;
 
 public class Domain {
