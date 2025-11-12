@@ -5,7 +5,6 @@ import cn.qiuye.gtl_extend.utils.NumberUtils;
 import org.gtlcore.gtlcore.integration.gtmt.NewGTValues;
 
 import com.gtladd.gtladditions.common.record.MachineEnergyData;
-import com.gtladd.gtladditions.utils.CommonUtils;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -100,12 +99,14 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine {
 
         if (avgEnergy.compareTo(BigDecimal.valueOf(0L)) >= 0) {
             textList.add(Component.translatable("gtl_extend.machine.wireless_energy_monitor.tooltip.input",
-                    Component.literal(NumberUtils.formatBigDecimalNumberOrSic(absAvgEnergy)).withStyle(ChatFormatting.BLUE), NumberUtils.formatBigDecimalNumberOrSic(voltageAmperage), voltageName).withStyle(ChatFormatting.GRAY));
+                    Component.literal(NumberUtils.formatBigDecimalNumberOrSic(absAvgEnergy)).withStyle(ChatFormatting.BLUE),
+                    NumberUtils.formatBigDecimalNumberOrSic(voltageAmperage), voltageName).withStyle(ChatFormatting.GRAY));
             textList.add(Component.translatable("gtceu.multiblock.power_substation.time_to_fill",
                     Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.time_to_fill")).withStyle(ChatFormatting.GRAY));
         } else {
             textList.add(Component.translatable("gtl_extend.machine.wireless_energy_monitor.tooltip.output",
-                    Component.literal(NumberUtils.formatBigDecimalNumberOrSic(absAvgEnergy)).withStyle(ChatFormatting.BLUE), NumberUtils.formatBigDecimalNumberOrSic(voltageAmperage), voltageName).withStyle(ChatFormatting.GRAY));
+                    Component.literal(NumberUtils.formatBigDecimalNumberOrSic(absAvgEnergy)).withStyle(ChatFormatting.BLUE),
+                    NumberUtils.formatBigDecimalNumberOrSic(voltageAmperage), voltageName).withStyle(ChatFormatting.GRAY));
             textList.add(Component.translatable("gtceu.multiblock.power_substation.time_to_drain",
                     getTimeToFillDrainText(energyTotal.divide(absAvgEnergy.toBigInteger().multiply(BigInteger.valueOf(20))))).withStyle(ChatFormatting.GRAY));
         }
@@ -125,7 +126,7 @@ public abstract class WirelessEnergyMonitorMixin extends MetaMachine {
                         .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", machine.getLevel()
                                 .dimension().location()).append(" [").append(pos).append("] ")
                                 .append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", GetName(this.holder.level(), uuid))))))
-                        .append(" ").append(CommonUtils.formatSignBigInteger(eut)).append(" EU/t (")
+                        .append(" ").append(NumberUtils.formatBigIntegerNumberOrSic(eut)).append(" EU/t (")
                         .append(NewGTValues.VNF[energyTier]).append(")")
                         .append(ComponentPanelWidget.withButton(Component.literal("[").append(pos)
                                 .append("]"), "none")));
