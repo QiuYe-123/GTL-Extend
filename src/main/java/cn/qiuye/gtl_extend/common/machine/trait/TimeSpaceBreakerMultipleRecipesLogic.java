@@ -11,8 +11,6 @@ import org.gtlcore.gtlcore.api.recipe.IParallelLogic;
 import org.gtlcore.gtlcore.api.recipe.RecipeResult;
 import org.gtlcore.gtlcore.api.recipe.RecipeRunnerHelper;
 
-import com.gtladd.gtladditions.api.recipe.WirelessGTRecipe;
-
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
@@ -28,7 +26,6 @@ import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import lombok.Getter;
 import lombok.val;
 import net.minecraft.nbt.CompoundTag;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiPredicate;
@@ -71,11 +68,6 @@ public class TimeSpaceBreakerMultipleRecipesLogic extends RecipeLogic implements
     private GTRecipe getRecipe() {
         if (!machine.hasProxies()) return null;
 
-        return getWirelessRecipe();
-    }
-
-    @Nullable
-    private WirelessGTRecipe getWirelessRecipe() {
         final var iterator = lookupRecipeIterator();
         final var itemInputs = new ObjectArrayList<Content>();
         final var fluidInputs = new ObjectArrayList<Content>();
