@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "cn.qiuye.gtl_extend.mixin",
+  "package": "cn.qiuye.gtlextend.mixin",
   "refmap": "gtl_extend.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "client": [

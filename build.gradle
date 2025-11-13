@@ -3,6 +3,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.allopen'
     alias libs.plugins.modDevGradleLegacy
     alias libs.plugins.lombok
     alias libs.plugins.spotless
