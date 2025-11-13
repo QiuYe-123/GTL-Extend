@@ -554,8 +554,6 @@ public class MultiBlockMachineA {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .tooltips(Component.literal(TextUtil.full_color("把不可能变为可能，我们无所不能")))
             .tooltips(Component.literal("此机器无需耗电，只需放置MAX激光靶仓就可以跑满并行"))
-            .tooltips(Component.literal("严禁使用增广系列输出，否则造成严重吞物品概不负责，普通me输出则会对超int上线的物品进行截断"))
-            .tooltips(Component.literal("请自行判断造成任何后果概不负责"))
             .tooltips(Component.literal("灯建议使用创造搭，因自动搭建逻辑问题，无法生存自动搭建，需要扔掉对应的灯，使用创造搭建"))
             .tooltips(Component.literal(TextUtil.purplish_red("结构来源：Mailgusang ---已获取授权")))
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_2.tooltip",
