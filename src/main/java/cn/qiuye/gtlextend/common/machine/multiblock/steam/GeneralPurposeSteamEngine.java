@@ -1,28 +1,23 @@
 package cn.qiuye.gtlextend.common.machine.multiblock.steam;
 
-import cn.qiuye.gtlextend.api.machine.IThreadModifierParallelSteamMachine;
-import cn.qiuye.gtlextend.common.machine.trait.SteamMultipleRecipesLogic;
-
-import org.gtlcore.gtlcore.api.machine.trait.ICheckPatternMachine;
-
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
+import com.gregtechceu.gtceu.api.gui.fancy.IFancyUIProvider;
+import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SteamEnergyRecipeHandler;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
@@ -31,7 +26,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,31 +33,18 @@ import java.util.Objects;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static org.gtlcore.gtlcore.common.data.GTLMachines.LARGE_STEAM_HATCH;
-
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine implements IFancyUIMachine, IDisplayUIMachine, ICheckPatternMachine, IThreadModifierParallelSteamMachine {
+public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine implements IFancyUIMachine, IDisplayUIMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            GeneralPurposeSteamEngine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+            GeneralPurposeSteamEngine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    private final double CONVERSION_RATE;
-    @Persisted
-    private int amountOC;
-    private final int MaxParallel;
-    private final int ExtendlThread;
+    private final double CONVERSION_RATE ;
 
-    public GeneralPurposeSteamEngine(IMachineBlockEntity holder, int MaxParallel, int ExtendlThread, double conversion_rate, Object... args) {
+    public GeneralPurposeSteamEngine(IMachineBlockEntity holder, double CONVERSION_RATE, Object... args) {
         super(holder, args);
-        this.MaxParallel = MaxParallel;
-        this.ExtendlThread = ExtendlThread;
-        this.CONVERSION_RATE = conversion_rate;
-    }
-
-    @Override
-    protected RecipeLogic createRecipeLogic(Object @NotNull... args) {
-        return new SteamMultipleRecipesLogic(this);
+        this.CONVERSION_RATE = CONVERSION_RATE;
     }
 
     @Override
@@ -76,14 +57,12 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
             var handler = itr.next();
             if (handler instanceof NotifiableFluidTank tank) {
                 if (tank.getFluidInTank(0).isFluidEqual(GTMaterials.Steam.getFluid(1))) {
-                    boolean isOC = tank.getMachine().getDefinition() == LARGE_STEAM_HATCH;
                     itr.remove();
                     if (!capabilitiesProxy.contains(IO.IN, EURecipeCapability.CAP)) {
                         capabilitiesProxy.put(IO.IN, EURecipeCapability.CAP, new ArrayList<>());
                     }
                     Objects.requireNonNull(capabilitiesProxy.get(IO.IN, EURecipeCapability.CAP))
-                            .add(new SteamEnergyRecipeHandler(tank, CONVERSION_RATE * (isOC ? Math.pow(3, this.amountOC) : 1)));
-                    return;
+                            .add(new SteamEnergyRecipeHandler(tank,  CONVERSION_RATE * Math.pow(2 , 100)));
                 }
             }
         }
@@ -91,6 +70,7 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
 
     @Override
     public void addDisplayText(List<Component> textList) {
+        IDisplayUIMachine.super.addDisplayText(textList);
         if (isFormed()) {
             textList.add(Component.translatable(getRecipeType().registryName.toLanguageKey())
                     .setStyle(Style.EMPTY.withColor(ChatFormatting.AQUA)
@@ -139,31 +119,22 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
     }
 
     @Override
+    public List<IFancyUIProvider> getSubTabs() {
+        return getParts().stream()
+                .filter(Objects::nonNull)
+                .map(IFancyUIProvider.class::cast)
+                .toList();
+    }
+
+    @Override
+    public void attachTooltips(TooltipsPanel tooltipsPanel) {
+        for (IMultiPart part : getParts()) {
+            part.attachFancyTooltipsToController(this, tooltipsPanel);
+        }
+    }
+
+    @Override
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
-    }
-
-    /**
-     * @return .
-     */
-    @Override
-    public int getExtendlDuration() {
-        return 1;
-    }
-
-    /**
-     * @return .
-     */
-    @Override
-    public int getMaxParallel() {
-        return MaxParallel;
-    }
-
-    /**
-     * @return .
-     */
-    @Override
-    public int getExtendlThread() {
-        return ExtendlThread;
     }
 }

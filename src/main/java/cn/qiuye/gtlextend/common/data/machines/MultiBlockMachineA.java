@@ -93,7 +93,7 @@ public class MultiBlockMachineA {
                     GTCEu.id("block/multiblock/fusion_reactor"))
             .register() : null;
 
-    public static final MultiblockMachineDefinition GENERAL_PURPOSE_STEAM_ENGINE = GTLExtendConfigHolder.INSTANCE.enableGeneralPurposeSteamEngine ? GTLEXRegistration.REGISTRATE.multiblock("general_purpose_steam_engine", (holder) -> new GeneralPurposeSteamEngine(holder, 16384, 1, 100.0D))
+    public static final MultiblockMachineDefinition GENERAL_PURPOSE_STEAM_ENGINE = GTLExtendConfigHolder.INSTANCE.enableGeneralPurposeSteamEngine ? GTLEXRegistration.REGISTRATE.multiblock("general_purpose_steam_engine", (holder) -> new GeneralPurposeSteamEngine(holder, 1000000))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(GTLRecipeTypes.LAVA_FURNACE_RECIPES,
                     GTRecipeTypes.FORGE_HAMMER_RECIPES,
@@ -150,7 +150,7 @@ public class MultiBlockMachineA {
                     GTCEu.id("block/multiblock/steam_oven"))
             .register() : null;
 
-    public static final MultiblockMachineDefinition STEAM_INTEGRATED_ORE_PROCESSING_CENTER = GTLEXRegistration.REGISTRATE.multiblock("steam_integrated_ore_processing_center", (holder) -> new GeneralPurposeSteamEngine(holder, 10000, 8, 1000.0D))
+    public static final MultiblockMachineDefinition STEAM_INTEGRATED_ORE_PROCESSING_CENTER = GTLEXRegistration.REGISTRATE.multiblock("steam_integrated_ore_processing_center", (holder) -> new GeneralPurposeSteamEngine(holder, 100000000))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTLRecipeTypes.INTEGRATED_ORE_PROCESSOR)
             .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
@@ -159,11 +159,11 @@ public class MultiBlockMachineA {
             .recipeModifier((machine, recipe, params, result) -> {
                 GTRecipe recipe1 = recipe.copy();
                 recipe1.duration = 1;
-                recipe1 = GTRecipeModifiers.fastParallel(machine, recipe1, 10000, false).getFirst();
+                recipe1 = GTRecipeModifiers.fastParallel(machine, recipe1, 100000, false).getFirst();
                 return recipe1;
             })
             .tooltips(Component.literal(TextUtil.full_color("暴力.....")))
-            .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为1t,自带10000并行")))
+            .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为1t,自带100000并行")))
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
                     Component.translatable("gtceu.integrated_ore_processor")))
             .tooltipBuilder(GTL_EX_ADD)
