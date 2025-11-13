@@ -545,7 +545,7 @@ public class MultiBlockMachineA {
                     GTCEu.id("block/multiblock/hpca"))
             .register();
 
-    public static final MultiblockMachineDefinition TIME_SPACE_BREAKER = GTLEXRegistration.REGISTRATE.multiblock("time_space_breaker", TimeSpaceBreakerMachine::new)
+    public static final MultiblockMachineDefinition TIME_SPACE_BREAKER = GTLEXRegistration.REGISTRATE.multiblock("time_space_breaker", TimeSpaceBreakerMultiple::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(GTLRecipeTypes.QFT_RECIPES,
                     GTLRecipeTypes.DIMENSIONALLY_TRANSCENDENT_PLASMA_FORGE_RECIPES)

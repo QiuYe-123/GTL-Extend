@@ -1,8 +1,7 @@
 package cn.qiuye.gtlextend.api.recipe
 
 import org.gtlcore.gtlcore.api.recipe.IGTRecipe
-
-import com.gtladd.gtladditions.common.machine.muiltblock.controller.ForgeOfTheAntichrist.Companion.ForgeOfTheAntichristLogic.Companion.cycleItems
+import org.gtlcore.gtlcore.utils.Registries.getItem
 
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability
@@ -12,9 +11,8 @@ import com.gregtechceu.gtceu.api.recipe.content.ContentModifier
 import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap
-
-import kotlin.collections.set
 
 class ModifyContents {
 
@@ -55,7 +53,7 @@ class ModifyContents {
                 if (cap == ItemRecipeCapability.CAP) {
                     for (content in contentList) {
                         if (content.content is SizedIngredient &&
-                            (content.content as SizedIngredient).items[0].item in cycleItems
+                            (content.content as SizedIngredient).items[0].item in CycleItems.cycleItems
                         ) {
                             copyList.add(content)
                         } else {
@@ -87,7 +85,7 @@ class ModifyContents {
                     val copyList = ObjectArrayList<Content>(contentList.size)
                     for (content in contentList) {
                         if (content.content is SizedIngredient &&
-                            (content.content as SizedIngredient).items[0].item in cycleItems
+                            (content.content as SizedIngredient).items[0].item in CycleItems.cycleItems
                         ) {
                             copyList.add(content.copy(ItemRecipeCapability.CAP, modifier))
                         } else {
@@ -101,5 +99,15 @@ class ModifyContents {
             }
             return after
         }
+    }
+
+    private object CycleItems {
+        val cycleItems = ObjectOpenHashSet(
+            arrayOf(
+                getItem("kubejs:extremely_durable_plasma_cell"),
+                getItem("kubejs:time_dilation_containment_unit"),
+                getItem("kubejs:plasma_containment_cell"),
+            ),
+        )
     }
 }
