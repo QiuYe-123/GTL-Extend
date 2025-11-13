@@ -40,7 +40,7 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             GeneralPurposeSteamEngine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    private final double CONVERSION_RATE ;
+    private final double CONVERSION_RATE;
 
     public GeneralPurposeSteamEngine(IMachineBlockEntity holder, double CONVERSION_RATE, Object... args) {
         super(holder, args);
@@ -62,7 +62,7 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
                         capabilitiesProxy.put(IO.IN, EURecipeCapability.CAP, new ArrayList<>());
                     }
                     Objects.requireNonNull(capabilitiesProxy.get(IO.IN, EURecipeCapability.CAP))
-                            .add(new SteamEnergyRecipeHandler(tank,  CONVERSION_RATE * Math.pow(2 , 100)));
+                            .add(new SteamEnergyRecipeHandler(tank, CONVERSION_RATE * Math.pow(2, 100)));
                 }
             }
         }
