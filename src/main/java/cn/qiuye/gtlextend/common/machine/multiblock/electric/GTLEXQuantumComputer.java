@@ -308,7 +308,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
 
             // 添加冷却液消耗显示
             long coolantToDrain = (long) Math.ceil(getMaxCWUt() / 1_000_000.0);
-            textList.add(Component.translatable("gtl_extend_machine_coolant_usage",
+            textList.add(Component.translatable("gtl_extend.machine.coolant_usage",
                     coolantToDrain + " L/t")
                     .withStyle(ChatFormatting.BLUE));
         }

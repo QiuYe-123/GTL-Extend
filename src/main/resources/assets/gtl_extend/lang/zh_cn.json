@@ -37,7 +37,7 @@
   "block.gtl_extend.uiv_primitive_dragon_egg_energy": "极巨压龙蛋能源吸收器",
   "gtl_extend_machine_mode": "当前模式: %s",
   "gtl_extend.machine.circuit": "电路配置: %d",
-  "gtl_extend_machine_coolant_usage": "冷却液消耗量: %d",
+  "gtl_extend.machine.coolant_usage": "冷却液消耗量: %d",
   "material.gtceu.eternal_blue_dream_vein": "永恒蓝梦",
   "material.gtceu.fluix_crystal": "福鲁伊克斯",
   "item.gtl_extend.eternalbluedream_ulv_processor_maninframe": "蓝梦ULV处理器主机",

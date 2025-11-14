@@ -17,7 +17,6 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -82,14 +81,14 @@ public class CRTierCasingMachine extends WorkableElectricMultiblockMachine imple
     }
 
     @Override
-    public void addDisplayText(@NotNull List<Component> textList) {
+    public void addDisplayText(List<Component> textList) {
         super.addDisplayText(textList);
         if (!this.isFormed) return;
         textList.add(Component.translatable("gtceu.casings.tier", tier));
     }
 
     @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
+    public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
 

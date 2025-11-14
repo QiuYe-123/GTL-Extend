@@ -244,8 +244,8 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
      * @return .
      */
     @Override
-    public int getExtendlThread() {
-        return Integer.MAX_VALUE - 1;
+    public long getExtendlThread() {
+        return Integer.MAX_VALUE;
     }
 
     /**

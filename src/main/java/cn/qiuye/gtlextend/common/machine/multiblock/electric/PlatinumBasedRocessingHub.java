@@ -11,9 +11,14 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class PlatinumBasedRocessingHub extends WorkableElectricMultiblockMachine implements IWirelessThreadModifierParallelMachine {
 
     protected @Nullable IThreadModifierPart threadPartMachine = null;
@@ -33,11 +38,10 @@ public class PlatinumBasedRocessingHub extends WorkableElectricMultiblockMachine
     }
 
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
+    protected RecipeLogic createRecipeLogic(Object @NotNull... args) {
         return new MultipleRecipesLogic(this);
     }
 
-    @NotNull
     @Override
     public MultipleRecipesLogic getRecipeLogic() {
         return (MultipleRecipesLogic) super.getRecipeLogic();

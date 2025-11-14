@@ -1,7 +1,7 @@
 package cn.qiuye.gtlextend.common.machine.multiblock.electric
 
 import cn.qiuye.gtlextend.api.machine.IThreadModifierParallelMachine
-import cn.qiuye.gtlextend.api.recipe.ModifyContents.Companion.copyAndModifyRecipe
+import cn.qiuye.gtlextend.api.recipe.ModifyContents
 import cn.qiuye.gtlextend.common.machine.trait.TimeSpaceBreakerMultipleRecipesLogic
 import cn.qiuye.gtlextend.common.record.ParallelData
 
@@ -19,7 +19,7 @@ class TimeSpaceBreakerMultiple(holder: IMachineBlockEntity, vararg args: Any?) :
     NoEnergyMultiblockMachine(holder, *args),
     IThreadModifierParallelMachine {
 
-    override fun getExtendlThread(): Int = Int.MAX_VALUE
+    override fun getExtendlThread(): Long = Int.MAX_VALUE * 2L
     override fun getMaxParallel(): Int = Int.MAX_VALUE
     override fun getExtendlDuration(): Int = 20
 
@@ -43,7 +43,7 @@ class TimeSpaceBreakerMultiple(holder: IMachineBlockEntity, vararg args: Any?) :
 
                 for (recipe in recipes) {
                     recipe ?: continue
-                    val modified = copyAndModifyRecipe(recipe, modifier)
+                    val modified = ModifyContents.copyAndModifyRecipe(recipe, modifier)
                     val parallel = getMaxParallel(modified, Long.MAX_VALUE)
                     if (parallel > 0) {
                         recipeList.add(modified)
