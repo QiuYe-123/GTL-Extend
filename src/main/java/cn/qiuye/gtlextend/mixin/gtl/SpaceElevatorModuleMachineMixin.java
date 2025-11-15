@@ -26,7 +26,6 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +63,7 @@ public abstract class SpaceElevatorModuleMachineMixin extends WorkableElectricMu
     @Overwrite(remap = false)
     private void getSpaceElevatorTier() {
         if (this.gtl_extend$controller != null && this.getLevel() != null) {
-            RecipeLogic logic = GTCapabilityHelper.getRecipeLogic(this.getLevel(), this.gtl_extend$controller, (Direction) null);
+            RecipeLogic logic = GTCapabilityHelper.getRecipeLogic(this.getLevel(), this.gtl_extend$controller, null);
             if (logic != null && logic.getMachine().getDefinition() == AdvancedMultiBlockMachine.SPACE_ELEVATOR) {
                 if (logic.isWorking() && logic.getProgress() > 80) {
                     this.gtl_extend$SpaceElevatorTier = ((SpaceElevatorMachine) logic.machine).getTier() - 7;
@@ -87,7 +86,7 @@ public abstract class SpaceElevatorModuleMachineMixin extends WorkableElectricMu
                     BlockPos[] coordinatess = new BlockPos[] { i.offset(3, 2, 0), i.offset(-3, 2, 0), i.offset(0, 2, 3), i.offset(0, 2, -3) };
 
                     for (BlockPos j : coordinatess) {
-                        RecipeLogic logic = GTCapabilityHelper.getRecipeLogic(level, j, (Direction) null);
+                        RecipeLogic logic = GTCapabilityHelper.getRecipeLogic(level, j, null);
                         if (logic != null && logic.getMachine().getDefinition() == AdvancedMultiBlockMachine.SPACE_ELEVATOR) {
                             this.gtl_extend$controller = j;
                             if (logic.isWorking() && logic.getProgress() > 80) {
@@ -175,7 +174,6 @@ public abstract class SpaceElevatorModuleMachineMixin extends WorkableElectricMu
     private int gtl_extend$Parallel() {
         double var = Math.pow(4, gtl_extend$ModuleTier - 1);
         double var1 = var * gtl_extend$tier;
-        int parallel = (int) var1;
-        return parallel;
+        return (int) var1;
     }
 }
