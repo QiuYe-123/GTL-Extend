@@ -87,7 +87,7 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
     public boolean onWorking() {
         boolean value = super.onWorking();
         if (this.eut && this.userId != null) {
-            WirelessEnergyManager.addEUToGlobalEnergyMap(userId, getRecipeEUt().negate(), this);
+            value = WirelessEnergyManager.addEUToGlobalEnergyMap(userId, getRecipeEUt().negate(), this);
         }
         return value;
     }
@@ -158,7 +158,7 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
             for (int config : priorityOrder) {
                 if (MachineIO.notConsumableCircuit(this, config)) {
                     this.oc = config;
-                    return;
+                    break;
                 }
             }
         }
