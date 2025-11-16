@@ -29,16 +29,15 @@ public class FormattingUtil {
     public static String formatNumberReadable(BigDecimal number, boolean milli, NumberFormat fmt, @Nullable String unit) {
         StringBuilder sb = new StringBuilder();
         BigDecimal zero = BigDecimal.ZERO;
-        BigDecimal oneThousand = new BigDecimal(1000);
         BigDecimal number1 = number;
         if (number.compareTo(zero) < 0) {
             number = number.abs();
             sb.append('-');
         }
 
-        if (milli && number.compareTo(oneThousand) >= 0) {
+        if (milli && number.compareTo(ONE_THOUSAND) >= 0) {
             milli = false;
-            number = number.divide(oneThousand, MathContext.DECIMAL128);
+            number = number.divide(ONE_THOUSAND, MathContext.DECIMAL128);
         }
 
         int exp = 0;
@@ -52,7 +51,7 @@ public class FormattingUtil {
 
             // 使用BigDecimal进行幂运算
             if (exp > 0) {
-                BigDecimal divisor = power(ONE_THOUSAND, exp);
+                BigDecimal divisor = power(exp);
                 number1 = number.divide(divisor, MathContext.DECIMAL128);
             }
         }
@@ -87,12 +86,12 @@ public class FormattingUtil {
     /**
      * 使用BigDecimal计算幂运算
      */
-    private static BigDecimal power(BigDecimal base, int exponent) {
+    private static BigDecimal power(int exponent) {
         if (exponent == 0) return BigDecimal.ONE;
 
         BigDecimal result = BigDecimal.ONE;
         for (int i = 0; i < exponent; i++) {
-            result = result.multiply(base);
+            result = result.multiply(ONE_THOUSAND);
         }
         return result;
     }
