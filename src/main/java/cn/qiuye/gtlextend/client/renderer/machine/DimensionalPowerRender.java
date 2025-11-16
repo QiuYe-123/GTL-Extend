@@ -1,7 +1,7 @@
 package cn.qiuye.gtlextend.client.renderer.machine;
 
 import cn.qiuye.gtlextend.GTL_Extend;
-import cn.qiuye.gtlextend.common.machine.multiblock.electric.DimensionalPower;
+import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.DimensionalPower;
 
 import org.gtlcore.gtlcore.GTLCore;
 

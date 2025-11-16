@@ -1,7 +1,7 @@
 package cn.qiuye.gtlextend.client.renderer.machine;
 
 import cn.qiuye.gtlextend.GTL_Extend;
-import cn.qiuye.gtlextend.common.machine.multiblock.electric.BlackHoleMatterDecompressor;
+import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.BlackHoleMatterDecompressor;
 
 import org.gtlcore.gtlcore.GTLCore;
 

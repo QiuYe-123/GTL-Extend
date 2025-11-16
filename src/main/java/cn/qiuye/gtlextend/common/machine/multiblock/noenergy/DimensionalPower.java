@@ -1,4 +1,4 @@
-package cn.qiuye.gtlextend.common.machine.multiblock.electric;
+package cn.qiuye.gtlextend.common.machine.multiblock.noenergy;
 
 import cn.qiuye.gtlextend.utils.NumberUtils;
 

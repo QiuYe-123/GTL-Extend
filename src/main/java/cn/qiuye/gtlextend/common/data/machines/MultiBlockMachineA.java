@@ -17,6 +17,9 @@ import cn.qiuye.gtlextend.common.data.machines.MultiBlock.SuperfluidGeneralEnerg
 import cn.qiuye.gtlextend.common.data.machines.MultiBlock.TimeSpaceBreaker.TimeSpaceBreaker;
 import cn.qiuye.gtlextend.common.data.machines.MultiBlock.Void_Pump.Void_Pump_MultiBlockStructure;
 import cn.qiuye.gtlextend.common.machine.multiblock.electric.*;
+import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.BlackHoleMatterDecompressor;
+import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.DimensionalPower;
+import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.TimeSpaceBreakerMultiple;
 import cn.qiuye.gtlextend.common.machine.multiblock.steam.GeneralPurposeSteamEngine;
 import cn.qiuye.gtlextend.config.GTLExtendConfigHolder;
 
