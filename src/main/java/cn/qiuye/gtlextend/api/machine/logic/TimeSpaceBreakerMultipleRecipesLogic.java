@@ -1,4 +1,4 @@
-package cn.qiuye.gtlextend.common.machine.trait;
+package cn.qiuye.gtlextend.api.machine.logic;
 
 import cn.qiuye.gtlextend.api.machine.IThreadModifierParallelMachine;
 import cn.qiuye.gtlextend.api.recipe.NoEnergyGTRecipe;
@@ -6,7 +6,6 @@ import cn.qiuye.gtlextend.api.recipe.NoEnergyGTRecipeBuilder;
 import cn.qiuye.gtlextend.common.record.ParallelData;
 import cn.qiuye.gtlextend.utils.CommonUtils;
 
-import org.gtlcore.gtlcore.api.machine.multiblock.NoEnergyMultiblockMachine;
 import org.gtlcore.gtlcore.api.machine.trait.ILockRecipe;
 import org.gtlcore.gtlcore.api.machine.trait.IRecipeStatus;
 import org.gtlcore.gtlcore.api.recipe.IGTRecipe;
@@ -14,17 +13,17 @@ import org.gtlcore.gtlcore.api.recipe.IParallelLogic;
 import org.gtlcore.gtlcore.api.recipe.RecipeResult;
 import org.gtlcore.gtlcore.api.recipe.RecipeRunnerHelper;
 
-import com.gtladd.gtladditions.common.record.RecipeData;
-
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayFIFOQueue;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
@@ -44,9 +43,9 @@ public class TimeSpaceBreakerMultipleRecipesLogic extends RecipeLogic implements
 
     protected final Predicate<IRecipeLogicMachine> beforeWorking;
 
-    private final IThreadModifierParallelMachine parallel;
+    protected final IThreadModifierParallelMachine parallel;
 
-    private final BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck;
+    protected final BiPredicate<CompoundTag, IRecipeLogicMachine> dataCheck;
 
     public TimeSpaceBreakerMultipleRecipesLogic(IThreadModifierParallelMachine machine) {
         this(machine, null, null);
@@ -60,8 +59,8 @@ public class TimeSpaceBreakerMultipleRecipesLogic extends RecipeLogic implements
     }
 
     @Override
-    public NoEnergyMultiblockMachine getMachine() {
-        return (NoEnergyMultiblockMachine) super.getMachine();
+    public WorkableElectricMultiblockMachine getMachine() {
+        return (WorkableElectricMultiblockMachine) super.getMachine();
     }
 
     @Override
@@ -77,52 +76,13 @@ public class TimeSpaceBreakerMultipleRecipesLogic extends RecipeLogic implements
         }
     }
 
-    protected boolean checkBeforeWorking() {
-        if (!machine.hasProxies()) return false;
-        return this.beforeWorking == null || this.beforeWorking.test(machine);
-    }
-
     @Nullable
-    protected ParallelData calculateParallels() {
-        var recipes = this.lookupRecipeIterator();
-        int length = recipes.size();
-        if (length == 0) return null;
-
-        long totalParallel = (long) this.getParallel().getMaxParallel() * this.getParallel().getExtendlThread();
-        long remaining = totalParallel;
-        long[] parallels = new long[length];
-        int index = 0;
-        var queue = new ObjectArrayFIFOQueue<RecipeData>(length);
-        var recipeList = new ObjectArrayList<GTRecipe>(length);
-
-        for (var r : recipes) {
-            if (r == null) continue;
-            long p = getMaxParallel(r, totalParallel);
-            if (p <= 0) continue;
-            recipeList.add(r);
-            parallels[index] = Math.min(p, totalParallel / length);
-            if (p > parallels[index]) queue.enqueue(new RecipeData(index, p - parallels[index]));
-            remaining -= parallels[index++];
-        }
-
-        return CommonUtils.getParallelData(length, remaining, parallels, queue, recipeList);
-    }
-
-    protected long getMaxParallel(GTRecipe recipe, long limit) {
-        return IParallelLogic.getMaxParallel(this.machine, recipe, limit);
-    }
-
-    private GTRecipe getRecipe() {
+    protected GTRecipe getRecipe() {
         if (!checkBeforeWorking()) return null;
 
         final var parallelData = calculateParallels();
         if (parallelData == null) return null;
 
-        return buildFinalRecipe(parallelData);
-    }
-
-    @Nullable
-    protected NoEnergyGTRecipe buildFinalRecipe(ParallelData parallelData) {
         final var itemOutputs = new ObjectArrayList<Content>();
         final var fluidOutputs = new ObjectArrayList<Content>();
 
@@ -152,13 +112,39 @@ public class TimeSpaceBreakerMultipleRecipesLogic extends RecipeLogic implements
         return buildRecipe(itemOutputs, fluidOutputs, parallel.getExtendlDuration());
     }
 
-    protected @NotNull NoEnergyGTRecipe buildRecipe(@NotNull List<Content> item, @NotNull List<Content> fluid, int duration) {
-        return NoEnergyGTRecipeBuilder
-                .ofRaw()
-                .output(ItemRecipeCapability.CAP, item)
-                .output(FluidRecipeCapability.CAP, fluid)
-                .duration(duration)
-                .buildRawRecipe();
+    @Nullable
+    protected ParallelData calculateParallels() {
+        var recipes = this.lookupRecipeIterator();
+        int length = recipes.size();
+        if (length == 0) return null;
+
+        long totalParallel = (long) this.getParallel().getMaxParallel() * this.parallel.getExtendlThread();
+        long remaining = totalParallel;
+        long[] parallels = new long[length];
+        int index = 0;
+        var recipeList = new ObjectArrayList<GTRecipe>(length);
+        var remainingWants = new LongArrayList(length);
+        var remainingIndices = new IntArrayList(length);
+
+        for (var r : recipes) {
+            if (r == null) continue;
+            long p = getMaxParallel(r, totalParallel);
+            if (p <= 0) continue;
+            recipeList.add(r);
+            long allocated = Math.min(p, totalParallel / length);
+            parallels[index] = allocated;
+            long want = p - allocated;
+            if (want > 0) {
+                remainingWants.add(want);
+                remainingIndices.add(index);
+            }
+            remaining -= allocated;
+            index++;
+        }
+
+        if (recipeList.isEmpty()) return null;
+
+        return CommonUtils.getParallelData(remaining, parallels, remainingWants, remainingIndices, recipeList);
     }
 
     protected @NotNull Set<GTRecipe> lookupRecipeIterator() {
@@ -176,7 +162,25 @@ public class TimeSpaceBreakerMultipleRecipesLogic extends RecipeLogic implements
         }
     }
 
+    protected boolean checkBeforeWorking() {
+        if (!machine.hasProxies()) return false;
+        return this.beforeWorking == null || this.beforeWorking.test(machine);
+    }
+
+    protected long getMaxParallel(GTRecipe recipe, long limit) {
+        return IParallelLogic.getMaxParallel(this.machine, recipe, limit);
+    }
+
     private boolean checkRecipe(GTRecipe recipe) {
         return true;
+    }
+
+    protected @NotNull NoEnergyGTRecipe buildRecipe(@NotNull List<Content> item, @NotNull List<Content> fluid, int duration) {
+        return NoEnergyGTRecipeBuilder
+                .ofRaw()
+                .output(ItemRecipeCapability.CAP, item)
+                .output(FluidRecipeCapability.CAP, fluid)
+                .duration(duration)
+                .buildRawRecipe();
     }
 }

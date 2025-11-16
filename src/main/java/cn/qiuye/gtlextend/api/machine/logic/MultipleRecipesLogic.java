@@ -1,4 +1,4 @@
-package cn.qiuye.gtlextend.common.machine.trait;
+package cn.qiuye.gtlextend.api.machine.logic;
 
 import cn.qiuye.gtlextend.api.machine.IThreadModifierParallelMachine;
 

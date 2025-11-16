@@ -14,91 +14,91 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap
 
-class ModifyContents {
+import kotlin.collections.set
 
-    companion object {
-        fun copyAndModifyRecipe(recipe: GTRecipe, modifier: ContentModifier): GTRecipe {
-            val copy = GTRecipe(
-                recipe.recipeType,
-                recipe.id,
-                modifyInputContents(recipe.inputs, modifier),
-                modifyOutputContents(recipe.outputs, modifier),
-                recipe.tickInputs,
-                recipe.tickOutputs,
-                recipe.inputChanceLogics,
-                recipe.outputChanceLogics,
-                recipe.tickInputChanceLogics,
-                recipe.tickOutputChanceLogics,
-                recipe.conditions,
-                recipe.ingredientActions,
-                recipe.data,
-                recipe.duration,
-                recipe.isFuel,
-            )
-            IGTRecipe.of(copy).realParallels = IGTRecipe.of(recipe).realParallels
-            copy.ocTier = recipe.ocTier
-            return copy
-        }
+object ModifyContents {
 
-        fun modifyOutputContents(
-            before: Map<RecipeCapability<*>, List<Content>>,
-            modifier: ContentModifier,
-        ): Map<RecipeCapability<*>, List<Content>> {
-            val after = Reference2ReferenceOpenHashMap<RecipeCapability<*>, List<Content>>()
-            for (entry in before) {
-                val cap = entry.key
-                val contentList = entry.value
-                val copyList = ObjectArrayList<Content>(contentList.size)
+    fun copyAndModifyRecipe(recipe: GTRecipe, modifier: ContentModifier): GTRecipe {
+        val copy = GTRecipe(
+            recipe.recipeType,
+            recipe.id,
+            modifyInputContents(recipe.inputs, modifier),
+            modifyOutputContents(recipe.outputs, modifier),
+            recipe.tickInputs,
+            recipe.tickOutputs,
+            recipe.inputChanceLogics,
+            recipe.outputChanceLogics,
+            recipe.tickInputChanceLogics,
+            recipe.tickOutputChanceLogics,
+            recipe.conditions,
+            recipe.ingredientActions,
+            recipe.data,
+            recipe.duration,
+            recipe.isFuel,
+        )
+        IGTRecipe.of(copy).realParallels = IGTRecipe.of(recipe).realParallels
+        copy.ocTier = recipe.ocTier
+        return copy
+    }
 
-                if (cap == ItemRecipeCapability.CAP) {
-                    for (content in contentList) {
-                        if (content.content is SizedIngredient &&
-                            (content.content as SizedIngredient).items[0].item in CycleItems.cycleItems
-                        ) {
-                            copyList.add(content)
-                        } else {
-                            copyList.add(content.copy(ItemRecipeCapability.CAP, modifier))
-                        }
+    private fun modifyOutputContents(
+        before: Map<RecipeCapability<*>, List<Content>>,
+        modifier: ContentModifier,
+    ): Map<RecipeCapability<*>, List<Content>> {
+        val after = Reference2ReferenceOpenHashMap<RecipeCapability<*>, List<Content>>()
+        for (entry in before) {
+            val cap = entry.key
+            val contentList = entry.value
+            val copyList = ObjectArrayList<Content>(contentList.size)
+
+            if (cap == ItemRecipeCapability.CAP) {
+                for (content in contentList) {
+                    if (content.content is SizedIngredient &&
+                        (content.content as SizedIngredient).items[0].item in CycleItems.cycleItems
+                    ) {
+                        copyList.add(content)
+                    } else {
+                        copyList.add(content.copy(ItemRecipeCapability.CAP, modifier))
                     }
-                } else {
-                    for (content in contentList) {
-                        copyList.add(content.copy(cap, modifier))
+                }
+            } else {
+                for (content in contentList) {
+                    copyList.add(content.copy(cap, modifier))
+                }
+            }
+            after[cap] = copyList
+        }
+        return after
+    }
+
+    private fun modifyInputContents(
+        before: Map<RecipeCapability<*>, List<Content>>,
+        modifier: ContentModifier,
+    ): Map<RecipeCapability<*>, List<Content>> {
+        if (!before.containsKey(ItemRecipeCapability.CAP)) return before
+
+        val after = Reference2ReferenceOpenHashMap<RecipeCapability<*>, List<Content>>()
+        for (entry in before) {
+            val cap = entry.key
+            val contentList = entry.value
+
+            if (cap == ItemRecipeCapability.CAP) {
+                val copyList = ObjectArrayList<Content>(contentList.size)
+                for (content in contentList) {
+                    if (content.content is SizedIngredient &&
+                        (content.content as SizedIngredient).items[0].item in CycleItems.cycleItems
+                    ) {
+                        copyList.add(content.copy(ItemRecipeCapability.CAP, modifier))
+                    } else {
+                        copyList.add(content)
                     }
                 }
                 after[cap] = copyList
+            } else {
+                after[cap] = contentList
             }
-            return after
         }
-
-        fun modifyInputContents(
-            before: Map<RecipeCapability<*>, List<Content>>,
-            modifier: ContentModifier,
-        ): Map<RecipeCapability<*>, List<Content>> {
-            if (!before.containsKey(ItemRecipeCapability.CAP)) return before
-
-            val after = Reference2ReferenceOpenHashMap<RecipeCapability<*>, List<Content>>()
-            for (entry in before) {
-                val cap = entry.key
-                val contentList = entry.value
-
-                if (cap == ItemRecipeCapability.CAP) {
-                    val copyList = ObjectArrayList<Content>(contentList.size)
-                    for (content in contentList) {
-                        if (content.content is SizedIngredient &&
-                            (content.content as SizedIngredient).items[0].item in CycleItems.cycleItems
-                        ) {
-                            copyList.add(content.copy(ItemRecipeCapability.CAP, modifier))
-                        } else {
-                            copyList.add(content)
-                        }
-                    }
-                    after[cap] = copyList
-                } else {
-                    after[cap] = contentList
-                }
-            }
-            return after
-        }
+        return after
     }
 
     private object CycleItems {

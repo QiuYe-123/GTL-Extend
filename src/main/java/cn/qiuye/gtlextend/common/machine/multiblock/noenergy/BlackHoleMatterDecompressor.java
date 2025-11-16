@@ -1,7 +1,7 @@
 package cn.qiuye.gtlextend.common.machine.multiblock.noenergy;
 
 import cn.qiuye.gtlextend.api.machine.IThreadModifierParallelMachine;
-import cn.qiuye.gtlextend.common.machine.trait.MultipleRecipesLogic;
+import cn.qiuye.gtlextend.api.machine.logic.MultipleRecipesLogic;
 import cn.qiuye.gtlextend.config.GTLExtendConfigHolder;
 import cn.qiuye.gtlextend.utils.NumberUtils;
 

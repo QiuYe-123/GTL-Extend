@@ -1,51 +1,121 @@
-package cn.qiuye.gtlextend.utils;
+package cn.qiuye.gtlextend.utils
 
-import cn.qiuye.gtlextend.common.record.ParallelData;
+import cn.qiuye.gtlextend.common.record.ParallelData
 
-import com.gtladd.gtladditions.common.record.RecipeData;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe
 
-import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import it.unimi.dsi.fastutil.ints.IntList
+import it.unimi.dsi.fastutil.longs.LongList
+import it.unimi.dsi.fastutil.objects.ObjectList
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectArrayFIFOQueue;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import org.jetbrains.annotations.Nullable;
+import kotlin.math.min
 
-public class CommonUtils {
+object CommonUtils {
 
     // ===================================================
     // Recipe Calculation
     // ===================================================
 
-    public static @Nullable ParallelData getParallelData(int length, long remaining, long[] parallels, ObjectArrayFIFOQueue<RecipeData> queue, ObjectArrayList<GTRecipe> recipeList) {
-        if (recipeList.isEmpty()) return null;
+    @JvmStatic
+    fun getParallelData(
+        remaining: Long,
+        parallels: LongArray,
+        remainingWants: LongList,
+        remainingIndices: IntList,
+        recipeList: ObjectList<GTRecipe>,
+    ): ParallelData? {
+        if (recipeList.isEmpty()) return null
+        if (remaining <= 0 || remainingWants.isEmpty()) return ParallelData(recipeList, parallels)
 
-        var remainingWants = new long[length];
-        var activeIndices = new IntArrayList(queue.size());
-        while (!queue.isEmpty()) {
-            var data = queue.dequeue();
-            remainingWants[data.index] = data.remainingWant;
-            activeIndices.add(data.index);
+        return if (remainingWants.size <= 64) {
+            getParallelDataBitmap(remaining, parallels, remainingWants, remainingIndices, recipeList)
+        } else {
+            getParallelDataIndexArray(remaining, parallels, remainingWants, remainingIndices, recipeList)
         }
+    }
 
-        while (remaining > 0 && !activeIndices.isEmpty()) {
-            long perRecipe = remaining / activeIndices.size();
-            if (perRecipe == 0) break;
+    private fun getParallelDataBitmap(
+        remaining: Long,
+        parallels: LongArray,
+        remainingWants: LongList,
+        remainingIndices: IntList,
+        recipeList: ObjectList<GTRecipe>,
+    ): ParallelData {
+        val count = remainingWants.size
+        var activeBits = (1L shl count) - 1
+        var activeCount = count
 
-            long distributed = 0;
-            for (var it = activeIndices.iterator(); it.hasNext();) {
-                int idx = it.nextInt();
-                long give = Math.min(remainingWants[idx], perRecipe);
-                parallels[idx] += give;
-                distributed += give;
-                remainingWants[idx] -= give;
-                if (remainingWants[idx] == 0) {
-                    it.remove();
+        var remaining = remaining
+        while (remaining > 0 && activeCount > 0) {
+            val perRecipe = remaining / activeCount
+            if (perRecipe <= 0L) break
+
+            var distributed = 0L
+            var newActiveBits = 0L
+            var newActiveCount = 0
+
+            var bits = activeBits
+            while (bits != 0L) {
+                val i = bits.countTrailingZeroBits()
+                bits = bits and (bits - 1)
+
+                val idx = remainingIndices.getInt(i)
+                val want = remainingWants.getLong(i)
+                val give = min(want, perRecipe)
+                parallels[idx] += give
+                distributed += give
+                remainingWants.set(i, want - give)
+
+                if (want - give > 0) {
+                    newActiveBits = newActiveBits or (1L shl i)
+                    newActiveCount++
                 }
             }
-            remaining -= distributed;
+
+            activeBits = newActiveBits
+            activeCount = newActiveCount
+            remaining -= distributed
         }
 
-        return new ParallelData(recipeList, parallels);
+        return ParallelData(recipeList, parallels)
+    }
+
+    private fun getParallelDataIndexArray(
+        remaining: Long,
+        parallels: LongArray,
+        remainingWants: LongList,
+        remainingIndices: IntList,
+        recipeList: ObjectList<GTRecipe>,
+    ): ParallelData {
+        var activeCount = remainingWants.size
+        var remaining = remaining
+
+        while (remaining > 0 && activeCount > 0) {
+            val perRecipe = remaining / activeCount
+            if (perRecipe <= 0L) break
+
+            var distributed = 0L
+            var writePos = 0
+
+            for (readPos in 0 until activeCount) {
+                val idx = remainingIndices.getInt(readPos)
+                val want = remainingWants.getLong(readPos)
+                val give = min(want, perRecipe)
+                parallels[idx] += give
+                distributed += give
+
+                val newWant = want - give
+                if (newWant > 0) {
+                    remainingWants.set(writePos, newWant)
+                    remainingIndices.set(writePos, idx)
+                    writePos++
+                }
+            }
+
+            activeCount = writePos
+            remaining -= distributed
+        }
+
+        return ParallelData(recipeList, parallels)
     }
 }
