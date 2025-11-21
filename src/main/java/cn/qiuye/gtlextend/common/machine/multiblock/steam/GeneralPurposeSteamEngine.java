@@ -62,7 +62,7 @@ public class GeneralPurposeSteamEngine extends WorkableMultiblockMachine impleme
                         capabilitiesProxy.put(IO.IN, EURecipeCapability.CAP, new ArrayList<>());
                     }
                     Objects.requireNonNull(capabilitiesProxy.get(IO.IN, EURecipeCapability.CAP))
-                            .add(new SteamEnergyRecipeHandler(tank, CONVERSION_RATE * Math.pow(2, 100)));
+                            .add(new SteamEnergyRecipeHandler(tank,  Math.pow(4, 100 * CONVERSION_RATE)));
                 }
             }
         }
