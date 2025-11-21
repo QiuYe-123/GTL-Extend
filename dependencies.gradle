@@ -13,12 +13,13 @@ dependencies {
     modImplementation("com.gregtechceu.gtceu:gtceu-$project.minecraft_version:$project.gtceu_version") { transitive = false }
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-$project.minecraft_version:$project.ldlib_version") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:$project.registrate_version")
-    modImplementation("dev:gtlcore-1.2.2.5-fix1")
+    modImplementation("dev:gtlcore-1.2.2.6-fix5")
     modImplementation(jarJar("dev:gtladditions:$project.gtladditions_version"))
     modRuntimeOnly("dev.latvian.mods:rhino-forge:$project.rhino_version")
     modRuntimeOnly("dev.latvian.mods:kubejs-forge:$project.kubejs_version")
 
-    modImplementation('appeng:appliedenergistics2-forge-15.2.13')
+    modImplementation('appeng:appliedenergistics2-forge:15.4.10')
+    modRuntimeOnly('org.appliedenergistics:guideme:20.1.11')
     modRuntimeOnly("dev.architectury:architectury-forge:${project.architectury_version}")
 
     modImplementation("dev.toma.configuration:configuration-forge-$project.minecraft_version:$project.configuration_version")
