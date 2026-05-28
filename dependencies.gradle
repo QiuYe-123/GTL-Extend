@@ -4,8 +4,9 @@ dependencies {
     modImplementation("thedarkcolour:kotlinforforge:4.11.0")
     modImplementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
-    api(annotationProcessor("io.github.llamalad7:mixinextras-common:$project.mixinextras_version"))
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:$project.mixinextras_version"))
     annotationProcessor 'org.spongepowered:mixin:0.8.7:processor'
+    implementation("io.github.llamalad7:mixinextras-forge:$project.mixinextras_version")
 
     modCompileOnly("mezz.jei:jei-$project.minecraft_version-forge-api:$project.jei_version") { transitive = false }
     modCompileOnly("mezz.jei:jei-$project.minecraft_version-common-api:$project.jei_version") { transitive = false }
@@ -13,15 +14,15 @@ dependencies {
     modImplementation("com.gregtechceu.gtceu:gtceu-$project.minecraft_version:$project.gtceu_version") { transitive = false }
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-$project.minecraft_version:$project.ldlib_version") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:$project.registrate_version")
-    modImplementation("dev:gtlcore-1.2.2.6-fix7")
+    modImplementation("dev:gtlcore-1.2.2.9-fix3")
     modImplementation("dev:Stargate Journey-1.20.1-0.6.44")
     modImplementation(jarJar("dev:gtladditions:$project.gtladditions_version"))
-    modRuntimeOnly("dev.latvian.mods:rhino-forge:$project.rhino_version")
-    modRuntimeOnly("dev.latvian.mods:kubejs-forge:$project.kubejs_version")
+    modImplementation("dev.latvian.mods:rhino-forge:$project.rhino_version")
+    modImplementation("dev.latvian.mods:kubejs-forge:$project.kubejs_version")
 
     modImplementation('appeng:appliedenergistics2-forge:15.4.10')
     modRuntimeOnly('org.appliedenergistics:guideme:20.1.11')
-    modRuntimeOnly("dev.architectury:architectury-forge:${project.architectury_version}")
+    modImplementation("dev.architectury:architectury-forge:${project.architectury_version}")
 
     modImplementation("dev.toma.configuration:configuration-forge-$project.minecraft_version:$project.configuration_version")
 
@@ -29,19 +30,18 @@ dependencies {
     modImplementation("com.teamresourceful:bytecodecs:1.0.2")
     modImplementation("com.teamresourceful.resourcefullib:resourcefullib-forge-${project.minecraft_version}:${project.resourcefullib_version}")
     modImplementation("com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-${project.minecraft_version}:${project.resourcefulconfig_version}")
-    modRuntimeOnly("earth.terrarium.botarium:botarium-forge-${project.minecraft_version}:${project.botarium_version}")
-    modRuntimeOnly("earth.terrarium.adastra:ad_astra-forge-${project.minecraft_version}:${ad_astra_version}") { transitive false }
+    modImplementation("earth.terrarium.botarium:botarium-forge-${project.minecraft_version}:${project.botarium_version}")
+    modImplementation("earth.terrarium.adastra:ad_astra-forge-${project.minecraft_version}:${ad_astra_version}") { transitive false }
 
     modRuntimeOnly("dev:constructionwand-1.20.1-2.11")
-    modRuntimeOnly("dev:worldedit-mod-7.2.15")
 
     modRuntimeOnly("curse.maven:glodium-957920:5006780")
-    modRuntimeOnly("dev:ExtendedAE-1.20-1.3.5-forge")
+    modImplementation("dev:ExtendedAE-1.20-1.3.5-forge")
 
-    modRuntimeOnly("org.moddingx:LibX:1.20.1-5.0.1")
-    modRuntimeOnly("dev:TravelAnchors-1.20.1-5.0.1")
+    modImplementation("org.moddingx:LibX:1.20.1-5.0.1")
+    modImplementation("dev:TravelAnchors-1.20.1-5.0.1")
 
-    modRuntimeOnly("dev:Re-Avaritia-forged-1.20.1-1.3.8.3")
+    modCompileOnly("dev:Re-Avaritia-forged-1.20.1-1.3.8.3")
 
     // ftb-chunk
     modRuntimeOnly("dev.ftb.mods:ftb-chunks-forge:2001.3.1"){ transitive = false }
@@ -49,7 +49,7 @@ dependencies {
     modRuntimeOnly("dev.ftb.mods:ftb-teams-forge:2001.3.0"){ transitive = false }
 
     // ftbu
-    modRuntimeOnly("dev.ftb.mods:ftb-ultimine-forge:2001.1.5"){ transitive = false }
+    modImplementation("dev.ftb.mods:ftb-ultimine-forge:2001.1.5"){ transitive = false }
 
 //    modRuntimeOnly("dev.emi:emi-forge:${project.emi_version}")
     modRuntimeOnly("mezz.jei:jei-$project.minecraft_version-forge:$project.jei_version") { transitive = false }
@@ -64,7 +64,7 @@ dependencies {
 
     modImplementation("dev:gtmthings-$project.gtmthings_version")
 
-    modImplementation("curse.maven:worldedit-225608:4586218")
+    modRuntimeOnly("curse.maven:worldedit-225608:4586218")
 
     modRuntimeOnly("dev:jecharacters:1.20.1-forge-4.5.11-dev-shadow")
 }
