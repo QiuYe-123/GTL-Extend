@@ -3,7 +3,7 @@ package cn.qiuye.gtlextend.mixin.gtladd;
 import org.gtlcore.gtlcore.integration.gtmt.NewGTValues;
 import org.gtlcore.gtlcore.utils.NumberUtils;
 
-import com.gtladd.gtladditions.common.machine.muiltblock.part.WirelessEnergyNetworkTerminalPartMachineBase;
+import com.gtladd.gtladditions.common.machine.multiblock.part.WirelessEnergyNetworkTerminalPartMachineBase;
 import com.gtladd.gtladditions.integration.jade.provider.WirelessEnergyNetworkTerminalProvider;
 
 import com.gregtechceu.gtceu.api.GTValues;
