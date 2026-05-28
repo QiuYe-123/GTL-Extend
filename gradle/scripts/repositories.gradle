@@ -1,8 +1,8 @@
 repositories {
-    mavenLocal()
     flatDir {
         dir "gradle/libs"
     }
+    mavenLocal()
     mavenCentral()
 
     maven {
@@ -54,9 +54,11 @@ repositories {
         }
     }
     maven {
-        url "https://maven.tterrag.com/"
+        url = "https://maven.tterrag.com/"
         content {
+            includeGroup("com.jozufozu.flywheel")
             includeGroup("com.tterrag.registrate")
+            includeGroup("com.simibubi.create")
         }
     }
     maven {
@@ -88,5 +90,15 @@ repositories {
     }
     maven {
         url "https://maven.architectury.dev/"
+    }
+    maven {
+        url "https://maven.saps.dev/releases/"
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.ftb.mods"
+        }
+    }
+    maven {
+        url = "https://maven.theillusivec4.top/"
     }
 }
