@@ -37,6 +37,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
@@ -62,7 +63,6 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
     public int allocatedCWUt = 0;
     @Persisted
     public long totalCWU = 0;
-    @Persisted
     public int maxCWUt = 0;
     private ICoilType coilType = CoilBlock.CoilType.CUPRONICKEL;
     @Persisted
@@ -136,7 +136,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
      * @return .
      */
     @Override
-    public int getMaxCWUt(Collection<IOpticalComputationProvider> seen) {
+    public int getMaxCWUt(@NotNull Collection<IOpticalComputationProvider> seen) {
         seen.add(this);
         return calculate(coilType.getCoilTemperature(), oc);
     }
@@ -146,7 +146,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
      * @return .
      */
     @Override
-    public boolean canBridge(Collection<IOpticalComputationProvider> seen) {
+    public boolean canBridge(@NotNull Collection<IOpticalComputationProvider> seen) {
         seen.add(this);
         return true;
     }
@@ -314,6 +314,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
         }
     }
 
+    /// 计算当前算力
     private static int calculate(int k, int oc) {
         // 确保输入在有效范围内
         k = Math.max(1, Math.min(k, 96000));
@@ -352,7 +353,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
         return calculateEnergyConsumption(calculate(coilType.getCoilTemperature(), oc));
     }
 
-    // 电量消耗函数
+    /// 电量消耗函数
     public static BigInteger calculateEnergyConsumption(int p) {
         // 确保p在范围内
         p = Math.max(1024, p);

@@ -14,8 +14,9 @@ dependencies {
     modImplementation("com.gregtechceu.gtceu:gtceu-$project.minecraft_version:$project.gtceu_version") { transitive = false }
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-$project.minecraft_version:$project.ldlib_version") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:$project.registrate_version")
-    modImplementation("dev:gtlcore-1.2.2.9-fix4")
+    modImplementation("dev:gtlcore:$project.gtlcore_version")
     modImplementation("dev:Stargate Journey-1.20.1-0.6.44")
+    modImplementation("curse.maven:oculus-581495:6020952")
     modImplementation(jarJar("dev:gtladditions:$project.gtladditions_version"))
     modImplementation("dev.latvian.mods:rhino-forge:$project.rhino_version")
     modImplementation("dev.latvian.mods:kubejs-forge:$project.kubejs_version")
@@ -36,7 +37,7 @@ dependencies {
     modRuntimeOnly("dev:constructionwand-1.20.1-2.11")
 
     modRuntimeOnly("curse.maven:glodium-957920:5006780")
-    modImplementation("dev:ExtendedAE-1.20-1.3.5-forge")
+    modImplementation("dev:ExtendedAE-1.20-$project.extendedae_version")
 
     modImplementation("org.moddingx:LibX:1.20.1-5.0.1")
     modImplementation("dev:TravelAnchors-1.20.1-5.0.1")

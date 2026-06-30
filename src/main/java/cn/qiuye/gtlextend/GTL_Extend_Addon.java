@@ -71,6 +71,6 @@ public class GTL_Extend_Addon implements IGTAddon {
         AdvFormulationLimitsRecipe.init(provider);
         HorizonMatterDecompression.init(provider);
         DimensionalPowerRecipe.init(provider);
-        StableSpacetimeCompression.init(provider);
+        StableSpacetimeProduction.init(provider);
     }
 }

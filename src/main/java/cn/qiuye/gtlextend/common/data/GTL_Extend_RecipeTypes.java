@@ -1,8 +1,11 @@
 package cn.qiuye.gtlextend.common.data;
 
+import com.gtladd.gtladditions.common.recipe.GTLAddRecipesTypes;
+
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
@@ -20,7 +23,7 @@ public class GTL_Extend_RecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
     public final static GTRecipeType HORIZON_MATTER_DECOMPRESSION_RECIPES = register("horizon_matter_decompression", MULTIBLOCK)
-            .setMaxIOSize(1, 0, 1, 37)
+            .setMaxIOSize(1, 0, 1, 40)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
     public final static GTRecipeType PLATINUM_BASE_DPROCESSING_HUB_RECIPES = register("one_stop_platinum_treatment", MULTIBLOCK)
@@ -55,10 +58,14 @@ public class GTL_Extend_RecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
             .setSound(GTL_Extend_SoundEntries.KMYY);
 
-    public final static GTRecipeType STABLE_SPACETIME_COMPRESSION_RECIPES = register("stable_spacetime_compression", MULTIBLOCK)
+    public final static GTRecipeType STABLE_SPACETIME_PRODUCTION_RECIPES = register("stable_spacetime_production", MULTIBLOCK)
             .setMaxIOSize(5, 1, 1, 0)
             .setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.SCIENCE);
+
+    public final static GTRecipeType SPACETIME_BREAK = register("spacetime_break", GTRecipeTypes.DUMMY)
+            .setXEIVisible(false)
             .setSound(GTSoundEntries.SCIENCE);
 
     public static String getCRTier(int tier) {
@@ -69,5 +76,7 @@ public class GTL_Extend_RecipeTypes {
         }
     }
 
-    public static void init() {}
+    public static void init() {
+        GTLAddRecipesTypes.MULTIPLE_TYPE_RECIPES.add(SPACETIME_BREAK);
+    }
 }

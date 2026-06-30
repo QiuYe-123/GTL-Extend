@@ -8,8 +8,11 @@ import cn.qiuye.gtlextend.utils.NumberUtils;
 import org.gtlcore.gtlcore.api.machine.multiblock.NoEnergyMultiblockMachine;
 import org.gtlcore.gtlcore.utils.MachineIO;
 
+import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CombinedDirectionalFancyConfigurator;
+import com.gregtechceu.gtceu.api.machine.fancyconfigurator.MachineModeFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -42,7 +45,6 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             BlackHoleMatterDecompressor.class, NoEnergyMultiblockMachine.MANAGED_FIELD_HOLDER);
     // 常量定义
-    private static final int BASE_PARALLEL = 64;
     private static final BigInteger BASE_EU_COST = BigInteger.valueOf(5277655810867200L);
     @Persisted
     private long eternalbluedream; // 永恒蓝梦流体存储量
@@ -176,6 +178,18 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
             this.userId = player.getUUID();
         }
         return true;
+    }
+
+    /// 强行注册机器模式切换按钮
+    @Override
+    public void attachSideTabs(TabsWidget sideTabs) {
+        sideTabs.setMainTab(this);
+
+        sideTabs.attachSubTab(new MachineModeFancyConfigurator(this));
+
+        var directionalConfigurator = CombinedDirectionalFancyConfigurator.of(self(), self());
+        if (directionalConfigurator != null)
+            sideTabs.attachSubTab(directionalConfigurator);
     }
 
     @Override
