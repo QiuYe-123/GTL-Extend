@@ -7,6 +7,8 @@
   "client": [
   ],
   "mixins": [
+    "forge.dataGenMixin",
+    "gtl.HugeFluidHatchMixin",
     "gtl.MetaMachineMixinExMixin",
     "gtl.MultipleRecipesLogicMixin",
     "gtl.SpaceElevatorModuleMachineMixin",

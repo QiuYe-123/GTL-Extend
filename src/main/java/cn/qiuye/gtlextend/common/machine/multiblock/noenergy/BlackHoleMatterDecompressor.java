@@ -8,8 +8,11 @@ import cn.qiuye.gtlextend.utils.NumberUtils;
 import org.gtlcore.gtlcore.api.machine.multiblock.NoEnergyMultiblockMachine;
 import org.gtlcore.gtlcore.utils.MachineIO;
 
+import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CombinedDirectionalFancyConfigurator;
+import com.gregtechceu.gtceu.api.machine.fancyconfigurator.MachineModeFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -42,7 +45,6 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             BlackHoleMatterDecompressor.class, NoEnergyMultiblockMachine.MANAGED_FIELD_HOLDER);
     // 常量定义
-    private static final int BASE_PARALLEL = 64;
     private static final BigInteger BASE_EU_COST = BigInteger.valueOf(5277655810867200L);
     @Persisted
     private long eternalbluedream; // 永恒蓝梦流体存储量
@@ -105,12 +107,7 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
 
     // 获取超频次数（电路配置映射）
     private int calculateOverclockTimes() {
-        return switch (Math.min(oc, 4)) {
-            case 2 -> 4;
-            case 3 -> 16;
-            case 4 -> 64;
-            default -> 1;
-        };
+        return 1 << (2 * Math.min(Math.max(oc - 1, 0), 7));
     }
 
     // 计算启动能耗
@@ -121,22 +118,32 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
         // 使用BigInteger的pow方法计算32的ocTimes次方
         BigInteger powerResult = base.pow(ocTimes);
         // 返回BASE_EU_COST与powerResult的乘积
-        return BASE_EU_COST.multiply(powerResult).multiply(BigInteger.valueOf(Integer.MAX_VALUE - 1));
+        // 为什么要再乘上2^31-2?
+        // return BASE_EU_COST.multiply(powerResult).multiply(BigInteger.valueOf(Integer.MAX_VALUE - 1));
+        return BASE_EU_COST.multiply(powerResult);
     }
 
     // 计算实际并行（考虑蓝梦流体加成）
     private int calculateParallel() {
         int base = getBaseParallel();
-        if (!isInfinityDreamEnabled()) return base;
+        if (!isInfinityDreamEnabled())
+            return base;
 
         // 每1000B流体翻倍一次，但不超过int最大值
         long multiplier = eternalbluedream / 1_000_000L;
+        int maxmul = (int) Math.ceil(Math.log(1.0 * Integer.MAX_VALUE / base) / Math.log(2));
+        if (multiplier > maxmul)
+            return Integer.MAX_VALUE;
         return (int) Math.min(base * (1L << multiplier), Integer.MAX_VALUE);
     }
 
-    // 计算基础并行（电路编号的8次方，1号特殊处理）
+    // 计算基础并行（电路编号的8次方，0,1号特殊处理）
     private int getBaseParallel() {
-        return (oc == 1) ? BASE_PARALLEL : (int) Math.pow(oc, 8);
+        return switch (oc) {
+            case 0 -> 1;
+            case 1 -> 64;
+            default -> (int) Math.pow(oc, 8);
+        };
     }
 
     @Override
@@ -150,8 +157,8 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
             oc = 0;
             // 处理额外流体输入（永恒蓝梦）
             if (isInfinityDreamEnabled()) {
-                if (MachineIO.inputFluid(this, ETERNALBLUEDREAM.getFluid(100000000))) {
-                    eternalbluedream += 100000000;
+                if (MachineIO.inputFluid(this, ETERNALBLUEDREAM.getFluid(100_000_000))) {
+                    eternalbluedream += 100_000_000;
                 }
             }
             int[] priorityOrder = { 8, 7, 6, 5, 4, 3, 2, 1 };
@@ -171,6 +178,18 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
             this.userId = player.getUUID();
         }
         return true;
+    }
+
+    /// 强行注册机器模式切换按钮
+    @Override
+    public void attachSideTabs(TabsWidget sideTabs) {
+        sideTabs.setMainTab(this);
+
+        sideTabs.attachSubTab(new MachineModeFancyConfigurator(this));
+
+        var directionalConfigurator = CombinedDirectionalFancyConfigurator.of(self(), self());
+        if (directionalConfigurator != null)
+            sideTabs.attachSubTab(directionalConfigurator);
     }
 
     @Override
@@ -222,14 +241,8 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
     }
 
     private double getPowerMultiplier() {
-        // 明确倍率规则：电路编号限制到4，但显示仍用原始值
-        int effectiveConfig = Math.min(oc, 4);
-        return switch (effectiveConfig) {
-            case 2 -> 32.0;
-            case 3 -> 1024.0;
-            case 4 -> 32768.0;
-            default -> 1.0;
-        };
+        // 明确倍率规则：电路编号限制到8，但显示仍用原始值
+        return Math.pow(32, Math.min(Math.max(oc - 1, 0), 7));
     }
 
     /**

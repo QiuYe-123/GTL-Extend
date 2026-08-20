@@ -1,0 +1,22 @@
+{
+  "gtceu.machine.available_recipe_map_12.tooltip": "可用配方类型：%s，%s，%s，%s，%s，%s，%s，%s，%s，%s，%s, %s",
+  "gtceu.machine.available_recipe_map_13.tooltip": "可用配方类型：%s，%s，%s，%s，%s，%s，%s，%s，%s，%s，%s, %s, %s",
+  "gtceu.machine.available_recipe_map_14.tooltip": "可用配方类型：%s，%s，%s，%s，%s，%s，%s，%s，%s，%s，%s, %s, %s, %s",
+  "gtceu.machine.available_recipe_map_15.tooltip": "可用配方类型：%s，%s，%s，%s，%s，%s，%s，%s，%s，%s，%s, %s, %s, %s, %s",
+  "gtceu.machine.primitive_dradon_egg_energy.tooltip.0": "无尽地吸收机器上方龙蛋的能量",
+  "gtceu.one_stop_platinum_treatment": "一站式铂处理",
+  "gtceu.horizon_matter_decompression": "视界物质掠夺",
+  "gtceu.dimensional_power": "超维度发电",
+  "gtceu.general_ae_manufacturing_machine": "通用AE制造",
+  "gtceu.large_void_pump": "大型虚空泵",
+  "gtceu.cattle_cattle_machine": "牛牛机",
+  "gtceu.czyhfdj": "真是一对苦命鸳鸯啊",
+  "gtceu.stable_spacetime_production": "稳定时空制作",
+  "gtceu.spacetime_break": "时空破碎",
+  "gtceu.planet_engine": "行星发动机",
+  "gtceu.recipe.tier_combination": "核心: %s,",
+  "gtceu.tier.void_world_block": "世界核心",
+  "gtceu.tier.dimension_core": "维度核心",
+  "gtceu.tope.electricity": "%s A %s",
+  "config.jade.plugin_gtceu.infinity_dual_hatch": ""
+}

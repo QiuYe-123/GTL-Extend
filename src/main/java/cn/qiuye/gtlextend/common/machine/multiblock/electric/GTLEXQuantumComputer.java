@@ -37,6 +37,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
@@ -62,7 +63,6 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
     public int allocatedCWUt = 0;
     @Persisted
     public long totalCWU = 0;
-    @Persisted
     public int maxCWUt = 0;
     private ICoilType coilType = CoilBlock.CoilType.CUPRONICKEL;
     @Persisted
@@ -92,9 +92,12 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
             for (int config : priorityOrder) {
                 if (MachineIO.notConsumableCircuit(this, config)) {
                     this.oc = config;
+                    updateTickSubscription();
                     return;
                 }
             }
+            // 未检测到电路时也要重新评估,避免tick订阅残留
+            updateTickSubscription();
         }
     }
 
@@ -112,7 +115,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
     @Override
     public int requestCWUt(int cwut, boolean simulate, Collection<IOpticalComputationProvider> seen) {
         seen.add(this);
-        if (!canProvideCWUt) return 0;
+        if (!isWorkingEnabled() || !canProvideCWUt) return 0;
         return !hasNotEnoughEnergy ? allocatedCWUt(cwut, simulate) : 0;
     }
 
@@ -136,7 +139,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
      * @return .
      */
     @Override
-    public int getMaxCWUt(Collection<IOpticalComputationProvider> seen) {
+    public int getMaxCWUt(@NotNull Collection<IOpticalComputationProvider> seen) {
         seen.add(this);
         return calculate(coilType.getCoilTemperature(), oc);
     }
@@ -146,12 +149,14 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
      * @return .
      */
     @Override
-    public boolean canBridge(Collection<IOpticalComputationProvider> seen) {
+    public boolean canBridge(@NotNull Collection<IOpticalComputationProvider> seen) {
         seen.add(this);
         return true;
     }
 
     public void tick() {
+        // 未成型或未配置电路时直接返回,避免空转消耗无线能量/冷却液
+        if (!isFormed() || oc < 1) return;
         if (isWorkingEnabled()) {
             consumeEnergy();
             consumeCoolant(); // 添加冷却液消耗
@@ -239,14 +244,15 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
     }
 
     /**
-     * 根据最大算力消耗冷却液
+     * 根据实际分配的算力消耗冷却液
      */
     private void consumeCoolant() {
-        int maxCWUt = getMaxCWUt();
-        if (maxCWUt <= 0) return;
+        // 上一tick实际分配出去的算力(本tick末尾会归零)
+        int usage = this.allocatedCWUt;
+        if (usage <= 0) return;
 
-        // 计算冷却液需求 - 每1M CWU/t消耗1L/t冷却液
-        long coolantToDrain = (long) Math.ceil(maxCWUt / 1_000.0);
+        // 计算冷却液需求 - 每1M CWU/t消耗1L/t冷却液(与tooltip一致)
+        long coolantToDrain = (long) Math.ceil(usage / 1_000_000.0);
         if (coolantToDrain <= 0) return;
 
         // 尝试抽取冷却液
@@ -270,10 +276,10 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
         return FluidStack.create(Registries.getFluid("kubejs:gelid_cryotheum"), amount);
     }
 
-    // 玩家交互绑定
+    // 玩家交互绑定 - 只绑定一次,避免多人服务器上每次右键都切换归属(队伍)
     @Override
     public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
-        if (this.userId == null || !this.userId.equals(player.getUUID())) {
+        if (this.userId == null) {
             this.userId = player.getUUID();
         }
         return true;
@@ -285,10 +291,16 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
         if (isFormed()) {
             // 用户无线电网信息（公共显示部分）
             if (userId != null) {
+                // hasOwner防护:绑定玩家离线且不在FTB队伍时GetName会NPE
+                Component ownerName = TeamUtil.hasOwner(getLevel(), userId)
+                        ? TeamUtil.GetName(getLevel(), userId)
+                        : Component.literal(userId.toString());
                 textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0",
-                        TeamUtil.GetName(getLevel(), userId)));
+                        ownerName));
                 textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.1",
                         NumberUtils.formatBigIntegerNumberOrSic(WirelessEnergyManager.getUserEU(userId))));
+            } else {
+                textList.add(Component.literal("未绑定玩家,请右键机器以绑定无线电网"));
             }
             // 公共信息
             textList.add(Component.literal("启动耗能：" + NumberUtils.formatBigIntegerNumberOrSic(energy()) + " EU/t"));
@@ -314,6 +326,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
         }
     }
 
+    /// 计算当前算力
     private static int calculate(int k, int oc) {
         // 确保输入在有效范围内
         k = Math.max(1, Math.min(k, 96000));
@@ -352,7 +365,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
         return calculateEnergyConsumption(calculate(coilType.getCoilTemperature(), oc));
     }
 
-    // 电量消耗函数
+    /// 电量消耗函数
     public static BigInteger calculateEnergyConsumption(int p) {
         // 确保p在范围内
         p = Math.max(1024, p);

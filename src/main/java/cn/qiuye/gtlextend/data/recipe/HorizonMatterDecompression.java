@@ -5,6 +5,8 @@ import cn.qiuye.gtlextend.GTL_Extend;
 import org.gtlcore.gtlcore.common.data.GTLMaterials;
 import org.gtlcore.gtlcore.utils.Registries;
 
+import com.gtladd.gtladditions.common.material.GTLAddMaterial;
+
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -55,8 +57,12 @@ public class HorizonMatterDecompression {
                         RawStarMatter.getFluid(FluidStorageKeys.PLASMA, 131072000),
                         CosmicMesh.getFluid(FluidStorageKeys.PLASMA, 131072000),
                         ActiniumSuperhydride.getFluid(FluidStorageKeys.PLASMA, 131072000),
+                        Plutonium241.getFluid(FluidStorageKeys.PLASMA, 13107200),
+                        GTLAddMaterial.INSTANCE.getCREON().getFluid(FluidStorageKeys.PLASMA, 131072000),
+                        Trinium.getFluid(131072000),
                         CosmicNeutronium.getFluid(131072000),
-                        Eternity.getFluid(131072000))
+                        Eternity.getFluid(131072000),
+                        Cosmic.getFluid(131072))
                 .duration(1200)
                 .save(provider);
     }
