@@ -4,6 +4,7 @@ import cn.qiuye.gtlextend.common.data.GTL_Extend_RecipeTypes
 
 import org.gtlcore.gtlcore.api.recipe.IGTRecipe
 import org.gtlcore.gtlcore.api.recipe.IParallelLogic
+import org.gtlcore.gtlcore.api.recipe.RecipeExtensionCopier
 import org.gtlcore.gtlcore.api.recipe.RecipeRunnerHelper
 
 import com.gtladd.gtladditions.api.machine.logic.GTLAddMultipleTypeWirelessRecipesLogic
@@ -53,6 +54,12 @@ open class TimeSpaceBreakerMultipleType(holder: IMachineBlockEntity, vararg args
     override fun needConfirmMEStock(): Boolean = true
 
     override fun getTier(): Int = GTValues.MAX_TRUE
+
+    @Suppress("unused")
+    fun supportsBatchProcessing(): Boolean = false
+
+    @Suppress("unused")
+    fun canConfigureBatchProcessing(): Boolean = false
 
     // ========================================
     // Logic
@@ -181,8 +188,7 @@ open class TimeSpaceBreakerMultipleType(holder: IMachineBlockEntity, vararg args
                         recipe.duration,
                         recipe.isFuel,
                     )
-                    IGTRecipe.of(copy).realParallels = IGTRecipe.of(recipe).realParallels
-                    copy.ocTier = recipe.ocTier
+                    RecipeExtensionCopier.copy(recipe, copy)
                     return copy
                 }
             }

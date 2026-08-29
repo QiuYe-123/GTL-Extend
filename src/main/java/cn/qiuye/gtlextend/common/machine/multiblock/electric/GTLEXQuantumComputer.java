@@ -292,9 +292,7 @@ public class GTLEXQuantumComputer extends NoEnergyMultiblockMachine
             // 用户无线电网信息（公共显示部分）
             if (userId != null) {
                 // hasOwner防护:绑定玩家离线且不在FTB队伍时GetName会NPE
-                Component ownerName = TeamUtil.hasOwner(getLevel(), userId)
-                        ? TeamUtil.GetName(getLevel(), userId)
-                        : Component.literal(userId.toString());
+                Component ownerName = TeamUtil.hasOwner(getLevel(), userId) ? TeamUtil.GetName(getLevel(), userId) : Component.literal(userId.toString());
                 textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0",
                         ownerName));
                 textList.add(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.1",

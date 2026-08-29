@@ -268,4 +268,14 @@ public class BlackHoleMatterDecompressor extends NoEnergyMultiblockMachine imple
     public int getExtendlDuration() {
         return (int) (4800 / Math.pow(2, this.oc));
     }
+
+    @SuppressWarnings("unused")
+    public Boolean supportsBatchProcessing() {
+        return false;
+    }
+
+    @SuppressWarnings("unused")
+    public Boolean canConfigureBatchProcessing() {
+        return false;
+    }
 }

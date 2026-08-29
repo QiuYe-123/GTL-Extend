@@ -8,12 +8,14 @@
   ],
   "mixins": [
     "forge.dataGenMixin",
+    "gtl.BatchProcessingMixin",
     "gtl.HugeFluidHatchMixin",
     "gtl.MetaMachineMixinExMixin",
     "gtl.MultipleRecipesLogicMixin",
     "gtl.SpaceElevatorModuleMachineMixin",
     "gtl.WorkableElectricMultiblockMachineMixin",
     "gtladd.WirelessEnergyNetworkTerminalProviderMixin",
+    "gtm.BlockPatternMixin",
     "gtmt.WirelessEnergyMonitorMixin"
   ],
   "injectors": {
