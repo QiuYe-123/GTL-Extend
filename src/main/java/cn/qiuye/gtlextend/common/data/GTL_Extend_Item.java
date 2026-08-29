@@ -77,9 +77,9 @@ public class GTL_Extend_Item {
     }
 
     private static ItemEntry<Item> registerMainframe(String tier) {
-        return REGISTRATE.item("eternalbluedream_" + tier + "_processor_maninframe", Item::new)
-                .lang("Eternal Blue Dream " + tier.toUpperCase() + " Processor maninframe")
-                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), GTL_Extend.id("item/eternalbluedream_processor_maninframe")))
+        return REGISTRATE.item("eternalbluedream_" + tier + "_processor_mainframe", Item::new)
+                .lang("Eternal Blue Dream " + tier.toUpperCase() + " Processor mainframe")
+                .model((ctx, prov) -> prov.withExistingParent(ctx.getName(), GTL_Extend.id("item/eternalbluedream_processor_mainframe")))
                 .register();
     }
 

@@ -11,7 +11,7 @@ import cn.qiuye.gtlextend.common.data.machines.MultiBlock.*;
 import cn.qiuye.gtlextend.common.machine.multiblock.electric.*;
 import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.BlackHoleMatterDecompressor;
 import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.DimensionalPower;
-import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.TimeSpaceBreakerMultiple;
+import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.TimeSpaceBreakerMultipleType;
 import cn.qiuye.gtlextend.common.machine.multiblock.steam.GeneralPurposeSteamEngine;
 import cn.qiuye.gtlextend.config.GTLExtendConfigHolder;
 
@@ -67,6 +67,7 @@ public class MultiBlockMachineA {
             .appearanceBlock(() -> GetRegistries.getBlock("ae2:sky_stone_block"))
             .recipeType(GTL_Extend_RecipeTypes.GENERAL_PURPOSE_AE_PRODUCTION_RECIPES)
             .tooltips(Component.literal(TextUtil.full_color("方便的生产一些AE的物品")))
+            .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
                     Component.translatable("gtceu.general_ae_manufacturing_machine")))
             .tooltipBuilder(GTL_EX_ADD)
@@ -115,6 +116,7 @@ public class MultiBlockMachineA {
             })
             .tooltips(Component.literal(TextUtil.full_color("暴力.....")))
             .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为10t,自带16384并行")))
+            .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_13.tooltip",
                     Component.translatable("gtceu.lava_furnace"),
                     Component.translatable("gtceu.forge_hammer"),
@@ -160,6 +162,7 @@ public class MultiBlockMachineA {
             })
             .tooltips(Component.literal(TextUtil.full_color("暴力.....")))
             .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为10t,自带100000并行")))
+            .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
                     Component.translatable("gtceu.integrated_ore_processor")))
             .tooltipBuilder(GTL_EX_ADD)
@@ -201,6 +204,9 @@ public class MultiBlockMachineA {
             .recipeType(GTL_Extend_RecipeTypes.VOID_PUMP_RECIPES)
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .tooltips(Component.literal(TextUtil.full_color("从虚拟的宇宙中抽取无尽的流体")))
+            .tooltips(Component.translatable("gtceu.multiblock.laser.tooltip"))
+            .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
+            .tooltips(Component.translatable("gtceu.multiblock.parallelizable.tooltip"))
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
                     Component.translatable("gtceu.large_void_pump")))
             .tooltipBuilder(GTL_EX_ADD)
@@ -230,6 +236,9 @@ public class MultiBlockMachineA {
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .tooltips(Component.literal(TextUtil.full_color("撸管太多导致出现了奇怪的现象")))
+            .tooltips(Component.translatable("gtceu.multiblock.laser.tooltip"))
+            .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
+            .tooltips(Component.translatable("gtceu.multiblock.parallelizable.tooltip"))
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
                     Component.translatable("gtceu.cattle_cattle_machine")))
             .tooltipBuilder(GTL_EX_ADD)
@@ -269,7 +278,8 @@ public class MultiBlockMachineA {
                 recipe_s = GTRecipeModifiers.fastParallel(machine, recipe_s, Integer.MAX_VALUE, false).getFirst();
                 return recipe_s;
             })
-            .tooltips(Component.literal(TextUtil.full_color("最大并行数：int")))
+            .tooltips(Component.literal(TextUtil.full_color("运行无视炉温")))
+            .tooltips(Component.literal(TextUtil.full_color("最大并行数：" + Integer.MAX_VALUE)))
             .tooltips(Component.literal(TextUtil.full_color("所有配方都为1s")))
             .tooltips(Component.literal(TextUtil.full_color("物质在我们手中不过是玩具")))
             .tooltips(Component.literal(TextUtil.full_color("可以随意捏造")))
@@ -319,14 +329,14 @@ public class MultiBlockMachineA {
             .tooltips(Component.literal("能耗公式:"))
             .tooltips(Component.literal("  - 基础能耗: 5.28P EU/启动"))
             .tooltips(Component.literal("  - 超频能耗 = 基础能耗 × 32^(超频次数)"))
-            .tooltips(Component.literal("  - 电路1: 无超频 (1倍)"))
+            .tooltips(Component.literal("  - 电路0、1: 无超频 (1倍)"))
             .tooltips(Component.literal("  - 电路2: 4倍超频"))
             .tooltips(Component.literal("  - 电路3: 16倍超频"))
             .tooltips(Component.literal("  - 电路4: 64倍超频"))
             .tooltips(Component.literal("并行计算:"))
-            .tooltips(Component.literal("  - 基础并行 = 电路编号^8 (电路1固定为64)"))
+            .tooltips(Component.literal("  - 基础并行 = 电路编号^8 (电路0固定为1，电路1固定为64)"))
             .tooltips(Component.literal("  - 蓝梦模式: 每1000B永恒蓝梦翻倍并行"))
-            .tooltips(Component.literal("  - 最大并行: Integer.MAX_VALUE"))
+            .tooltips(Component.literal("  - 最大并行: 2147483647"))
             .tooltips(Component.literal("配方时间:"))
             .tooltips(Component.literal("  - 基础时间: 4800 ticks"))
             .tooltips(Component.literal("  - 实际时间 = 4800 / 2^(电路编号)"))
@@ -419,13 +429,15 @@ public class MultiBlockMachineA {
             .hasTESR(true)
             .register();
 
-    public static final MultiblockMachineDefinition PLATINUM_BASE_DPROCESSING_HUB = GTLEXRegistration.REGISTRATE.multiblock("platinum_based_rocessing_hub", PlatinumBasedRocessingHub::new)
+    public static final MultiblockMachineDefinition PLATINUM_BASE_DPROCESSING_HUB = GTLEXRegistration.REGISTRATE.multiblock("platinum_based_processing_hub", PlatinumBasedProcessingHub::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTL_Extend_RecipeTypes.PLATINUM_BASE_DPROCESSING_HUB_RECIPES)
             .appearanceBlock(ADVANCED_COMPUTER_CASING)
             .tooltips(Component.literal(TextUtil.full_color("一步完成铂系金属处理")))
             .tooltips(Component.literal("可使用等离子增产"))
             .tooltips(Component.literal("可使用等离子：氩等离子，铁等离子，镍等离子，简并态等离子"))
+            .tooltips(Component.translatable("gtceu.multiblock.laser.tooltip"))
+            .tooltips(Component.translatable("gtceu.machine.multiple_recipes.tooltip"))
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .tooltipBuilder(GTL_EX_ADD)
@@ -492,7 +504,7 @@ public class MultiBlockMachineA {
             .tooltips(Component.literal("  - 基础算力: 1024 ~ " + Integer.MAX_VALUE + " CWU/t"))
             .tooltips(Component.literal("  - 线圈温度影响: 50% (1K-96000K)"))
             .tooltips(Component.literal("  - 电路配置影响: 50% (1-8)"))
-            .tooltips(Component.literal("  - 最终算力 = 1024 + (MAX_INT-1024) × (0.5×(温度/96000) + 0.5×(电路/8))"))
+            .tooltips(Component.literal("  - 最终算力 = 1024 + 2,147,482,623 × (0.5×(温度/96000) + 0.5×(电路/8))"))
             .tooltips(Component.literal("能耗公式:"))
             .tooltips(Component.literal("  - 基础能耗: 2,147,483,647 EU/t ~ 10^20 EU/t"))
             .tooltips(Component.literal("  - 能耗随算力指数增长: log10(E) = A×算力 + B"))
@@ -541,22 +553,24 @@ public class MultiBlockMachineA {
                     GTCEu.id("block/multiblock/hpca"))
             .register();
 
-    public static final MultiblockMachineDefinition TIME_SPACE_BREAKER = GTLEXRegistration.REGISTRATE.multiblock("time_space_breaker", TimeSpaceBreakerMultiple::new)
+    public static final MultiblockMachineDefinition TIME_SPACE_BREAKER = GTLEXRegistration.REGISTRATE.multiblock("time_space_breaker", TimeSpaceBreakerMultipleType::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(GTLRecipeTypes.QFT_RECIPES,
-                    GTLRecipeTypes.DIMENSIONALLY_TRANSCENDENT_PLASMA_FORGE_RECIPES)
+                    GTLRecipeTypes.DIMENSIONALLY_TRANSCENDENT_PLASMA_FORGE_RECIPES,
+                    GTL_Extend_RecipeTypes.STABLE_SPACETIME_PRODUCTION_RECIPES)
             .appearanceBlock(HIGH_POWER_CASING)
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .tooltips(Component.literal(TextUtil.full_color("把不可能变为可能，我们无所不能")))
-            .tooltips(Component.literal("此机器无需耗电"))
+            .tooltips(Component.literal(TextUtil.full_color("工作无需耗电")))
+            .tooltips(Component.literal(TextUtil.full_color("支持跨配方种类并行")))
             .tooltips(Component.literal("此机器的概率消耗为原来的10%，输出概率变为100%，输出倍率为固定的100倍"))
-            .tooltips(Component.literal("因机器特性无法使用任何隔离"))
             .tooltips(Component.literal("灯建议使用创造搭，因自动搭建逻辑问题，无法生存自动搭建，需要扔掉对应的灯，使用创造搭建"))
             .tooltips(Component.literal(TextUtil.purplish_red("结构来源：Mailgusang ---已获取授权")))
-            .tooltips(Component.translatable("gtceu.machine.available_recipe_map_2.tooltip",
+            .tooltips(Component.translatable("gtceu.machine.available_recipe_map_3.tooltip",
                     Component.translatable("gtceu.dimensionally_transcendent_plasma_forge"),
-                    Component.translatable("gtceu.qft")))
+                    Component.translatable("gtceu.qft"),
+                    Component.translatable("gtceu.stable_spacetime_production")))
             .tooltipBuilder(GTL_EX_ADD)
             .pattern(definition -> TimeSpaceBreakerMultiBlock.PATTERN
                     .where("~", Predicates.controller(blocks(definition.getBlock())))
@@ -629,7 +643,7 @@ public class MultiBlockMachineA {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(GTL_Extend_RecipeTypes.PLANETARY_ENGINE_RECIPES)
             .appearanceBlock(HIGH_POWER_CASING)
-            .recipeModifier((machine, recipe, params, result) -> PlanetaryEngineMachine.PERecipeModifier(machine, recipe, params, result))
+            .recipeModifier(PlanetaryEngineMachine::PERecipeModifier)
             .pattern(definition -> PlanetaryEngineMultiblock.PATTERN
                     .where('~', controller(blocks(definition.getBlock())))
                     .where(' ', any())
