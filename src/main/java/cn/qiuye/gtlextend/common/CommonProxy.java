@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -29,6 +30,7 @@ public class CommonProxy {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         REGISTRATE.registerEventListeners(eventBus);
         eventBus.addListener(this::commonSetup);
+        eventBus.addListener(this::clientSetup);
         eventBus.addListener(this::addMaterialRegistries);
         eventBus.addListener(this::addMaterials);
         eventBus.addListener(this::modifyMaterials);
@@ -48,6 +50,8 @@ public class CommonProxy {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {}
+
+    protected void clientSetup(final FMLClientSetupEvent event) {}
 
     private void addMaterialRegistries(MaterialRegistryEvent event) {
         GTCEuAPI.materialManager.createRegistry(GTL_Extend.MODID);

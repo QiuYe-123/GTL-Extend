@@ -2,6 +2,7 @@ package cn.qiuye.gtlextend.client.renderer.machine;
 
 import cn.qiuye.gtlextend.GTL_Extend;
 import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.BlackHoleMatterDecompressor;
+import cn.qiuye.gtlextend.config.GTLExtendConfigHolder;
 
 import org.gtlcore.gtlcore.GTLCore;
 
@@ -32,6 +33,7 @@ import java.util.function.Consumer;
 
 public class BlackHoleMatterDecompressorRender extends WorkableCasingMachineRenderer implements IControllerRenderer {
 
+    private static final boolean enabled = GTLExtendConfigHolder.INSTANCE.enableBlackHoleMatterDecompressor;
     private static final ResourceLocation SPACE_MODEL = GTL_Extend.id("obj/space");
     private static final ResourceLocation BLACKHOLE_MODEL = GTL_Extend.id("obj/black_hole");
 
@@ -61,6 +63,8 @@ public class BlackHoleMatterDecompressorRender extends WorkableCasingMachineRend
                        MultiBufferSource buffer,
                        int combinedLight,
                        int combinedOverlay) {
+        if (!enabled)
+            return;
         if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
                 machineBlockEntity.getMetaMachine() instanceof BlackHoleMatterDecompressor machine &&
                 machine.isActive()) {

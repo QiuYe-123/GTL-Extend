@@ -1,6 +1,6 @@
 package cn.qiuye.gtlextend.api.recipe
 
-import org.gtlcore.gtlcore.api.recipe.IGTRecipe
+import org.gtlcore.gtlcore.api.recipe.RecipeExtensionCopier
 import org.gtlcore.gtlcore.utils.Registries.getItem
 
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability
@@ -36,8 +36,7 @@ object ModifyContents {
             recipe.duration,
             recipe.isFuel,
         )
-        IGTRecipe.of(copy).realParallels = IGTRecipe.of(recipe).realParallels
-        copy.ocTier = recipe.ocTier
+        RecipeExtensionCopier.copy(recipe, copy)
         return copy
     }
 

@@ -18,12 +18,12 @@ side = "BOTH"
 [[dependencies.${mod_id}]]
 modId = "gtlcore"
 mandatory = true
-versionRange = "[1.2.2.5-fix1,)"
+versionRange = "[1.2.3.2-fix2,)"
 ordering = "AFTER"
 side = "BOTH"
 [[dependencies.${mod_id}]]
 modId = "gtladditions"
 mandatory = true
-versionRange = "[2.4Custom,)"
+versionRange = "[3.2.8Custom-fix2,)"
 ordering = "AFTER"
 side = "BOTH"

@@ -4,6 +4,7 @@ import cn.qiuye.gtlextend.client.ClientProxy;
 import cn.qiuye.gtlextend.common.CommonProxy;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -15,6 +16,7 @@ public class GTL_Extend {
 
     public static final String MODID = "gtl_extend", NAME = "GTL Extend";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
+    public static final String VERSION = "3.2.1";
 
     public static ResourceLocation id(String name) {
         return new ResourceLocation(MODID, name);
@@ -22,6 +24,7 @@ public class GTL_Extend {
 
     public GTL_Extend() {
         DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     /**

@@ -2,6 +2,7 @@ package cn.qiuye.gtlextend.client.renderer.machine;
 
 import cn.qiuye.gtlextend.GTL_Extend;
 import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.DimensionalPower;
+import cn.qiuye.gtlextend.config.GTLExtendConfigHolder;
 
 import org.gtlcore.gtlcore.GTLCore;
 
@@ -32,6 +33,7 @@ import java.util.function.Consumer;
 
 public class DimensionalPowerRender extends WorkableCasingMachineRenderer implements IControllerRenderer {
 
+    private static final boolean enabled = GTLExtendConfigHolder.INSTANCE.enableHyperDimensionalPower;
     private static final ResourceLocation SPACE_MODEL = GTL_Extend.id("obj/space");
 
     public DimensionalPowerRender() {
@@ -56,6 +58,8 @@ public class DimensionalPowerRender extends WorkableCasingMachineRenderer implem
                        MultiBufferSource buffer,
                        int combinedLight,
                        int combinedOverlay) {
+        if (!enabled)
+            return;
         if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
                 machineBlockEntity.getMetaMachine() instanceof DimensionalPower machine &&
                 machine.isActive()) {

@@ -3,7 +3,7 @@ package cn.qiuye.gtlextend.mixin.gtl;
 import org.gtlcore.gtlcore.api.machine.multiblock.IModularMachineModule;
 import org.gtlcore.gtlcore.common.data.GTLBlocks;
 import org.gtlcore.gtlcore.common.data.GTLRecipeModifiers;
-import org.gtlcore.gtlcore.common.data.machines.AdvancedMultiBlockMachine;
+import org.gtlcore.gtlcore.common.data.machines.AdvancedMultiBlockMachineB;
 import org.gtlcore.gtlcore.common.machine.multiblock.electric.SpaceElevatorMachine;
 import org.gtlcore.gtlcore.common.machine.multiblock.electric.SpaceElevatorModuleMachine;
 
@@ -30,7 +30,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 
@@ -64,7 +67,7 @@ public abstract class SpaceElevatorModuleMachineMixin extends WorkableElectricMu
     private void getSpaceElevatorTier() {
         if (this.gtl_extend$controller != null && this.getLevel() != null) {
             RecipeLogic logic = GTCapabilityHelper.getRecipeLogic(this.getLevel(), this.gtl_extend$controller, null);
-            if (logic != null && logic.getMachine().getDefinition() == AdvancedMultiBlockMachine.SPACE_ELEVATOR) {
+            if (logic != null && logic.getMachine().getDefinition() == AdvancedMultiBlockMachineB.SPACE_ELEVATOR) {
                 if (logic.isWorking() && logic.getProgress() > 80) {
                     this.gtl_extend$SpaceElevatorTier = ((SpaceElevatorMachine) logic.machine).getTier() - 7;
                     this.gtl_extend$ModuleTier = ((SpaceElevatorMachine) logic.machine).getCasingTier();
@@ -87,7 +90,7 @@ public abstract class SpaceElevatorModuleMachineMixin extends WorkableElectricMu
 
                     for (BlockPos j : coordinatess) {
                         RecipeLogic logic = GTCapabilityHelper.getRecipeLogic(level, j, null);
-                        if (logic != null && logic.getMachine().getDefinition() == AdvancedMultiBlockMachine.SPACE_ELEVATOR) {
+                        if (logic != null && logic.getMachine().getDefinition() == AdvancedMultiBlockMachineB.SPACE_ELEVATOR) {
                             this.gtl_extend$controller = j;
                             if (logic.isWorking() && logic.getProgress() > 80) {
                                 this.gtl_extend$SpaceElevatorTier = ((SpaceElevatorMachine) logic.machine).getTier() - 7;

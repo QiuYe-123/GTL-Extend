@@ -11,7 +11,7 @@ plugins {
 
 version = mod_version
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
@@ -31,6 +31,10 @@ generateModMetadata.doFirst {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
     options.compilerArgs << "-Xlint:-deprecation" << "-Xlint:-removal" // 忽略删除和过时，真删了报错再说吧
+    options.fork = true
+    options.forkOptions.jvmArgs += [
+            '-Xss4m' // 将栈大小提升到 4M（默认通常为 512k 或 1m）
+    ]
 }
 
 lombok {
@@ -48,3 +52,22 @@ idea {
         downloadJavadoc = true
     }
 }
+
+/*
+// 拦截运行任务，在启动前替换掉 Classpath 中的旧版 LWJGL
+tasks.named('runClient') {
+    jvmArgs(
+            //'-Dfml.earlywindow=false',
+            '-Dorg.lwjgl.util.Debug=false',
+            '-Dorg.lwjgl.util.NoChecks=true' // 绕过 LWJGL 内部的 JNI 版本严格校验
+    )
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.lwjgl') {
+            details.useVersion '3.3.3'
+            details.because 'Fix Java 21 JNI compatibility issues during debugging'
+        }
+    }
+}*/

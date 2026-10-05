@@ -21,5 +21,13 @@ public class DimensionalPowerRecipe {
                 .outputFluids(GTLMaterials.DimensionallyTranscendentResplendentCatalyst.getFluid(1000))
                 .duration(200)
                 .save(provider);
+
+        DIMENSIONALPOWER_RECIPES.recipeBuilder(GTL_Extend.id("dimensional_power_2"))
+                .inputItems(Registries.getItem("gtladditions:astral_array"))
+                .inputFluids(GTLMaterials.ExcitedDtsc.getFluid(1000))
+                .outputItems(Registries.getItem("gtladditions:strange_annihilation_fuel_rod"))
+                .outputFluids(GTLMaterials.DimensionallyTranscendentExoticCatalyst.getFluid(1000))
+                .duration(72000)
+                .save(provider);
     }
 }

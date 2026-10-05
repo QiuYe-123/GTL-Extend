@@ -63,4 +63,14 @@ public class GTLEXDimensionallyTranscendentDissolvingTank extends WorkableElectr
         super.onPartUnload();
         this.threadPartMachine = null;
     }
+
+    @SuppressWarnings("unused")
+    public Boolean supportsBatchProcessing() {
+        return false;
+    }
+
+    @SuppressWarnings("unused")
+    public Boolean canConfigureBatchProcessing() {
+        return false;
+    }
 }

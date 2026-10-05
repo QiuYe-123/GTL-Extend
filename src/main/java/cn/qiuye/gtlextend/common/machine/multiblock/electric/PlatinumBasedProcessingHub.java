@@ -19,7 +19,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class PlatinumBasedRocessingHub extends WorkableElectricMultiblockMachine implements IWirelessThreadModifierParallelMachine {
+public class PlatinumBasedProcessingHub extends WorkableElectricMultiblockMachine implements IWirelessThreadModifierParallelMachine {
 
     protected @Nullable IThreadModifierPart threadPartMachine = null;
 
@@ -33,7 +33,7 @@ public class PlatinumBasedRocessingHub extends WorkableElectricMultiblockMachine
         } else return Integer.MAX_VALUE;
     }
 
-    public PlatinumBasedRocessingHub(IMachineBlockEntity holder, Object... args) {
+    public PlatinumBasedProcessingHub(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
     }
 
@@ -62,5 +62,15 @@ public class PlatinumBasedRocessingHub extends WorkableElectricMultiblockMachine
     public void onPartUnload() {
         super.onPartUnload();
         this.threadPartMachine = null;
+    }
+
+    @SuppressWarnings("unused")
+    public Boolean supportsBatchProcessing() {
+        return false;
+    }
+
+    @SuppressWarnings("unused")
+    public Boolean canConfigureBatchProcessing() {
+        return false;
     }
 }

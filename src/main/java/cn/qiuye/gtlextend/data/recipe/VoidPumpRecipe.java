@@ -8,6 +8,7 @@ import org.gtlcore.gtlcore.common.data.GTLMaterials;
 import org.gtlcore.gtlcore.utils.Registries;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.common.data.GTItems;
 
 import com.lowdragmc.lowdraglib.side.fluid.FluidStack;
 
@@ -21,6 +22,7 @@ import static cn.qiuye.gtlextend.common.data.GTL_Extend_RecipeTypes.VOID_PUMP_RE
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.EXTRACTOR_RECIPES;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.FLUID_SOLIDFICATION_RECIPES;
 
 public class VoidPumpRecipe {
 
@@ -39,6 +41,14 @@ public class VoidPumpRecipe {
                     .inputItems(Registries.getItem("ae2:fluix_dust"))
                     .outputFluids(GTL_Extend_Materials.FLUIXCRYSTAL.getFluid(144))
                     .duration(200)
+                    .EUt(V[LV])
+                    .save(provider);
+
+            FLUID_SOLIDFICATION_RECIPES.recipeBuilder("gtl_extend_solidify_fluix_block")
+                    .notConsumable(GTItems.SHAPE_MOLD_BLOCK)
+                    .inputFluids(GTL_Extend_Materials.FLUIXCRYSTAL.getFluid(576))
+                    .outputItems(Registries.getItem("ae2:fluix_block"))
+                    .duration(800)
                     .EUt(V[LV])
                     .save(provider);
         }
