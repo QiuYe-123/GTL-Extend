@@ -1,7 +1,5 @@
 package cn.qiuye.gtlextend.common.data.machines;
 
-import appeng.core.AppEng;
-import appeng.core.definitions.AEBlocks;
 import cn.qiuye.gtlextend.api.registries.GTLEXRegistration;
 import cn.qiuye.gtlextend.api.registries.GetRegistries;
 import cn.qiuye.gtlextend.client.renderer.machine.BlackHoleMatterDecompressorRender;
@@ -15,7 +13,18 @@ import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.BlackHoleMatterDeco
 import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.DimensionalPower;
 import cn.qiuye.gtlextend.common.machine.multiblock.noenergy.TimeSpaceBreakerMultipleType;
 import cn.qiuye.gtlextend.common.machine.multiblock.steam.GeneralPurposeSteamEngine;
+import cn.qiuye.gtlextend.common.machine.multiblock.steam.GeneralPurposeSteamEngineMultiple;
 import cn.qiuye.gtlextend.config.GTLExtendConfigHolder;
+
+import org.gtlcore.gtlcore.api.pattern.GTLPredicates;
+import org.gtlcore.gtlcore.common.data.GTLBlocks;
+import org.gtlcore.gtlcore.common.data.GTLMachines;
+import org.gtlcore.gtlcore.common.data.GTLRecipeModifiers;
+import org.gtlcore.gtlcore.common.data.GTLRecipeTypes;
+import org.gtlcore.gtlcore.utils.TextUtil;
+
+import com.gtladd.gtladditions.api.machine.GTLAddPartAbility;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -29,18 +38,14 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
-import com.gtladd.gtladditions.api.machine.GTLAddPartAbility;
+
+import appeng.core.AppEng;
+import appeng.core.definitions.AEBlocks;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
-import org.gtlcore.gtlcore.api.pattern.GTLPredicates;
-import org.gtlcore.gtlcore.common.data.GTLBlocks;
-import org.gtlcore.gtlcore.common.data.GTLMachines;
-import org.gtlcore.gtlcore.common.data.GTLRecipeModifiers;
-import org.gtlcore.gtlcore.common.data.GTLRecipeTypes;
-import org.gtlcore.gtlcore.utils.TextUtil;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -86,7 +91,7 @@ public class MultiBlockMachineA {
                     GTCEu.id("block/multiblock/fusion_reactor"))
             .register() : null;
 
-    public static final MultiblockMachineDefinition GENERAL_PURPOSE_STEAM_ENGINE = GTLExtendConfigHolder.INSTANCE.enableGeneralPurposeSteamEngine ? GTLEXRegistration.REGISTRATE.multiblock("general_purpose_steam_engine", (holder) -> new GeneralPurposeSteamEngine(holder, 1000000))
+    public static final MultiblockMachineDefinition GENERAL_PURPOSE_STEAM_ENGINE = GTLExtendConfigHolder.INSTANCE.enableGeneralPurposeSteamEngine ? GTLEXRegistration.REGISTRATE.multiblock("general_purpose_steam_engine", (holder) -> new GeneralPurposeSteamEngine(holder, 1_000_000))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(GTLRecipeTypes.LAVA_FURNACE_RECIPES,
                     GTRecipeTypes.FORGE_HAMMER_RECIPES,
@@ -146,7 +151,7 @@ public class MultiBlockMachineA {
                     GTCEu.id("block/multiblock/steam_oven"))
             .register() : null;
 
-    public static final MultiblockMachineDefinition STEAM_INTEGRATED_ORE_PROCESSING_CENTER = GTLEXRegistration.REGISTRATE.multiblock("steam_integrated_ore_processing_center", (holder) -> new GeneralPurposeSteamEngine(holder, 100000000))
+    public static final MultiblockMachineDefinition STEAM_INTEGRATED_ORE_PROCESSING_CENTER = GTLEXRegistration.REGISTRATE.multiblock("steam_integrated_ore_processing_center", (holder) -> new GeneralPurposeSteamEngine(holder, 100_000_000))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTLRecipeTypes.INTEGRATED_ORE_PROCESSOR)
             .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
@@ -155,11 +160,62 @@ public class MultiBlockMachineA {
             .recipeModifier((machine, recipe, params, result) -> {
                 GTRecipe recipe1 = recipe.copy();
                 recipe1.duration = 10;
-                recipe1 = GTRecipeModifiers.fastParallel(machine, recipe1, 100000, false).getFirst();
+                recipe1 = GTRecipeModifiers.fastParallel(machine, recipe1, 131072, false).getFirst();
                 return recipe1;
             })
             .tooltips(Component.literal(TextUtil.full_color("暴力.....")))
-            .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为10t,自带100000并行")))
+            .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为10t,自带131072并行")))
+            .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
+            .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
+                    Component.translatable("gtceu.integrated_ore_processor")))
+            .tooltipBuilder(GTL_EX_ADD)
+            .pattern(definition -> SteamOPMultiBlock.PATTERN
+                    .where("~", Predicates.controller(blocks(definition.getBlock())))
+                    .where(" ", Predicates.any())
+                    .where("A", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get())
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS)))
+                    .where("B", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Invar)))
+                    .where("C", Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
+                    .where("D", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Bronze)))
+                    .where("E", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Steel)))
+                    .where("F", Predicates.blocks(GTBlocks.BRONZE_HULL.get()))
+                    .where("G", Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
+                    .where("H", Predicates.blocks(GTBlocks.CASING_BRONZE_GEARBOX.get()))
+                    .where("I", Predicates.blocks(GTBlocks.MACHINE_CASING_LV.get()))
+                    .where("J", Predicates.blocks(ALL_FIREBOXES.get(BoilerFireboxType.BRONZE_FIREBOX).get()))
+                    .where("K", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get()))
+                    .where("L", Predicates.fluids(Fluids.WATER))
+                    .where("M", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get()))
+                    .where("N", Predicates.blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .where("O", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get())
+                            .or(Predicates.abilities(PartAbility.STEAM).setMinGlobalLimited(1).setMaxGlobalLimited(9)))
+                    .where("P", Predicates.blocks(GTBlocks.CASING_BRONZE_BRICKS.get())
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(20))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setMaxGlobalLimited(20)))
+                    .where("Q", Predicates.blocks(ChemicalHelper.getBlock(TagPrefix.block, GTMaterials.WroughtIron)))
+                    .where("R", Predicates.abilities(PartAbility.MUFFLER))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    GTCEu.id("block/multiblock/steam_oven"))
+            .register();
+
+    public static final MultiblockMachineDefinition ADVANCED_STEAM_INTEGRATED_ORE_PROCESSING_CENTER = GTLEXRegistration.REGISTRATE.multiblock("advanced_steam_integrated_ore_processing_center", (holder) -> new GeneralPurposeSteamEngineMultiple(holder, 100_000_000))
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(GTLRecipeTypes.INTEGRATED_ORE_PROCESSOR)
+            .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
+            .recipeModifier((machine, recipe, params, result) -> {
+                GTRecipe recipe_s = recipe.copy();
+                recipe_s.duration = 10;
+                recipe_s = GTRecipeModifiers.fastParallel(machine, recipe_s, 1048576, false).getFirst();
+                return recipe_s;
+            })
+            .tooltips(Component.literal(TextUtil.full_color("暴力.....")))
+            .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为10t,自带1048576并行")))
+            .tooltips(Component.translatable("gtceu.machine.multiple_recipes.tooltip"))
             .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
                     Component.translatable("gtceu.integrated_ore_processor")))
@@ -272,13 +328,13 @@ public class MultiBlockMachineA {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .recipeModifier((machine, recipe, params, result) -> {
                 GTRecipe recipe_s = recipe.copy();
-                recipe_s.duration = 1;
+                recipe_s.duration = 20;
                 recipe_s = GTRecipeModifiers.fastParallel(machine, recipe_s, Integer.MAX_VALUE, false).getFirst();
                 return recipe_s;
             })
             .tooltips(Component.literal(TextUtil.full_color("运行无视炉温")))
             .tooltips(Component.literal(TextUtil.full_color("最大并行数：" + Integer.MAX_VALUE)))
-            .tooltips(Component.literal(TextUtil.full_color("所有配方都为1s")))
+            .tooltips(Component.literal(TextUtil.full_color("设置所有配方时间为1s")))
             .tooltips(Component.literal(TextUtil.full_color("物质在我们手中不过是玩具")))
             .tooltips(Component.literal(TextUtil.full_color("可以随意捏造")))
             .tooltips(Component.translatable("gtceu.multiblock.laser.tooltip"))

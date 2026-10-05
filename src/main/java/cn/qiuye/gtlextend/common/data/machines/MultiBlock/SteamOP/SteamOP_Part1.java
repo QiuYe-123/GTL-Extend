@@ -205,7 +205,7 @@ public class SteamOP_Part1 {
     public static final String[] LAYER_011 = {
             "CCC G CCC   EHE   EHE     G   G  CCC",
             "CC  G  CC                        KIA",
-            "    G                            KKK",
+            "    G                            KKA",
             "    G                            DDD",
             "    G                     M   M     ",
             "    G                     M   M     ",
@@ -225,8 +225,8 @@ public class SteamOP_Part1 {
     public static final String[] LAYER_012 = {
             "  EEHEBEBEEEBGBEEEBGBEEEEEGEEEGEECCC",
             "      B B   B B   B B    E E E EEKKA",
-            "      B B   B B   B B    E E E EEKKK",
-            "      B B   B B   B B    E E E E KKK",
+            "      B B   B B   B B    E E E EEKKA",
+            "      B B   B B   B B    E E E E KKA",
             "      B B   B B   B B    EEE EEE    ",
             "      BBB   BBB   BBB    EME EME    ",
             "      B B   BNB   BNB    E E E E    ",
@@ -245,8 +245,8 @@ public class SteamOP_Part1 {
     public static final String[] LAYER_013 = {
             "  GHGHGHGHGHGHGHGHGHGHGHGHGHGHGHGGGC",
             "                                GGG~",
-            "                                 KKK",
-            "                                 KKK",
+            "                                 KKA",
+            "                                 KKA",
             "                                    ",
             "      B B   B B   B B     M   M     ",
             "             N     N      M   M     ",
@@ -265,8 +265,8 @@ public class SteamOP_Part1 {
     public static final String[] LAYER_014 = {
             "  HEEEEGEEEEEEEEEEEGEEEEEEEEEEEEECGC",
             "                         E E E EEKKA",
-            "                         E E E EEKKK",
-            "                         E E E E KKK",
+            "                         E E E EEKKA",
+            "                         E E E E KKA",
             "                         E E E E    ",
             "      B B   B B   B B    EEE EEE    ",
             "             N     N     EME EME    ",
@@ -285,7 +285,7 @@ public class SteamOP_Part1 {
     public static final String[] LAYER_015 = {
             "IIGI  BGB   BGB   BHB            CGC",
             "CCCC  B B   B B   B B            KNA",
-            "CCCC  B B   B B   B B            KKK",
+            "CCCC  B B   B B   B B            KKA",
             " CC   B B   B B   B B            DDD",
             "      B B   B B   B B               ",
             "      BBB   BBB   BBB               ",
@@ -444,8 +444,8 @@ public class SteamOP_Part1 {
 
     public static final String[] LAYER_023 = {
             "      C C   C C   C C  C C C C C C C",
-            "      C C   C C   C C  KPPPPPPPPPPKO",
-            "                       KPPPPPPPPPPKO",
+            "      C C   C C   C C  KPPPPPPPPPPPO",
+            "                       KPPPPPPPPPPPO",
             "                       KDFDFDFDFDFDO",
             "                        D D D D D D ",
             "                                    ",

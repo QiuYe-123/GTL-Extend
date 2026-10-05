@@ -1,5 +1,7 @@
 package cn.qiuye.gtlextend.mixin.gtmt;
 
+import org.gtlcore.gtlcore.common.machine.multiblock.part.NeutronAcceleratorPartMachine;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.ICoverable;
@@ -8,10 +10,10 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.cover.CoverBehavior;
 import com.gregtechceu.gtceu.api.cover.CoverDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.common.machine.electric.BatteryBufferMachine;
 import com.gregtechceu.gtceu.common.machine.electric.HullMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
+
 import com.hepdd.gtmthings.api.misc.WirelessEnergyManager;
 import com.hepdd.gtmthings.common.cover.WirelessEnergyReceiveCover;
 import net.minecraft.core.Direction;
@@ -25,11 +27,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.UUID;
 
-@Mixin(value = WirelessEnergyReceiveCover.class, remap = false)
+@Mixin(value = WirelessEnergyReceiveCover.class, priority = 114514, remap = false)
 public abstract class WirelessEnergyReceiveCoverMixin extends CoverBehavior {
 
-    @Shadow
-    private TickableSubscription subscription;
     @Shadow
     private UUID uuid;
 
@@ -62,14 +62,7 @@ public abstract class WirelessEnergyReceiveCoverMixin extends CoverBehavior {
     }
 
     @Shadow
-    private void updateCoverSub() {
-        if (this.uuid != null) {
-            this.subscription = this.coverHolder.subscribeServerTick(this.subscription, this::updateEnergy);
-        } else if (this.subscription != null) {
-            this.subscription.unsubscribe();
-            this.subscription = null;
-        }
-    }
+    protected abstract void updateCoverSub();
 
     /**
      * @author
@@ -77,36 +70,31 @@ public abstract class WirelessEnergyReceiveCoverMixin extends CoverBehavior {
      */
     @Overwrite
     private void updateEnergy() {
-        if (this.uuid != null) {
-            IEnergyContainer energyContainer = GTCapabilityHelper.getEnergyContainer(this.coverHolder.getLevel(), this.coverHolder.getPos(), this.attachedSide);
-            if (energyContainer != null) {
-                MetaMachine machine = MetaMachine.getMachine(this.coverHolder.getLevel(), this.coverHolder.getPos());
-                if (!(machine instanceof BatteryBufferMachine || machine instanceof HullMachine || machine instanceof EnergyHatchPartMachine)) {
-                    long changeStored = Math.min(this.machineMaxEnergy - energyContainer.getEnergyStored(), this.energyPerTick);
-                    if (changeStored <= 0L) {
-                        return;
-                    }
+        if (this.uuid == null) return;
+        IEnergyContainer energyContainer = GTCapabilityHelper.getEnergyContainer(coverHolder.getLevel(), coverHolder.getPos(), attachedSide);
+        if (energyContainer != null) {
+            MetaMachine machine = MetaMachine.getMachine(coverHolder.getLevel(), coverHolder.getPos());
+            if (machine instanceof BatteryBufferMachine || machine instanceof HullMachine || (machine instanceof NeutronAcceleratorPartMachine neutronAccelerator && neutronAccelerator.isWorkingEnabled()) || machine instanceof EnergyHatchPartMachine) {
+                long changeStored = Math.min(energyContainer.getEnergyCapacity() - energyContainer.getEnergyStored(), this.energyPerTick);
+                if (changeStored <= 0L)
+                    return;
 
-                    if (!WirelessEnergyManager.addEUToGlobalEnergyMap(this.uuid, -changeStored, machine)) {
-                        return;
-                    }
+                if (!WirelessEnergyManager.addEUToGlobalEnergyMap(this.uuid, -changeStored, machine))
+                    return;
 
-                    energyContainer.addEnergy(changeStored);
-                } else {
-                    long changeStored = Math.min(energyContainer.getEnergyCapacity() - energyContainer.getEnergyStored(), this.energyPerTick);
-                    if (changeStored <= 0L) {
-                        return;
-                    }
+                energyContainer.acceptEnergyFromNetwork(machine instanceof EnergyHatchPartMachine energyHatch ? energyHatch.getFrontFacing() : null, GTValues.V[this.tier], this.amperage);
+            } else {
+                long changeStored = Math.min(this.machineMaxEnergy - energyContainer.getEnergyStored(), this.energyPerTick);
+                if (changeStored <= 0L)
+                    return;
 
-                    if (!WirelessEnergyManager.addEUToGlobalEnergyMap(this.uuid, -changeStored, machine)) {
-                        return;
-                    }
+                if (!WirelessEnergyManager.addEUToGlobalEnergyMap(this.uuid, -changeStored, machine))
+                    return;
 
-                    energyContainer.acceptEnergyFromNetwork(machine instanceof EnergyHatchPartMachine energyHatch ? energyHatch.getFrontFacing() : null, GTValues.V[this.tier], this.amperage);
-                }
+                energyContainer.addEnergy(changeStored);
             }
-
-            this.updateCoverSub();
         }
+
+        this.updateCoverSub();
     }
 }

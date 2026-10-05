@@ -1,26 +1,11 @@
 package cn.qiuye.gtlextend.data.recipe;
 
-import appeng.core.definitions.AEBlocks;
 import cn.qiuye.gtlextend.GTL_Extend;
 import cn.qiuye.gtlextend.common.data.GTL_Extend_Blocks;
 import cn.qiuye.gtlextend.common.data.GTL_Extend_Item;
 import cn.qiuye.gtlextend.common.data.machines.MultiBlockMachineA;
 import cn.qiuye.gtlextend.config.GTLExtendConfigHolder;
-import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.common.data.GCyMBlocks;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
-import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
-import com.gregtechceu.gtceu.data.recipe.CustomTags;
-import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
-import com.gtladd.gtladditions.common.items.GTLAddItems;
-import com.gtladd.gtladditions.common.machine.multiblock.MultiBlockMachine;
-import com.gtladd.gtladditions.common.material.GTLAddMaterial;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+
 import org.gtlcore.gtlcore.api.data.tag.GTLTagPrefix;
 import org.gtlcore.gtlcore.common.data.GTLBlocks;
 import org.gtlcore.gtlcore.common.data.GTLItems;
@@ -28,14 +13,32 @@ import org.gtlcore.gtlcore.common.data.GTLMachines;
 import org.gtlcore.gtlcore.common.data.machines.*;
 import org.gtlcore.gtlcore.utils.Registries;
 
+import com.gtladd.gtladditions.common.items.GTLAddItems;
+import com.gtladd.gtladditions.common.machine.multiblock.MultiBlockMachine;
+import com.gtladd.gtladditions.common.material.GTLAddMaterial;
+
+import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
+import com.gregtechceu.gtceu.common.data.GCyMBlocks;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
+import com.gregtechceu.gtceu.data.recipe.CustomTags;
+import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
+
+import appeng.core.definitions.AEBlocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
 import java.util.function.Consumer;
 
 import static cn.qiuye.gtlextend.common.data.GTL_Extend_Blocks.DIMENSION_CORE;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
-import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLER_RECIPES;
-import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLY_LINE_RECIPES;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static org.gtlcore.gtlcore.common.data.GTLMaterials.*;
 import static org.gtlcore.gtlcore.common.data.GTLRecipeTypes.SUPRACHRONAL_ASSEMBLY_LINE_RECIPES;
 import static org.gtlcore.gtlcore.common.data.machines.MultiBlockMachineA.*;
@@ -129,6 +132,13 @@ public class GTLEXMachineRecipe {
                 .outputItems(MultiBlockMachineA.STEAM_INTEGRATED_ORE_PROCESSING_CENTER)
                 .duration(20000)
                 .EUt(VA[LV])
+                .save(provider);
+
+        COMPRESSOR_RECIPES.recipeBuilder(GTL_Extend.id("the_advanced_steam_integrated_ore_processing_center"))
+                .inputItems(MultiBlockMachineA.STEAM_INTEGRATED_ORE_PROCESSING_CENTER, 64)
+                .outputItems(MultiBlockMachineA.ADVANCED_STEAM_INTEGRATED_ORE_PROCESSING_CENTER)
+                .duration(12000)
+                .EUt(VA[LuV])
                 .save(provider);
 
         ASSEMBLY_LINE_RECIPES.recipeBuilder(GTL_Extend.id("cattle_cattle_machine"))

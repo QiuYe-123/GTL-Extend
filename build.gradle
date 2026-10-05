@@ -52,3 +52,22 @@ idea {
         downloadJavadoc = true
     }
 }
+
+/*
+// 拦截运行任务，在启动前替换掉 Classpath 中的旧版 LWJGL
+tasks.named('runClient') {
+    jvmArgs(
+            //'-Dfml.earlywindow=false',
+            '-Dorg.lwjgl.util.Debug=false',
+            '-Dorg.lwjgl.util.NoChecks=true' // 绕过 LWJGL 内部的 JNI 版本严格校验
+    )
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.lwjgl') {
+            details.useVersion '3.3.3'
+            details.because 'Fix Java 21 JNI compatibility issues during debugging'
+        }
+    }
+}*/

@@ -22,8 +22,7 @@ public abstract class HugeFluidHatchMixin extends FluidHatchPartMachine {
     @Inject(
             method = "createTank",
             at = @At("HEAD"),
-            cancellable = true,
-            remap = false)
+            cancellable = true)
     protected void modify_createTank(long initialCapacity, int slots, Object[] args, CallbackInfoReturnable<NotifiableFluidTank> cir) {
         cir.setReturnValue(new NotifiableFluidTank((HugeFluidHatchPartMachine) (Object) this, slots, 2147483647L, this.io, IO.BOTH));
     }
